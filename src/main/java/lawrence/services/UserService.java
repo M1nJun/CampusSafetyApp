@@ -1,5 +1,33 @@
 package lawrence.services;
 
-public class UserService {
+import lawrence.dtos.UserDTO;
+import lawrence.entities.User;
+import lawrence.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+@Service
+public class UserService {
+    @Autowired
+    PasswordService passwordService;
+
+    @Autowired
+    UserRepository userRepository;
+
+    public String save(UserDTO user) {
+        List<User> existing = userRepository.findByUsername(user.getUsername());
+       if(!existing.isEmpty()) {
+           return "Duplicate";
+       }
+
+       User newUser = new User();
+       newUser.setUsername(user.getUsername());
+       String hash = passwordService.hashPassword(user.getPassword());
+       newUser.setPassword(hash);
+       newUser.setUsertype(user.getUsertype());
+       userRepository.save(newUser);
+       return newUser.getUserID().toString();
+    }
 }
