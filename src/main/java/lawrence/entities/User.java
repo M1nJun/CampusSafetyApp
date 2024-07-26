@@ -23,6 +23,7 @@ public class User {
     private String usertype;
 
 
+
     public User() {}
 
     public UUID getUserID() {

@@ -30,4 +30,17 @@ public class UserService {
        userRepository.save(newUser);
        return newUser.getUserID().toString();
     }
+
+    public User findByNameAndPassword(String username, String password) {
+        List<User> existing = userRepository.findByUsername(username);
+        if(existing.size() != 1)
+            return null;
+        User u = existing.get(0);
+        if(passwordService.verifyHash(password, u.getPassword())) {
+            u.setPassword("Undisclosed");
+        } else{
+            u = null;
+        }
+        return u;
+    }
 }

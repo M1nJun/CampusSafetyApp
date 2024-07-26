@@ -13,10 +13,10 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer requestID;
     @ManyToOne
-    @JoinColumn(name="userID")
+    @JoinColumn(name="requesterID")
     private User requester;
     @ManyToOne
-    @JoinColumn(name="userID")
+    @JoinColumn(name="receiverID")
     private User receiver;
     private LocalDateTime requestDate;
     private LocalDateTime lastModifiedDate;

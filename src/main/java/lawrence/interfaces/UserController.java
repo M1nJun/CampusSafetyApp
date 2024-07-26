@@ -46,5 +46,17 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(token);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody UserDTO user) {
+        User result = us.findByNameAndPassword(user.getUsername(), user.getPassword());
+        if (result == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+        }
+        String token = jwtService.makeJwt(result.getUserID().toString());
+        return ResponseEntity.status(HttpStatus.OK).body(token);
+    }
+
+
+
 
 }
