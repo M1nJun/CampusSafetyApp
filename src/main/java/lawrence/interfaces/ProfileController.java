@@ -1,6 +1,7 @@
 package lawrence.interfaces;
 
 import lawrence.dtos.ProfileDTO;
+import lawrence.entities.Profile;
 import lawrence.securities.CampusSafetyUserDetails;
 import lawrence.services.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,4 +42,22 @@ public class ProfileController {
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(key);
     }
+
+    @GetMapping("/self")
+    public ResponseEntity<ProfileDTO> findByUserSelf(Authentication authentication) {
+        CampusSafetyUserDetails details = (CampusSafetyUserDetails) authentication.getPrincipal();
+        UUID id = UUID.fromString(details.getUsername());
+        Profile profile = ps.findByUser(id.toString());
+        ProfileDTO result = new ProfileDTO(profile);
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProfileDTO> findByUser(Authentication authentication, @PathVariable String id) {
+        Profile profile = ps.findByUser(id);
+        ProfileDTO result = new ProfileDTO(profile);
+        return ResponseEntity.ok().body(result);
+    }
+
+
 }

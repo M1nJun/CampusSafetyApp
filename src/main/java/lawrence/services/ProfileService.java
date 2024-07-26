@@ -42,4 +42,11 @@ public class ProfileService {
         profileRepository.save(newProfile);
         return newProfile.getProfileID().toString();
     }
+
+    public Profile findByUser(String id){
+        Optional<User> u = userRepository.findById(UUID.fromString(id));
+        if(u.isPresent())
+            return u.get().getProfile();
+        return new Profile();
+    }
 }

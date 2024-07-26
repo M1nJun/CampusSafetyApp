@@ -1,11 +1,6 @@
 package lawrence.entities;
 
-import jakarta.persistence.Table;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import java.util.UUID;
@@ -22,6 +17,8 @@ public class User {
     private String password;
     private String usertype;
 
+    @OneToOne(mappedBy="user")
+    private Profile profile;
 
 
     public User() {}
@@ -56,5 +53,13 @@ public class User {
 
     public void setUsertype(String usertype) {
         this.usertype = usertype;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 }
