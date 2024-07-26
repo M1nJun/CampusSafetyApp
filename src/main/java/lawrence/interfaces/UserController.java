@@ -45,4 +45,6 @@ public class UserController {
         String token = jwtService.makeJwt(key);
         return ResponseEntity.status(HttpStatus.CREATED).body(token);
     }
+
+
 }
