@@ -1,6 +1,7 @@
 package lawrence.interfaces;
 
 import lawrence.entities.User;
+import lawrence.securities.CampusSafetyUserDetails;
 import lawrence.services.UserService;
 import lawrence.dtos.UserDTO;
 import lawrence.securities.JwtService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
 
 
 @RestController
@@ -54,6 +56,22 @@ public class UserController {
         }
         String token = jwtService.makeJwt(result.getUserID().toString());
         return ResponseEntity.status(HttpStatus.OK).body(token);
+    }
+
+    @GetMapping("/profile/self")
+    public ResponseEntity<UserDTO> findByUserSelf(Authentication authentication) {
+        CampusSafetyUserDetails details = (CampusSafetyUserDetails) authentication.getPrincipal();
+        UUID id = UUID.fromString(details.getUsername());
+        User user = us.findByUser(id.toString());
+        UserDTO result = new UserDTO(user);
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<UserDTO> findByUser(Authentication authentication, @PathVariable String id) {
+        User user = us.findByUser(id);
+        UserDTO result = new UserDTO(user);
+        return ResponseEntity.ok().body(result);
     }
 
 

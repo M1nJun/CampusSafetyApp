@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -22,11 +24,9 @@ public class UserService {
            return "Duplicate";
        }
 
-       User newUser = new User();
-       newUser.setUsername(user.getUsername());
+       User newUser = new User(user);
        String hash = passwordService.hashPassword(user.getPassword());
        newUser.setPassword(hash);
-       newUser.setUsertype(user.getUsertype());
        userRepository.save(newUser);
        return newUser.getUserID().toString();
     }
@@ -42,5 +42,12 @@ public class UserService {
             u = null;
         }
         return u;
+    }
+
+    public User findByUser(String id){
+        Optional<User> u = userRepository.findById(UUID.fromString(id));
+        if(u.isPresent())
+            return u.get();
+        return new User();
     }
 }
