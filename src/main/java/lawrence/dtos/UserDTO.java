@@ -10,6 +10,7 @@ public class UserDTO {
     private String lastname;
     private String phone;
     private String studentID;
+    private Boolean busy;
 
     public UserDTO() {}
 
@@ -77,5 +78,13 @@ public class UserDTO {
 
     public void setStudentID(String studentID) {
         this.studentID = studentID;
+    }
+
+    public Boolean getBusy() {
+        return busy;
+    }
+
+    public void setBusy(Boolean busy) {
+        this.busy = busy;
     }
 }

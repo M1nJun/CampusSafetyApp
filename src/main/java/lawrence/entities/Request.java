@@ -24,6 +24,8 @@ public class Request {
     private String requestTitle;
     private String comment;
     private String requestStatus;
+    private Boolean reserved;
+    private LocalDateTime reservationDue;
 
     public Request() {}
 
@@ -31,8 +33,11 @@ public class Request {
         requestDate = LocalDateTime.now();
         lastModifiedDate = this.requestDate;
         requestType = core.getRequestType();
+        requestTitle = core.getRequestTitle();
         comment = core.getComment();
         requestStatus = core.getRequestStatus();
+        reserved = core.getReserved();
+        reservationDue = core.getReservationDue();
     }
 
     @PrePersist
@@ -115,5 +120,29 @@ public class Request {
 
     public void setRequestStatus(String requestStatus) {
         this.requestStatus = requestStatus;
+    }
+
+    public String getRequestTitle() {
+        return requestTitle;
+    }
+
+    public void setRequestTitle(String requestTitle) {
+        this.requestTitle = requestTitle;
+    }
+
+    public Boolean getReserved() {
+        return reserved;
+    }
+
+    public void setReserved(Boolean reserved) {
+        this.reserved = reserved;
+    }
+
+    public LocalDateTime getReservationDue() {
+        return reservationDue;
+    }
+
+    public void setReservationDue(LocalDateTime reservationDue) {
+        this.reservationDue = reservationDue;
     }
 }
