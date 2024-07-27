@@ -35,7 +35,7 @@ public class Request {
         requestType = core.getRequestType();
         requestTitle = core.getRequestTitle();
         comment = core.getComment();
-        requestStatus = core.getRequestStatus();
+        requestStatus = "pending";
         reserved = core.getReserved();
         reservationDue = core.getReservationDue();
     }

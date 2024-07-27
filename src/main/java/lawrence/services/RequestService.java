@@ -8,6 +8,8 @@ import lawrence.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,5 +32,14 @@ public class RequestService {
         newRequest.setRequester(user);
         requestRepository.save(newRequest);
         return newRequest.getRequestID().toString();
+    }
+
+    public List<RequestDTO> getPendingRequests() {
+        List<Request> requests = requestRepository.findByRequestStatus("pending");
+        List<RequestDTO> result = new ArrayList<RequestDTO>();
+        for (Request r : requests) {
+            result.add(new RequestDTO(r));
+        }
+        return result;
     }
 }

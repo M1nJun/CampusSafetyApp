@@ -1,6 +1,7 @@
 package lawrence.interfaces;
 
 import lawrence.dtos.RequestDTO;
+import lawrence.entities.Request;
 import lawrence.securities.CampusSafetyUserDetails;
 import lawrence.services.RequestService;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -31,5 +34,12 @@ public class RequestController  {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Cannot generate key");
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(key);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<RequestDTO>> findAllRequest(Authentication authentication) {
+        List<RequestDTO> result = rs.getPendingRequests();
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+
     }
 }

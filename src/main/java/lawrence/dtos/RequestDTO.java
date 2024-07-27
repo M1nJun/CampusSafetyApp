@@ -22,7 +22,7 @@ public class RequestDTO {
     public RequestDTO(Request core) {
         requestID = core.getRequestID().intValue();
         requester = core.getRequester().getUserID().toString();
-        receiver = core.getReceiver().getUserID().toString();
+        receiver = (core.getReceiver() != null) ? core.getReceiver().getUserID().toString() : null;
         requestDate = core.getRequestDate();
         lastModifiedDate = core.getLastModifiedDate();
         requestType = core.getRequestType();
