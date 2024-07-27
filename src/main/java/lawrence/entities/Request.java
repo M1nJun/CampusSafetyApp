@@ -3,6 +3,8 @@ package lawrence.entities;
 import jakarta.persistence.*;
 import lawrence.dtos.RequestDTO;
 import lawrence.entities.User;
+import lawrence.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 
@@ -26,6 +28,7 @@ public class Request {
     private String requestStatus;
     private Boolean reserved;
     private LocalDateTime reservationDue;
+
 
     public Request() {}
 
@@ -55,6 +58,11 @@ public class Request {
 
     public void acceptRequest() {
         this.requestStatus = "accepted";
+        this.lastModifiedDate = LocalDateTime.now();
+    }
+
+    public void completeRequest() {
+        this.requestStatus = "completed";
         this.lastModifiedDate = LocalDateTime.now();
     }
 

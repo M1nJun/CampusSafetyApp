@@ -36,10 +36,39 @@ public class RequestController  {
         return ResponseEntity.status(HttpStatus.CREATED).body(key);
     }
 
-    @GetMapping("/all")
+    @GetMapping("pending/all")
     public ResponseEntity<List<RequestDTO>> findAllRequest(Authentication authentication) {
         List<RequestDTO> result = rs.getPendingRequests();
         return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 
+    @GetMapping("/reserved/pending-or-accepted/all")
+    public ResponseEntity<List<RequestDTO>> findAllReservedRequests() {
+        List<RequestDTO> result = rs.getReservedRequests();
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @PostMapping("/accept")
+    public ResponseEntity<String> acceptRequest(Authentication authentication, @RequestParam Integer requestId) {
+        CampusSafetyUserDetails details = (CampusSafetyUserDetails) authentication.getPrincipal();
+        UUID receiverId = UUID.fromString(details.getUsername());
+        String response = rs.acceptRequest(requestId, receiverId);
+        if (response.equals("Request accepted and receiver marked as busy")) {
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+    @PostMapping("/complete")
+    public ResponseEntity<String> completeRequest(Authentication authentication, @RequestParam Integer requestId) {
+        CampusSafetyUserDetails details = (CampusSafetyUserDetails) authentication.getPrincipal();
+        UUID receiverId = UUID.fromString(details.getUsername());
+        String response = rs.completeRequest(requestId, receiverId);
+        if (response.equals("Request completed and receiver marked as not busy")) {
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.badRequest().body(response);
+        }
     }
 }
