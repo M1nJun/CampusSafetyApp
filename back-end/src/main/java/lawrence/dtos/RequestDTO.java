@@ -11,7 +11,7 @@ public class RequestDTO {
     private LocalDateTime requestDate;
     private LocalDateTime lastModifiedDate;
     private String requestType;
-    private String requestTitle;
+    private String requestSubject;
     private String comment;
     private String requestStatus;
     private Boolean reserved;
@@ -26,8 +26,9 @@ public class RequestDTO {
         requestDate = core.getRequestDate();
         lastModifiedDate = core.getLastModifiedDate();
         requestType = core.getRequestType();
-        requestTitle = core.getRequestTitle();
+        requestSubject = core.getRequestSubject();
         comment = core.getComment();
+        
         requestStatus = core.getRequestStatus();
         reserved = core.getReserved();
         reservationDue = core.getReservationDue();
@@ -97,12 +98,12 @@ public class RequestDTO {
         this.requestStatus = requestStatus;
     }
 
-    public String getRequestTitle() {
-        return requestTitle;
+    public String getRequestSubject() {
+        return requestSubject;
     }
 
-    public void setRequestTitle(String requestTitle) {
-        this.requestTitle = requestTitle;
+    public void setRequestSubject(String requestSubject) {
+        this.requestSubject = requestSubject;
     }
 
     public Boolean getReserved() {

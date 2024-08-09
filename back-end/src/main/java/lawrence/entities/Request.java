@@ -23,7 +23,7 @@ public class Request {
     private LocalDateTime requestDate;
     private LocalDateTime lastModifiedDate;
     private String requestType;
-    private String requestTitle;
+    private String requestSubject;
     private String comment;
     private String requestStatus;
     private Boolean reserved;
@@ -36,7 +36,7 @@ public class Request {
         requestDate = LocalDateTime.now();
         lastModifiedDate = this.requestDate;
         requestType = core.getRequestType();
-        requestTitle = core.getRequestTitle();
+        requestSubject = core.getRequestSubject();
         comment = core.getComment();
         requestStatus = "pending";
         reserved = core.getReserved();
@@ -130,12 +130,12 @@ public class Request {
         this.requestStatus = requestStatus;
     }
 
-    public String getRequestTitle() {
-        return requestTitle;
+    public String getRequestSubject() {
+        return requestSubject;
     }
 
-    public void setRequestTitle(String requestTitle) {
-        this.requestTitle = requestTitle;
+    public void setRequestSubject(String requestSubject) {
+        this.requestSubeject = requestSubject;
     }
 
     public Boolean getReserved() {
