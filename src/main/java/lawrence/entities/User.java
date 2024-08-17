@@ -7,6 +7,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -26,6 +27,9 @@ public class User {
     private String phone;
     private String studentID;
     private Boolean busy;
+    private Boolean verified;
+    private String verificationCode;
+    private LocalDateTime verificationCodeExpiry;
 
     public User() {}
 
@@ -36,6 +40,7 @@ public class User {
         lastname = core.getLastname();
         phone = core.getPhone();
         studentID = core.getStudentID();
+        verified = false;
     }
 
     public UUID getUserID() {
@@ -108,5 +113,29 @@ public class User {
 
     public void setBusy(Boolean busy) {
         this.busy = busy;
+    }
+
+    public Boolean getVerified() {
+        return verified;
+    }
+
+    public void setVerified(Boolean verified) {
+        this.verified = verified;
+    }
+
+    public LocalDateTime getVerificationCodeExpiry() {
+        return verificationCodeExpiry;
+    }
+
+    public void setVerificationCodeExpiry(LocalDateTime verificationCodeExpiry) {
+        this.verificationCodeExpiry = verificationCodeExpiry;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
     }
 }

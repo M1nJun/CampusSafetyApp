@@ -2,6 +2,8 @@ package lawrence.dtos;
 
 import lawrence.entities.User;
 
+import java.time.LocalDateTime;
+
 public class UserDTO {
     private String username;
     private String password;
@@ -11,6 +13,9 @@ public class UserDTO {
     private String phone;
     private String studentID;
     private Boolean busy;
+    private Boolean verified;
+    private String verificationCode;
+    private LocalDateTime verificationCodeExpiry;
 
     public UserDTO() {}
 
@@ -22,6 +27,7 @@ public class UserDTO {
         lastname = core.getLastname();
         phone = core.getPhone();
         studentID = core.getStudentID();
+        verified = core.getVerified();
     }
 
     public String getUsername() {
@@ -86,5 +92,29 @@ public class UserDTO {
 
     public void setBusy(Boolean busy) {
         this.busy = busy;
+    }
+
+    public Boolean getVerified() {
+        return verified;
+    }
+
+    public void setVerified(Boolean verified) {
+        this.verified = verified;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+    }
+
+    public LocalDateTime getVerificationCodeExpiry() {
+        return verificationCodeExpiry;
+    }
+
+    public void setVerificationCodeExpiry(LocalDateTime verificationCodeExpiry) {
+        this.verificationCodeExpiry = verificationCodeExpiry;
     }
 }
