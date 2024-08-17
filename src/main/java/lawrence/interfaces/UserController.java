@@ -1,5 +1,6 @@
 package lawrence.interfaces;
 
+import lawrence.dtos.LoginResponseDTO;
 import lawrence.entities.User;
 import lawrence.securities.CampusSafetyUserDetails;
 import lawrence.services.UserService;
@@ -49,13 +50,16 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserDTO user) {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody UserDTO user) {
         User result = us.findByNameAndPassword(user.getUsername(), user.getPassword());
         if (result == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
         String token = jwtService.makeJwt(result.getUserID().toString());
-        return ResponseEntity.status(HttpStatus.OK).body(token);
+        String usertype = result.getUsertype();
+
+        LoginResponseDTO responseDTO = new LoginResponseDTO(token, usertype);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
     @GetMapping("/profile/self")

@@ -135,7 +135,7 @@ public class Request {
     }
 
     public void setRequestSubject(String requestSubject) {
-        this.requestSubeject = requestSubject;
+        this.requestSubject = requestSubject;
     }
 
     public Boolean getReserved() {
