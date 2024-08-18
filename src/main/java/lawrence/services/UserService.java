@@ -43,6 +43,19 @@ public class UserService {
        return newUser.getUserID().toString();
     }
 
+    public String newCode(User user) {
+        String verificationCode = String.format("%06d", new Random().nextInt(999999));
+        user.setVerificationCode(verificationCode);
+        user.setVerificationCodeExpiry(LocalDateTime.now().plusMinutes(15));
+        userRepository.save(user);
+
+        // Send verification email
+        emailService.sendVerificationEmail(user.getUsername(), "Email Verification",
+                "Your verification code is: " + verificationCode);
+
+        return "New Verification Code Generated";
+    }
+
 
     public User findByNameAndPassword(String username, String password) {
         List<User> existing = userRepository.findByUsername(username);

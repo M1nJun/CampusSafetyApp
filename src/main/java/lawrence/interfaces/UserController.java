@@ -47,11 +47,22 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(token);
     }
 
+    @PostMapping("/newcode")
+    public ResponseEntity<String> newCode(Authentication authentication) {
+        CampusSafetyUserDetails details = (CampusSafetyUserDetails) authentication.getPrincipal();
+        UUID id = UUID.fromString(details.getUsername());
+        User user = us.findByUser(id.toString());
+
+        String result = us.newCode(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+    }
+
     @PostMapping("/verify")
     public ResponseEntity<String> verifyCode(@RequestBody String verificationCode, Authentication authentication) {
         CampusSafetyUserDetails details = (CampusSafetyUserDetails) authentication.getPrincipal();
         UUID id = UUID.fromString(details.getUsername());
         User user = us.findByUser(id.toString());
+
 
         if (user == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not found");
@@ -61,7 +72,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Verification code expired");
         }
 
-        if (!user.getVerificationCode().equals(verificationCode)) {
+        if (!user.getVerificationCode().trim().equals(verificationCode.trim())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid verification code");
         }
 
@@ -79,8 +90,9 @@ public class UserController {
         }
         String token = jwtService.makeJwt(result.getUserID().toString());
         String usertype = result.getUsertype();
+        Boolean verified = result.getVerified();
 
-        LoginResponseDTO responseDTO = new LoginResponseDTO(token, usertype);
+        LoginResponseDTO responseDTO = new LoginResponseDTO(token, usertype, verified);
         return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
