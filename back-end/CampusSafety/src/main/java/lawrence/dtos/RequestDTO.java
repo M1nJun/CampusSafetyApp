@@ -12,7 +12,9 @@ public class RequestDTO {
     private LocalDateTime lastModifiedDate;
     private String requestType;
     private String requestSubject;
-    private String comment;
+    private String location;
+    private String destination;
+    private String message;
     private String requestStatus;
     private Boolean reserved;
     private LocalDateTime reservationDue;
@@ -27,8 +29,9 @@ public class RequestDTO {
         lastModifiedDate = core.getLastModifiedDate();
         requestType = core.getRequestType();
         requestSubject = core.getRequestSubject();
-        comment = core.getComment();
-        
+        message = core.getMessage();
+        location = core.getLocation();
+        destination = core.getDestination();
         requestStatus = core.getRequestStatus();
         reserved = core.getReserved();
         reservationDue = core.getReservationDue();
@@ -82,12 +85,12 @@ public class RequestDTO {
         this.requestType = requestType;
     }
 
-    public String getComment() {
-        return comment;
+    public String getMessage() {
+        return message;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getRequestStatus() {
@@ -120,5 +123,21 @@ public class RequestDTO {
 
     public void setReservationDue(LocalDateTime reservationDue) {
         this.reservationDue = reservationDue;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
     }
 }

@@ -52,7 +52,7 @@ export default function VerificationScreen() {
           // Officers have verified account already.
           // need to pass token to the studenthome page.
           // So that whatever reqeust they make becomes the user's request.
-          navigation.navigate("StudentHome");
+          navigation.navigate("StudentHome", { token });
         } else {
           const error = await response.text();
           Alert.alert("Error", error);
