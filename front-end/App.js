@@ -18,6 +18,7 @@ import StudentAccountScreen from "./screens/StudentAccountScreen";
 import RequestViewScreen from "./screens/RequestViewScreen";
 import OfficerHomeScreen from "./screens/OfficerHomeScreen";
 import OfficerRequestLockScreen from "./screens/OfficerRequestLockScreen";
+import StudentRequestLockScreen from "./screens/StudentRequestLockScreen";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -36,6 +37,10 @@ export default function App() {
         <Stack.Screen
           name="OfficerRequestLock"
           component={OfficerRequestLockScreen}
+        />
+        <Stack.Screen
+          name="StudentRequestLock"
+          component={StudentRequestLockScreen}
         />
         <Stack.Screen
           name="RequestView"

@@ -1,15 +1,6 @@
 //rnf
-import { theme } from "../colors";
 import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-} from "react-native";
+import { View } from "react-native";
 import React from "react";
 import { useEffect, useState } from "react";
 import { useRoute, useNavigation } from "@react-navigation/native";

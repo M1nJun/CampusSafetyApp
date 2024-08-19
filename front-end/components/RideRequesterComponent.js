@@ -14,15 +14,17 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import styles from "../styles";
 import { useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 const RideRequesterComponent = ({ token }) => {
+  const navigation = useNavigation();
+
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [isReserve, setIsReserve] = useState(false);
   const [location, setLocation] = useState("");
   const [destination, setDestination] = useState("");
   const [message, setMessage] = useState("");
-  const [requestSubject, setRequestSubject] = useState("");
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -64,6 +66,7 @@ const RideRequesterComponent = ({ token }) => {
 
       if (response.ok) {
         Alert.alert("Success", "Your ride request has been submitted.");
+        navigation.navigate("StudentRequestLock", { token });
       } else {
         Alert.alert("Error", "Failed to submit the request. Please try again.");
       }

@@ -6,6 +6,7 @@ import {
   View,
   Text,
   Image,
+  Alert,
   TouchableOpacity,
   TextInput,
   ScrollView,
@@ -15,9 +16,14 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import styles from "../styles";
 
-const SafetyRequesterComponent = () => {
+const SafetyRequesterComponent = ({ token }) => {
   const [date, setDate] = useState(new Date(1598051730000));
   const [show, setShow] = useState(false);
+  const [isReserve, setIsReserve] = useState(false);
+  const [location, setLocation] = useState("");
+  // const [destination, setDestination] = useState("");
+  const [message, setMessage] = useState("");
+  const [requestSubject, setRequestSubject] = useState("");
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -28,9 +34,44 @@ const SafetyRequesterComponent = () => {
     setShow(true);
   };
 
-  const [isReserve, setIsReserve] = useState(false);
   const reserve = () => setIsReserve(true);
   const instant = () => setIsReserve(false);
+
+  const handleSubmit = async () => {
+    // adjusting date object to include user's local time zone offset.
+    const localDate = new Date(
+      date.getTime() - date.getTimezoneOffset() * 60000
+    );
+
+    const requestData = {
+      requestType: "safety",
+      requestSubject: requestSubject.trim(),
+      location: location.trim(),
+      destination: null,
+      message: message.trim(),
+      reserved: isReserve,
+      reservationDue: isReserve ? localDate : null,
+    };
+
+    try {
+      const response = await fetch("http://localhost:8085/request", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      if (response.ok) {
+        Alert.alert("Success", "Your ride request has been submitted.");
+      } else {
+        Alert.alert("Error", "Failed to submit the request. Please try again.");
+      }
+    } catch (error) {
+      Alert.alert("Error", "An error occurred while submitting the request.");
+    }
+  };
 
   return (
     <ScrollView>
@@ -46,6 +87,8 @@ const SafetyRequesterComponent = () => {
           placeholderTextColor="gray"
           autoCapitalize="none"
           style={styles.input}
+          value={requestSubject}
+          onChangeText={setRequestSubject}
         ></TextInput>
       </View>
       <View style={{ ...styles.widthControll, justifyContent: "center" }}>
@@ -54,6 +97,8 @@ const SafetyRequesterComponent = () => {
           placeholderTextColor="gray"
           autoCapitalize="none"
           style={styles.input}
+          value={location}
+          onChangeText={setLocation}
         ></TextInput>
       </View>
       <View style={styles.questionContainer}>
@@ -166,10 +211,12 @@ const SafetyRequesterComponent = () => {
             ...styles.input,
             paddingBottom: 60,
           }}
+          value={message}
+          onChangeText={setMessage}
         ></TextInput>
       </View>
       <View style={{ ...styles.widthControll, justifyContent: "center" }}>
-        <TouchableOpacity style={styles.blueBtn}>
+        <TouchableOpacity style={styles.blueBtn} onPress={handleSubmit}>
           <Text style={styles.blueBtnText}>Submit</Text>
         </TouchableOpacity>
       </View>
