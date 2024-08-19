@@ -82,6 +82,15 @@ public class UserService {
         user.setVerificationCode(null);
         user.setVerificationCodeExpiry(null);
         userRepository.save(user);
-        return "Successfuly Verified";
+        return "Successfully Verified";
+    }
+
+    public String updateProfile(User user, UserDTO newProfile){
+        user.setFirstname(newProfile.getFirstname());
+        user.setLastname(newProfile.getLastname());
+        user.setPhone(newProfile.getPhone());
+        user.setUsername(newProfile.getStudentID());
+        userRepository.save(user);
+        return "Successfully Updated";
     }
 }

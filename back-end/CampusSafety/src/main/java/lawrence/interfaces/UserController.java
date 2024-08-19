@@ -114,4 +114,13 @@ public class UserController {
         return ResponseEntity.ok().body(result);
     }
 
+    @PostMapping("/profile/update")
+    public ResponseEntity<String> updateProfile(Authentication authentication, @RequestBody UserDTO newProfile) {
+        CampusSafetyUserDetails details = (CampusSafetyUserDetails) authentication.getPrincipal();
+        UUID id = UUID.fromString(details.getUsername());
+        User user = us.findByUser(id.toString());
+        String result = us.updateProfile(user, newProfile);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
 }

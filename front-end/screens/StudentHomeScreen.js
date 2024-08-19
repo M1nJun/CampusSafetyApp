@@ -30,7 +30,7 @@ export default function StudentHomeScreen() {
         <SafetyRequesterComponent token={token} />
       )}
 
-      <BottomNavigationBarComponent type="Student" />
+      <BottomNavigationBarComponent type="Student" token={token} />
     </View>
   );
 }

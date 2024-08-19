@@ -13,14 +13,14 @@ import Entypo from "@expo/vector-icons/Entypo";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
-const BottomNavigationBarComponent = ({ type }) => {
+const BottomNavigationBarComponent = ({ type, token }) => {
   const navigation = useNavigation();
   const route = useRoute(); // To get the current route name
 
   const handleNavigation = (screen) => {
     if (route.name !== screen) {
       // Check if we're already on the target screen
-      navigation.navigate(screen);
+      navigation.navigate(screen, { token });
     }
   };
   return (
