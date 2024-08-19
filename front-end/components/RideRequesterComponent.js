@@ -65,8 +65,10 @@ const RideRequesterComponent = ({ token }) => {
       });
 
       if (response.ok) {
+        const responseData = await response.json();
+        const requestId = responseData.key;
         Alert.alert("Success", "Your ride request has been submitted.");
-        navigation.navigate("StudentRequestLock", { token });
+        navigation.navigate("StudentRequestLock", { token, requestId });
       } else {
         Alert.alert("Error", "Failed to submit the request. Please try again.");
       }

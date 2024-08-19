@@ -32,6 +32,11 @@ public class RequestService {
         return newRequest.getRequestID().toString();
     }
 
+    public Request findByRequestId(String id){
+        Integer intId = Integer.parseInt(id);
+        return requestRepository.findById(intId).orElse(null);
+    }
+
     public List<RequestDTO> getPendingRequests() {
         List<Request> requests = requestRepository.findByRequestStatus("pending");
         List<RequestDTO> result = new ArrayList<RequestDTO>();

@@ -21,10 +21,10 @@ import UserRequestViewComponent from "../components/UserRequestViewComponent";
 
 const StudentRequestLockScreen = () => {
   const route = useRoute();
-  const { token } = route.params;
+  const { token, requestId } = route.params;
   return (
     <View style={styles.container}>
-      <UserRequestViewComponent />
+      <UserRequestViewComponent token={token} requestId={requestId} />
     </View>
   );
 };

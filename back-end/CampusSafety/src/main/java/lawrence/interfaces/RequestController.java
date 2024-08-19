@@ -31,9 +31,16 @@ public class RequestController  {
         request.setRequester(id.toString());
         String key = rs.save(request);
         if (key.equals("Bad Id")) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Cannot generate key");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Cannot generate key\"}");
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(key);
+        return ResponseEntity.status(HttpStatus.CREATED).body("{\"key\":\"" + key + "\"}");
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<RequestDTO>findByRequestId(Authentication authentication, @PathVariable String id) {
+        Request request = rs.findByRequestId(id);
+        RequestDTO result = new RequestDTO(request);
+        return ResponseEntity.ok().body(result);
     }
 
     @GetMapping("pending/all")

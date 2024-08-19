@@ -1,18 +1,78 @@
-import React from "react";
-import { theme } from "../colors";
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-} from "react-native";
+import { View, Text, TouchableOpacity, Alert } from "react-native";
 import styles from "../styles";
+import { useRoute } from "@react-navigation/native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import React, { useEffect, useState } from "react";
 
 const UserRequestViewComponent = () => {
+  const route = useRoute();
+  const { token, requestId } = route.params;
+
+  const [requestData, setRequestData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRequestData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8085/request/${requestId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setRequestData(data);
+        } else {
+          Alert.alert("Error", "Fail to fetch the request data.");
+        }
+      } catch (error) {
+        Alert.alert(
+          "Error",
+          "An error occurred while fetching the request data."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRequestData();
+  }, [requestId, token]);
+
+  if (loading) {
+    return (
+      <View
+        style={{
+          backgroundColor: "white",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  if (!requestData) {
+    return (
+      <View
+        style={{
+          backgroundColor: "white",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text>No data found.</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={{ backgroundColor: "white", borderRadius: 15 }}>
       <View
@@ -30,14 +90,25 @@ const UserRequestViewComponent = () => {
             fontWeight: "700",
           }}
         >
-          Safety Request
+          {requestData.requestType === "ride"
+            ? "Ride Request"
+            : "Safety Request"}
         </Text>
-        <MaterialCommunityIcons
-          name="shield-check"
-          size={37}
-          color="black"
-          style={{ paddingRight: 20 }}
-        />
+        {requestData.requestType === "ride" ? (
+          <FontAwesome5
+            name="shuttle-van"
+            size={30}
+            color="black"
+            style={{ paddingRight: 20 }}
+          />
+        ) : (
+          <MaterialCommunityIcons
+            name="shield-check"
+            size={37}
+            color="black"
+            style={{ paddingRight: 20 }}
+          />
+        )}
       </View>
 
       <Text
@@ -48,7 +119,7 @@ const UserRequestViewComponent = () => {
           marginVertical: 10,
         }}
       >
-        Location: Hiett Hall
+        Location: {requestData.location}
       </Text>
       <Text
         style={{
@@ -58,8 +129,7 @@ const UserRequestViewComponent = () => {
           marginVertical: 10,
         }}
       >
-        Details: My room number is 203. I am locked out of my room. Please help
-        me.
+        Details: {requestData.message}
       </Text>
       <Text
         style={{
@@ -69,7 +139,7 @@ const UserRequestViewComponent = () => {
           marginVertical: 10,
         }}
       >
-        Date: 07/30/2024 09:33 am
+        Date: {new Date(requestData.requestDate).toLocaleString()}
       </Text>
       <View
         style={{
