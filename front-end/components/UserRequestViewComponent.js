@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 
 const UserRequestViewComponent = () => {
   const route = useRoute();
-  const { token, requestId } = route.params;
+  const { token, requestID } = route.params;
 
   const [requestData, setRequestData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -16,7 +16,7 @@ const UserRequestViewComponent = () => {
     const fetchRequestData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8085/request/${requestId}`,
+          `http://localhost:8085/request/${requestID}`,
           {
             method: "GET",
             headers: {
@@ -43,7 +43,7 @@ const UserRequestViewComponent = () => {
     };
 
     fetchRequestData();
-  }, [requestId, token]);
+  }, [requestID, token]);
 
   if (loading) {
     return (

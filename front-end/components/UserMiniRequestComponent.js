@@ -14,12 +14,22 @@ import { useEffect, useState } from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import styles from "../styles";
 
-const UserMiniRequestComponent = ({ requestType, date, navigation }) => {
+const UserMiniRequestComponent = ({
+  navigation,
+  requestID,
+  requestType,
+  date,
+  token,
+}) => {
   return (
     <TouchableOpacity
       style={styles.miniRequest}
       onPress={() =>
-        navigation.navigate("RequestView", { userType: "student" })
+        navigation.navigate("RequestView", {
+          token,
+          requestID,
+          userType: "student",
+        })
       }
     >
       <View
@@ -36,7 +46,7 @@ const UserMiniRequestComponent = ({ requestType, date, navigation }) => {
         <Text style={{ fontSize: 18 }}>{date}</Text>
       </View>
 
-      {requestType === "Ride" ? (
+      {requestType === "ride" ? (
         <FontAwesome5
           name="shuttle-van"
           size={30}

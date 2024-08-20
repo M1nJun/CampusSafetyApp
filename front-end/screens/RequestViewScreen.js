@@ -15,14 +15,15 @@ import { useEffect, useState } from "react";
 import styles from "../styles";
 import UserRequestViewComponent from "../components/UserRequestViewComponent";
 import OfficerRequestViewComponent from "../components/OfficerRequestViewComponent";
+import { useRoute } from "@react-navigation/native";
 
 const RequestViewScreen = ({ route }) => {
-  const { userType } = route.params;
+  const { token, userType, requestID } = route.params;
   console.log(userType);
   return (
     <View style={styles.container}>
       {userType === "student" ? (
-        <UserRequestViewComponent />
+        <UserRequestViewComponent token={token} requestID={requestID} />
       ) : (
         <OfficerRequestViewComponent />
       )}

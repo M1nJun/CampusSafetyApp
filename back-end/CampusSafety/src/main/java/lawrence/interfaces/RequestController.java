@@ -43,6 +43,27 @@ public class RequestController  {
         return ResponseEntity.ok().body(result);
     }
 
+
+    // should update this so that it only returns the list of ids.
+    // need to make a method that searches all the request made by the user that is reserved and in pending status.
+    @GetMapping("/self/pending/all")
+    public ResponseEntity<List<RequestDTO>> findPendingRequestsByUser(Authentication authentication) {
+        CampusSafetyUserDetails details = (CampusSafetyUserDetails) authentication.getPrincipal();
+        UUID id = UUID.fromString(details.getUsername());
+        List<RequestDTO> requests = rs.findPendingRequestsByUser(id);
+
+        return ResponseEntity.ok(requests);
+    }
+
+    // need to make a method that searches all the request that are in completed status.
+
+    // need to make a method that searches for reserved requests that are 30 minutes away from the reservation time.
+
+    // need to make a method that searches for instant requests in time order
+
+    // need to make a method that searches for reserved requests that are more than 30 minutes away from the reservation time.
+    
+
     @GetMapping("pending/all")
     public ResponseEntity<List<RequestDTO>> findAllRequest(Authentication authentication) {
         List<RequestDTO> result = rs.getPendingRequests();
@@ -78,4 +99,5 @@ public class RequestController  {
             return ResponseEntity.badRequest().body(response);
         }
     }
+    // at some point we'll need a method that queries for just the ride requests for the driver app.
 }

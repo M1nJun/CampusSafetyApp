@@ -25,9 +25,9 @@ export default function StudentAccountScreen({ navigation }) {
       {isProfile ? (
         <ProfileComponent token={token} />
       ) : (
-        <MyRequestComponent navigation={navigation} />
+        <MyRequestComponent navigation={navigation} token={token} />
       )}
-      <BottomNavigationBarComponent type="Student" />
+      <BottomNavigationBarComponent type="Student" token={token} />
     </View>
   );
 }
