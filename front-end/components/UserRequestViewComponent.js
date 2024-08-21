@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, Alert } from "react-native";
 import styles from "../styles";
-import { useRoute } from "@react-navigation/native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import React, { useEffect, useState } from "react";
@@ -9,8 +9,37 @@ const UserRequestViewComponent = () => {
   const route = useRoute();
   const { token, requestID } = route.params;
 
+  const navigation = useNavigation();
+
   const [requestData, setRequestData] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const cancelRequest = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8085/request/${requestID}/cancel`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json", // Specify content type
+          },
+        }
+      );
+
+      if (response.ok) {
+        const message = await response.text();
+        Alert.alert("Success", message, [
+          { text: "OK", onPress: () => navigation.goBack() },
+        ]);
+      } else {
+        const errorData = await response.text();
+        Alert.alert("Error", `Failed to cancel request: ${errorData}`);
+      }
+    } catch (error) {
+      Alert.alert("Error", `Error cancelling request: ${error.message}`);
+    }
+  };
 
   useEffect(() => {
     const fetchRequestData = async () => {
@@ -141,17 +170,20 @@ const UserRequestViewComponent = () => {
       >
         Date: {new Date(requestData.requestDate).toLocaleString()}
       </Text>
-      <View
-        style={{
-          ...styles.widthControll,
-          justifyContent: "center",
-          paddingBottom: 20,
-        }}
-      >
-        <TouchableOpacity style={styles.blueBtn}>
-          <Text style={styles.blueBtnText}>Cancel this Request</Text>
-        </TouchableOpacity>
-      </View>
+      {requestData.requestStatus === "pending" ||
+      requestData.requestStatus === "accepted" ? (
+        <View
+          style={{
+            ...styles.widthControll,
+            justifyContent: "center",
+            paddingBottom: 20,
+          }}
+        >
+          <TouchableOpacity style={styles.blueBtn} onPress={cancelRequest}>
+            <Text style={styles.blueBtnText}>Cancel this Request</Text>
+          </TouchableOpacity>
+        </View>
+      ) : null}
     </View>
   );
 };

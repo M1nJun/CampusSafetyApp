@@ -22,10 +22,10 @@ import LottieView from "lottie-react-native";
 
 const StudentRequestLockScreen = () => {
   const route = useRoute();
-  const { token, requestId } = route.params;
+  const { token, requestID } = route.params;
   return (
     <View style={styles.container}>
-      <UserRequestViewComponent token={token} requestId={requestId} />
+      <UserRequestViewComponent token={token} requestID={requestID} />
       <View style={{ justifyContent: "center", alignItems: "center" }}>
         <LottieView
           style={{ width: 500, height: 200, marginTop: -30, marginBottom: -60 }}

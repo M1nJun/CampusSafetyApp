@@ -67,14 +67,14 @@ public class RequestService {
         return result;
     }
 
-    public String acceptRequest(Integer requestId, UUID receiverId) {
-        Optional<Request> maybeRequest = requestRepository.findById(requestId);
+    public String acceptRequest(Integer requestID, UUID receiverID) {
+        Optional<Request> maybeRequest = requestRepository.findById(requestID);
         if (!maybeRequest.isPresent()) {
             return "Request not found";
         }
         Request request = maybeRequest.get();
 
-        Optional<User> maybeReceiver = userRepository.findById(receiverId);
+        Optional<User> maybeReceiver = userRepository.findById(receiverID);
         if (!maybeReceiver.isPresent()) {
             return "Receiver not found";
         }
@@ -90,14 +90,14 @@ public class RequestService {
         return "Request accepted and receiver marked as busy";
     }
 
-    public String completeRequest(Integer requestId, UUID receiverId) {
-        Optional<Request> maybeRequest = requestRepository.findById(requestId);
+    public String completeRequest(Integer requestID, UUID receiverID) {
+        Optional<Request> maybeRequest = requestRepository.findById(requestID);
         if (!maybeRequest.isPresent()) {
             return "Request not found";
         }
         Request request = maybeRequest.get();
 
-        if (!request.getReceiver().getUserID().equals(receiverId)) {
+        if (!request.getReceiver().getUserID().equals(receiverID)) {
             return "Unauthorized action";
         }
 
@@ -113,8 +113,8 @@ public class RequestService {
         return "Request completed and receiver marked as not busy";
     }
 
-    public String cancelRequest(Integer requestId) {
-        Optional<Request> maybeRequest = requestRepository.findById(requestId);
+    public String cancelRequest(Integer requestID) {
+        Optional<Request> maybeRequest = requestRepository.findById(requestID);
         if (!maybeRequest.isPresent()) {
             return "Request not found";
         }

@@ -31,9 +31,9 @@ public class RequestController  {
         request.setRequester(id.toString());
         String key = rs.save(request);
         if (key.equals("Bad Id")) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Cannot generate key\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot generate key");
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body("{\"key\":\"" + key + "\"}");
+        return ResponseEntity.status(HttpStatus.CREATED).body(key);
     }
 
     @GetMapping("/{id}")
@@ -103,14 +103,15 @@ public class RequestController  {
         }
     }
 
-    @PostMapping("/cancel")
-    public ResponseEntity<String> cancelRequest(Authentication authentication, @RequestParam Integer requestId) {
+    @PostMapping("/{requestID}/cancel")
+    public ResponseEntity<String> cancelRequest(Authentication authentication, @PathVariable String requestID) {
 //        CampusSafetyUserDetails details = (CampusSafetyUserDetails) authentication.getPrincipal();
 //        UUID receiverId = UUID.fromString(details.getUsername());
         // as of right now, I just set it up so that the person who cancelled it is not important
         // working on the student cancellation tho.
-        String response = rs.cancelRequest(requestId);
-        if (response.equals("Request accepted and receiver marked as busy")) {
+        Integer requestIDInt = Integer.parseInt(requestID);
+        String response = rs.cancelRequest(requestIDInt);
+        if (response.equals("Request successfully cancelled")) {
             return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.badRequest().body(response);

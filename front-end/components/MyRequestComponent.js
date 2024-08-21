@@ -9,7 +9,8 @@ import {
   ScrollView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useRoute } from "@react-navigation/native";
+import { useFocusEffect, useRoute } from "@react-navigation/native";
+import { useCallback } from "react";
 import UserMiniRequestComponent from "./UserMiniRequestComponent";
 
 const MyRequestComponent = ({ navigation }) => {
@@ -19,40 +20,38 @@ const MyRequestComponent = ({ navigation }) => {
   const [pendingRequests, setPendingRequests] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchPendingRequests = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:8085/request/self/pending/all",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-          console.log(data[0].requestType);
-          setPendingRequests(data);
-        } else {
-          console.error("Failed to fetch pending requests");
+  const fetchPendingRequests = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8085/request/self/pending/all",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         }
-      } catch (error) {
-        console.error("Error fetching pending requests:", error);
-      } finally {
-        setLoading(false);
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data[0].requestType);
+        setPendingRequests(data);
+      } else {
+        console.error("Failed to fetch pending requests");
       }
-    };
+    } catch (error) {
+      console.error("Error fetching pending requests:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchPendingRequests();
-  }, [token]);
-
-  useEffect(() => {
-    console.log("Fetched Data:", pendingRequests);
-  }, [pendingRequests]);
+  useFocusEffect(
+    useCallback(() => {
+      fetchPendingRequests();
+    }, [token])
+  );
 
   if (loading) {
     return (
