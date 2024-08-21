@@ -62,7 +62,10 @@ public class RequestController  {
     // need to make a method that searches for instant requests in time order
 
     // need to make a method that searches for reserved requests that are more than 30 minutes away from the reservation time.
-    
+
+    // need to make a method that cancels the request
+
+
 
     @GetMapping("pending/all")
     public ResponseEntity<List<RequestDTO>> findAllRequest(Authentication authentication) {
@@ -94,6 +97,20 @@ public class RequestController  {
         UUID receiverId = UUID.fromString(details.getUsername());
         String response = rs.completeRequest(requestId, receiverId);
         if (response.equals("Request completed and receiver marked as not busy")) {
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+    @PostMapping("/cancel")
+    public ResponseEntity<String> cancelRequest(Authentication authentication, @RequestParam Integer requestId) {
+//        CampusSafetyUserDetails details = (CampusSafetyUserDetails) authentication.getPrincipal();
+//        UUID receiverId = UUID.fromString(details.getUsername());
+        // as of right now, I just set it up so that the person who cancelled it is not important
+        // working on the student cancellation tho.
+        String response = rs.cancelRequest(requestId);
+        if (response.equals("Request accepted and receiver marked as busy")) {
             return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.badRequest().body(response);

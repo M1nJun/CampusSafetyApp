@@ -113,5 +113,18 @@ public class RequestService {
         return "Request completed and receiver marked as not busy";
     }
 
+    public String cancelRequest(Integer requestId) {
+        Optional<Request> maybeRequest = requestRepository.findById(requestId);
+        if (!maybeRequest.isPresent()) {
+            return "Request not found";
+        }
+        Request request = maybeRequest.get();
+
+        request.cancelRequest();
+        requestRepository.save(request);
+
+        return "Request successfully cancelled";
+    }
+
 
 }

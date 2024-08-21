@@ -70,6 +70,11 @@ public class Request {
         this.lastModifiedDate = LocalDateTime.now();
     }
 
+    public void cancelRequest() {
+        this.requestStatus = "cancelled";
+        this.lastModifiedDate = LocalDateTime.now();
+    }
+
     public Integer getRequestID() {
         return requestID;
     }
