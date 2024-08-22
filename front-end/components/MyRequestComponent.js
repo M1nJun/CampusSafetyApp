@@ -13,8 +13,8 @@ const MyRequestComponent = ({ navigation }) => {
   const [acceptedRequests, setAcceptedRequests] = useState([]);
   const [completedRequests, setCompletedRequests] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [polling, setPolling] = useState(null);
 
+  // Fetch request data by status
   const fetchRequests = async (status, setStateFunction, url) => {
     try {
       const response = await fetch(url, {
@@ -34,44 +34,48 @@ const MyRequestComponent = ({ navigation }) => {
     } catch (error) {
       console.error(`Error fetching ${status} requests:`, error);
     }
-    // finally {
-    //   setLoading(false);
-    // }
   };
 
-  const fetchAllRequests = async () => {
-    setLoading(true);
-    await fetchRequests(
-      "pending",
-      setPendingRequests,
-      "http://localhost:8085/request/self/pending/all"
-    );
-    await fetchRequests(
-      "accepted",
-      setAcceptedRequests,
-      "http://localhost:8085/request/self/accepted/all"
-    );
-    await fetchRequests(
-      "completed",
-      setCompletedRequests,
-      "http://localhost:8085/request/self/completed/all"
-    );
-    setLoading(false);
-  };
-
+  // Fetch data on component focus
   useFocusEffect(
     useCallback(() => {
-      fetchAllRequests();
+      setLoading(true);
+      fetchRequests(
+        "pending",
+        setPendingRequests,
+        "http://localhost:8085/request/self/pending/all"
+      );
+      fetchRequests(
+        "accepted",
+        setAcceptedRequests,
+        "http://localhost:8085/request/self/accepted/all"
+      );
+      fetchRequests(
+        "completed",
+        setCompletedRequests,
+        "http://localhost:8085/request/self/completed/all"
+      );
+      setLoading(false);
 
-      // Start polling every 10 seconds
-      const intervalId = setInterval(fetchAllRequests, 10000);
-      setPolling(intervalId);
+      const intervalId = setInterval(() => {
+        fetchRequests(
+          "pending",
+          setPendingRequests,
+          "http://localhost:8085/request/self/pending/all"
+        );
+        fetchRequests(
+          "accepted",
+          setAcceptedRequests,
+          "http://localhost:8085/request/self/accepted/all"
+        );
+        fetchRequests(
+          "completed",
+          setCompletedRequests,
+          "http://localhost:8085/request/self/completed/all"
+        );
+      }, 10000);
 
-      // Cleanup when the component is unfocused
-      return () => {
-        clearInterval(intervalId);
-        setPolling(null);
-      };
+      return () => clearInterval(intervalId);
     }, [token])
   );
 
@@ -84,19 +88,12 @@ const MyRequestComponent = ({ navigation }) => {
           alignItems: "center",
         }}
       >
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
-          <LottieView
-            style={{
-              width: 500,
-              height: 200,
-              marginTop: -30,
-              marginBottom: -60,
-            }}
-            source={require("../assets/LoadingData.json")}
-            autoPlay
-            loop
-          />
-        </View>
+        <LottieView
+          style={{ width: 500, height: 200, marginTop: -30, marginBottom: -60 }}
+          source={require("../assets/LoadingData.json")}
+          autoPlay
+          loop
+        />
         <Text>Loading...</Text>
       </View>
     );
@@ -104,82 +101,58 @@ const MyRequestComponent = ({ navigation }) => {
 
   return (
     <ScrollView>
-      <Text
-        style={{
-          color: "white",
-          fontSize: 20,
-          fontWeight: "600",
-          marginTop: 10,
-        }}
-      >
-        Pending Requests
-      </Text>
-      {pendingRequests.length === 0 ? (
-        <Text style={{ color: "white" }}>No pending requests</Text>
-      ) : (
-        pendingRequests.map((request) => (
-          <UserMiniRequestComponent
-            key={request.requestID}
-            navigation={navigation}
-            date={request.requestDate}
-            requestType={request.requestType}
-            requestID={request.requestID}
-            token={token}
-          />
-        ))
-      )}
-
-      <Text
-        style={{
-          color: "white",
-          fontSize: 20,
-          fontWeight: "600",
-          marginTop: 10,
-        }}
-      >
-        Accepted Requests
-      </Text>
-      {acceptedRequests.length === 0 ? (
-        <Text style={{ color: "white" }}>No accepted requests</Text>
-      ) : (
-        acceptedRequests.map((request) => (
-          <UserMiniRequestComponent
-            key={request.requestID}
-            navigation={navigation}
-            date={request.requestDate}
-            requestType={request.requestType}
-            requestID={request.requestID}
-            token={token}
-          />
-        ))
-      )}
-
-      <Text
-        style={{
-          color: "white",
-          fontSize: 20,
-          fontWeight: "600",
-          marginTop: 30,
-        }}
-      >
-        Past Requests
-      </Text>
-      {completedRequests.length === 0 ? (
-        <Text style={{ color: "white" }}>No past requests</Text>
-      ) : (
-        completedRequests.map((request) => (
-          <UserMiniRequestComponent
-            key={request.requestID}
-            navigation={navigation}
-            date={request.requestDate}
-            requestType={request.requestType}
-            requestID={request.requestID}
-            token={token}
-          />
-        ))
-      )}
+      <Section
+        title="Pending Requests"
+        data={pendingRequests}
+        navigation={navigation}
+        token={token}
+      />
+      <Section
+        title="Accepted Requests"
+        data={acceptedRequests}
+        navigation={navigation}
+        token={token}
+      />
+      <Section
+        title="Past Requests"
+        data={completedRequests}
+        navigation={navigation}
+        token={token}
+      />
     </ScrollView>
   );
 };
+
+// Section component to handle rendering of each request type
+const Section = React.memo(({ title, data, navigation, token }) => {
+  return (
+    <>
+      <Text
+        style={{
+          color: "white",
+          fontSize: 20,
+          fontWeight: "600",
+          marginTop: 10,
+        }}
+      >
+        {title}
+      </Text>
+      {data.length === 0 ? (
+        <Text style={{ color: "white" }}>No {title.toLowerCase()}</Text>
+      ) : (
+        data.map((request) => (
+          <UserMiniRequestComponent
+            key={request.requestID}
+            navigation={navigation}
+            date={request.requestDate}
+            requestType={request.requestType}
+            requestID={request.requestID}
+            token={token}
+          />
+        ))
+      )}
+    </>
+  );
+});
 
 export default MyRequestComponent;
