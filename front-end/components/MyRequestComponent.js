@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import { useFocusEffect, useRoute } from "@react-navigation/native";
 import { useCallback } from "react";
 import UserMiniRequestComponent from "./UserMiniRequestComponent";
+import LottieView from "lottie-react-native";
 
 const MyRequestComponent = ({ navigation }) => {
   const route = useRoute();
@@ -57,12 +58,24 @@ const MyRequestComponent = ({ navigation }) => {
     return (
       <View
         style={{
-          backgroundColor: "white",
+          backgroundColor: "black",
           justifyContent: "center",
           alignItems: "center",
         }}
       >
-        {/* will add loading animation */}
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          <LottieView
+            style={{
+              width: 500,
+              height: 200,
+              marginTop: -30,
+              marginBottom: -60,
+            }}
+            source={require("../assets/LoadingData.json")}
+            autoPlay
+            loop
+          />
+        </View>
         <Text>Loading...</Text>
       </View>
     );
@@ -70,15 +83,28 @@ const MyRequestComponent = ({ navigation }) => {
 
   if (pendingRequests.length === 0) {
     return (
-      <View
-        style={{
-          backgroundColor: "white",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Text>No data found.</Text>
-      </View>
+      <ScrollView>
+        <Text
+          style={{
+            color: "white",
+            fontSize: 20,
+            fontWeight: "600",
+            marginTop: 10,
+          }}
+        >
+          Pending Requests
+        </Text>
+        <Text
+          style={{
+            color: "white",
+            fontSize: 20,
+            fontWeight: "600",
+            marginTop: 30,
+          }}
+        >
+          Past Requests
+        </Text>
+      </ScrollView>
     );
   }
 

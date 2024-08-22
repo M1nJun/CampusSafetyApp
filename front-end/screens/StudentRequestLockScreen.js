@@ -29,7 +29,7 @@ const StudentRequestLockScreen = () => {
       <View style={{ justifyContent: "center", alignItems: "center" }}>
         <LottieView
           style={{ width: 500, height: 200, marginTop: -30, marginBottom: -60 }}
-          source={require("../assets/Animation - 1724086249641.json")}
+          source={require("../assets/WaitingDriver.json")}
           autoPlay
           loop
         />

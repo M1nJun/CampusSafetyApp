@@ -50,7 +50,16 @@ public class RequestController  {
     public ResponseEntity<List<RequestDTO>> findPendingRequestsByUser(Authentication authentication) {
         CampusSafetyUserDetails details = (CampusSafetyUserDetails) authentication.getPrincipal();
         UUID id = UUID.fromString(details.getUsername());
-        List<RequestDTO> requests = rs.findPendingRequestsByUser(id);
+        List<RequestDTO> requests = rs.findCertainStatusRequestsByUser(id, "pending");
+
+        return ResponseEntity.ok(requests);
+    }
+
+    @GetMapping("/self/accepted/all")
+    public ResponseEntity<List<RequestDTO>> findAcceptedRequestsByUser(Authentication authentication) {
+        CampusSafetyUserDetails details = (CampusSafetyUserDetails) authentication.getPrincipal();
+        UUID id = UUID.fromString(details.getUsername());
+        List<RequestDTO> requests = rs.findCertainStatusRequestsByUser(id, "accepted");
 
         return ResponseEntity.ok(requests);
     }

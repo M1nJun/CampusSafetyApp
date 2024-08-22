@@ -37,9 +37,9 @@ public class RequestService {
         return requestRepository.findById(intId).orElse(null);
     }
 
-    public List<RequestDTO> findPendingRequestsByUser(UUID userId) {
+    public List<RequestDTO> findCertainStatusRequestsByUser(UUID userId, String status) {
         User user = userRepository.findById(userId).orElse(null);
-        List<Request> result = requestRepository.findByRequestStatusAndRequester("pending", user);
+        List<Request> result = requestRepository.findByRequestStatusAndRequester(status, user);
         List<RequestDTO> requestDTOS = new ArrayList<>();
         for(Request request : result) {
             RequestDTO dto = new RequestDTO(request);

@@ -64,7 +64,11 @@ const SafetyRequesterComponent = ({ token }) => {
       });
 
       if (response.ok) {
-        Alert.alert("Success", "Your ride request has been submitted.");
+        const requestID = await response.text();
+        // upon submittion, you get the string form of the key not a JSON object.
+        // needs to be mirrored on the SafetyRequesterComponent.
+        Alert.alert("Success", "Your safety request has been submitted.");
+        navigation.navigate("StudentRequestLock", { token, requestID });
       } else {
         Alert.alert("Error", "Failed to submit the request. Please try again.");
       }
