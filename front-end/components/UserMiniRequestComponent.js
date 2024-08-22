@@ -40,13 +40,13 @@ const UserMiniRequestComponent = ({
         }}
       >
         <Text style={{ fontSize: 18, fontWeight: "700" }}>
-          {requestType} Request
+          {requestType === "ride" ? "Ride" : "Safety"} Request
         </Text>
         <Text style={{ fontSize: 18 }}>, </Text>
-        <Text style={{ fontSize: 18 }}>{date}</Text>
+        <Text style={{ fontSize: 18 }}>{new Date(date).toLocaleString()}</Text>
       </View>
 
-      {requestType === "ride" ? (
+      {/* {requestType === "ride" ? (
         <FontAwesome5
           name="shuttle-van"
           size={30}
@@ -60,7 +60,7 @@ const UserMiniRequestComponent = ({
           color="black"
           style={{ paddingRight: 20 }}
         />
-      )}
+      )} */}
     </TouchableOpacity>
   );
 };

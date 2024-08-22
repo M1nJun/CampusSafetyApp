@@ -64,6 +64,15 @@ public class RequestController  {
         return ResponseEntity.ok(requests);
     }
 
+    @GetMapping("/self/completed/all")
+    public ResponseEntity<List<RequestDTO>> findCompletedRequestsByUser(Authentication authentication) {
+        CampusSafetyUserDetails details = (CampusSafetyUserDetails) authentication.getPrincipal();
+        UUID id = UUID.fromString(details.getUsername());
+        List<RequestDTO> requests = rs.findCertainStatusRequestsByUser(id, "completed");
+
+        return ResponseEntity.ok(requests);
+    }
+
     // need to make a method that searches all the request that are in completed status.
 
     // need to make a method that searches for reserved requests that are 30 minutes away from the reservation time.
