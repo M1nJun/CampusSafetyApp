@@ -50,4 +50,13 @@ public class OptionService {
         }
         return dtos;
     }
+
+    public List<LocationOptionDTO> findLocationOptionsByKeyword(String keyword) {
+        List<LocationOption> locationOptions = locationOptionRepository.findByLocationNameContainingIgnoreCase(keyword);
+        List<LocationOptionDTO> dtos = new ArrayList<>();
+        for (LocationOption locationOption : locationOptions) {
+            dtos.add(new LocationOptionDTO(locationOption));
+        }
+        return dtos;
+    }
 }

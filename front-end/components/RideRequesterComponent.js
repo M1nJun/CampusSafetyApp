@@ -16,11 +16,13 @@ import Entypo from '@expo/vector-icons/Entypo';
 import styles from "../styles";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
+import debounce from "lodash.debounce"; 
 
 const RideRequesterComponent = ({ token }) => {
   const navigation = useNavigation();
 
   const [locationList, setLocationList] = useState([]); // Store location options
+  const [destinationList, setDestinationList] = useState([]); 
   const [showDestinationDropdown, setShowDestinationDropdown] = useState(false); // State to toggle dropdown for destination
   const [showLocationList, setShowLocationList] = useState(false);
 
@@ -31,29 +33,69 @@ const RideRequesterComponent = ({ token }) => {
   const [destination, setDestination] = useState("");
   const [message, setMessage] = useState("");
 
+
+  const fetchLocationList = async () => {
+    try {
+      const response = await fetch("http://localhost:8085/option/location/all", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setLocationList(data); // Set the locations state
+      } else {
+        Alert.alert("Error", "Failed to fetch locations list.");
+      }
+    } catch (error) {
+      Alert.alert("Error", "An error occurred while fetching locations list.");
+    }
+  };
+
+  const fetchDestinationList = async () => {
+    try {
+      const response = await fetch(`http://localhost:8085/option/location/all`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setDestinationList(data); // Set the destination state
+      } else {
+        Alert.alert("Error", "Failed to fetch filtered locations.");
+      }
+    } catch (error) {
+      Alert.alert("Error", "An error occurred while fetching filtered locations.");
+    }
+  };
+
   // Fetch locations on component mount
   useEffect(() => {
-    const fetchLocationList = async () => {
-      try {
-        const response = await fetch("http://localhost:8085/option/location/all", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setLocationList(data); // Set the locations state
-        } else {
-          Alert.alert("Error", "Failed to fetch locations list.");
-        }
-      } catch (error) {
-        Alert.alert("Error", "An error occurred while fetching locations list.");
-      }
-    };
-
     fetchLocationList();
+    fetchDestinationList();
   }, [token]);
+
+  const handleKeywordChange = debounce(async (keyword, isDestination) => {
+    try {
+      const response = await fetch(`http://localhost:8085/option/location/${keyword}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        isDestination? setDestinationList(data) : setLocationList(data);
+      } else {
+        Alert.alert("Error", "Failed to fetch filtered locations.");
+      }
+    } catch (error) {
+      Alert.alert("Error", "An error occurred while fetching filtered locations.");
+    }
+  }, 300); // 300ms debounce delay
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -124,20 +166,23 @@ const RideRequesterComponent = ({ token }) => {
           style={{...styles.input, marginBottom:5}}
           value={destination}
           onFocus={() => setShowDestinationDropdown(true)}
-          onChangeText={setDestination}
+          onChangeText={(text) => {
+            setDestination(text);
+            text === "" ? fetchDestinationList() : handleKeywordChange(text, true);
+          }}
         ></TextInput>
         
       </View>
       
       {showDestinationDropdown && (<View style={{...styles.widthControll, justifyContent:'center'}}><View style={{flex:0.9}}><ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
-          {locationList.map((loc) => (
+          {destinationList.map((dest) => (
             
-            <TouchableOpacity style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} key={loc.locationOptionID} onPress={() => {
-              setDestination(loc.locationName);
+            <TouchableOpacity style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} key={dest.locationOptionID} onPress={() => {
+              setDestination(dest.locationName);
               setShowDestinationDropdown(false);
             }}>
               <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
-              <Text style={{color:"black", fontSize: 16, fontWeight:"500"}}>{loc.locationName}</Text>
+              <Text style={{color:"black", fontSize: 16, fontWeight:"500"}}>{dest.locationName}</Text>
             </TouchableOpacity>
           ))}
         </ScrollView></View></View>)}
@@ -149,7 +194,10 @@ const RideRequesterComponent = ({ token }) => {
           autoCapitalize="none"
           style={{...styles.input, marginBottom:5}}
           value={location}
-          onChangeText={setLocation}
+          onChangeText={(text) => {
+            setLocation(text);
+            text === "" ? fetchLocationList() : handleKeywordChange(text, false);
+          }}
           onFocus={() => setShowLocationList(true)}
         ></TextInput>
       </View>

@@ -43,4 +43,10 @@ public class OptionController {
         List<RequestOptionDTO> result = os.findAllRequestOptions();
         return ResponseEntity.ok(result);
     }
+
+    @GetMapping("/location/{keyword}")
+    public ResponseEntity<List<LocationOptionDTO>> getLocationOptionsByKeyword(@PathVariable String keyword) {
+        List<LocationOptionDTO> result = os.findLocationOptionsByKeyword(keyword);
+        return ResponseEntity.ok(result);
+    }
 }

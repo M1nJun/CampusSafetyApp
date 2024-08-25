@@ -2,10 +2,8 @@
 import React from "react";
 import { theme } from "../colors";
 import {
-  StyleSheet,
   View,
   Text,
-  Image,
   Alert,
   TouchableOpacity,
   TextInput,
@@ -18,6 +16,7 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Entypo from '@expo/vector-icons/Entypo';
 import styles from "../styles";
 import { useNavigation } from "@react-navigation/native";
+import debounce from "lodash.debounce"; 
 
 const SafetyRequesterComponent = ({ token }) => {
   const navigation = useNavigation();
@@ -35,26 +34,26 @@ const SafetyRequesterComponent = ({ token }) => {
   const [message, setMessage] = useState("");
   const [requestSubject, setRequestSubject] = useState("");
 
-  useEffect(() => {
-    const fetchLocationList = async () => {
-      try {
-        const response = await fetch("http://localhost:8085/option/location/all", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setLocationList(data); // Set the locations state
-        } else {
-          Alert.alert("Error", "Failed to fetch locations list.");
-        }
-      } catch (error) {
-        Alert.alert("Error", "An error occurred while fetching locations list.");
+  const fetchLocationList = async () => {
+    try {
+      const response = await fetch("http://localhost:8085/option/location/all", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setLocationList(data); // Set the locations state
+      } else {
+        Alert.alert("Error", "Failed to fetch locations list.");
       }
-    };
+    } catch (error) {
+      Alert.alert("Error", "An error occurred while fetching locations list.");
+    }
+  };
 
+  useEffect(() => {
     const fetchRequestList = async () => {
       try {
         const response = await fetch("http://localhost:8085/option/request/all", {
@@ -77,6 +76,26 @@ const SafetyRequesterComponent = ({ token }) => {
     fetchLocationList();
     fetchRequestList();
   }, [token]);
+
+   // Function to handle location input change with debounce
+   const handleLocationKeywordChange = debounce(async (keyword) => {
+    try {
+      const response = await fetch(`http://localhost:8085/option/location/${keyword}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setLocationList(data);
+      } else {
+        Alert.alert("Error", "Failed to fetch filtered locations.");
+      }
+    } catch (error) {
+      Alert.alert("Error", "An error occurred while fetching filtered locations.");
+    }
+  }, 300); // 300ms debounce delay
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -173,7 +192,11 @@ const SafetyRequesterComponent = ({ token }) => {
           autoCapitalize="none"
           style={{...styles.input, marginBottom:5}}
           value={location}
-          onChangeText={setLocation}
+          onChangeText={(text) => {
+            setLocation(text);
+            text === "" ? fetchLocationList() :
+            handleLocationKeywordChange(text);
+          }}
           onFocus={() => setShowLocationList(true)}
         ></TextInput>
       </View>
