@@ -12,6 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import Entypo from '@expo/vector-icons/Entypo';
 import styles from "../styles";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
@@ -19,12 +20,40 @@ import { useNavigation } from "@react-navigation/native";
 const RideRequesterComponent = ({ token }) => {
   const navigation = useNavigation();
 
+  const [locationList, setLocationList] = useState([]); // Store location options
+  const [showDestinationDropdown, setShowDestinationDropdown] = useState(false); // State to toggle dropdown for destination
+  const [showLocationList, setShowLocationList] = useState(false);
+
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [isReserve, setIsReserve] = useState(false);
   const [location, setLocation] = useState("");
   const [destination, setDestination] = useState("");
   const [message, setMessage] = useState("");
+
+  // Fetch locations on component mount
+  useEffect(() => {
+    const fetchLocationList = async () => {
+      try {
+        const response = await fetch("http://localhost:8085/option/location/all", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setLocationList(data); // Set the locations state
+        } else {
+          Alert.alert("Error", "Failed to fetch locations list.");
+        }
+      } catch (error) {
+        Alert.alert("Error", "An error occurred while fetching locations list.");
+      }
+    };
+
+    fetchLocationList();
+  }, [token]);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -87,25 +116,55 @@ const RideRequesterComponent = ({ token }) => {
           justifyContent: "center",
         }}
       >
+
         <TextInput
           placeholder="Where to?"
           placeholderTextColor="gray"
           autoCapitalize="none"
-          style={styles.input}
+          style={{...styles.input, marginBottom:5}}
           value={destination}
+          onFocus={() => setShowDestinationDropdown(true)}
           onChangeText={setDestination}
         ></TextInput>
+        
       </View>
+      
+      {showDestinationDropdown && (<View style={{...styles.widthControll, justifyContent:'center'}}><View style={{flex:0.9}}><ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
+          {locationList.map((loc) => (
+            
+            <TouchableOpacity style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} key={loc.locationOptionID} onPress={() => {
+              setDestination(loc.locationName);
+              setShowDestinationDropdown(false);
+            }}>
+              <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
+              <Text style={{color:"black", fontSize: 16, fontWeight:"500"}}>{loc.locationName}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView></View></View>)}
+      
       <View style={{ ...styles.widthControll, justifyContent: "center" }}>
         <TextInput
           placeholder="Where are you?"
           placeholderTextColor="gray"
           autoCapitalize="none"
-          style={styles.input}
+          style={{...styles.input, marginBottom:5}}
           value={location}
           onChangeText={setLocation}
+          onFocus={() => setShowLocationList(true)}
         ></TextInput>
       </View>
+      {showLocationList && (<View style={{...styles.widthControll, justifyContent:'center'}}><View style={{flex:0.9}}><ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
+          {locationList.map((loc) => (
+            
+            <TouchableOpacity style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} key={loc.locationOptionID} onPress={() => {
+              setLocation(loc.locationName);
+              setShowLocationList(false);
+            }}>
+              <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
+              <Text style={{color:"black", fontSize: 16, fontWeight:"500"}}>{loc.locationName}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView></View></View>)}
       <View style={styles.questionContainer}>
         <Text style={styles.question}>
           When do you want this ride to happen?

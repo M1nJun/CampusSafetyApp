@@ -73,6 +73,15 @@ public class RequestController  {
         return ResponseEntity.ok(requests);
     }
 
+
+    @GetMapping("/{id}/status")
+    public ResponseEntity<String>findStatusByRequestId(Authentication authentication, @PathVariable String id) {
+        Request request = rs.findByRequestId(id);
+        String status = request.getRequestStatus();
+
+        return ResponseEntity.ok(status);
+    }
+
     // need to make a method that searches all the request that are in completed status.
 
     // need to make a method that searches for reserved requests that are 30 minutes away from the reservation time.
