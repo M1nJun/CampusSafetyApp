@@ -17,6 +17,7 @@ import styles from "../styles";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import debounce from "lodash.debounce"; 
+import MapView, {Marker} from 'react-native-maps';
 
 const RideRequesterComponent = ({ token }) => {
   const navigation = useNavigation();
@@ -25,6 +26,15 @@ const RideRequesterComponent = ({ token }) => {
   const [destinationList, setDestinationList] = useState([]); 
   const [showDestinationDropdown, setShowDestinationDropdown] = useState(false); // State to toggle dropdown for destination
   const [showLocationList, setShowLocationList] = useState(false);
+
+  const [showMap, setShowMap] = useState(false);
+  const [mapRegion, setMapRegion] = useState({
+    latitude:44.260445,
+    longitude:-88.397713,
+    latitudeDelta:0.004,
+    longitudeDelta:0.004,
+
+  });
 
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
@@ -202,6 +212,19 @@ const RideRequesterComponent = ({ token }) => {
         ></TextInput>
       </View>
       {showLocationList && (<View style={{...styles.widthControll, justifyContent:'center'}}><View style={{flex:0.9}}><ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
+      <TouchableOpacity 
+          style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
+          onPress={() => {
+            setLocation("Current Location");
+            setShowLocationList(false);
+            setShowMap(true);
+            // Handle showing the map or fetching the current location
+            // showCurrentLocationMap();
+          }}
+        >
+          <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
+          <Text style={{color:theme.lightBlue, fontSize: 16, fontWeight:"500"}}>Current Location</Text>
+        </TouchableOpacity>
           {locationList.map((loc) => (
             
             <TouchableOpacity style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} key={loc.locationOptionID} onPress={() => {
@@ -213,6 +236,12 @@ const RideRequesterComponent = ({ token }) => {
             </TouchableOpacity>
           ))}
         </ScrollView></View></View>)}
+
+
+        {showMap && (<View><MapView region={mapRegion} style={{width: "100%", height: "80%", borderRadius:10}}>
+          <Marker coordinate={mapRegion} title= "Marker" /></MapView></View>)}
+
+
       <View style={styles.questionContainer}>
         <Text style={styles.question}>
           When do you want this ride to happen?
