@@ -30,7 +30,7 @@ const RideRequesterComponent = ({ token }) => {
   const [showLocationList, setShowLocationList] = useState(false);
 
   // this is for the map share current location feature
-  const [showMap, setShowMap] = useState(false);
+  const [showMap, setShowMap] = useState(false); // going to be also used as a flag to tell if the user is using the map or not.
   const [mapRegion, setMapRegion] = useState({
     latitude:44.260445,
     longitude:-88.397713,
@@ -86,8 +86,6 @@ const RideRequesterComponent = ({ token }) => {
 
   // this is to reverseGeocode the long, lang coords to address
   const [address, setAddress] = useState("");
-  const [usingMap, setUsingMap] = useState(false); // Flag to track if the map is being used
-  
 
 
   // this is for the date picker for a reservation feature
@@ -185,7 +183,7 @@ const RideRequesterComponent = ({ token }) => {
     const requestData = {
       requestType: "ride",
       requestSubject: "Need a ride",
-      location: usingMap ? address : location.trim(),
+      location: location.trim(),
       destination: destination.trim(),
       message: message.trim(),
       reserved: isReserve,
@@ -260,13 +258,12 @@ const RideRequesterComponent = ({ token }) => {
           placeholderTextColor="gray"
           autoCapitalize="none"
           style={{...styles.input, marginBottom:5}}
-          value={usingMap ? address : location} // Show address if using map, otherwise show location
+          value={showMap ? address : location} // Show address if using map, otherwise show location
           onChangeText={(text) => {
             setLocation(text);
             (text === "") ? fetchLocationList() : handleKeywordChange(text, false);
           }}
           onFocus={() => {setShowLocationList(true);
-            //  setUsingMap(false); setShowMap(false);
             }}
         ></TextInput>
       </View>
@@ -279,7 +276,6 @@ const RideRequesterComponent = ({ token }) => {
             setLocation("Current Location");
             setShowLocationList(false);
             setShowMap(true);
-            setUsingMap(true); // Set flag to true
             userCurrentLocation();
             console.log("Map region updated:", mapRegion);
           }}
@@ -292,7 +288,7 @@ const RideRequesterComponent = ({ token }) => {
             <TouchableOpacity style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} key={loc.locationOptionID} onPress={() => {
               setLocation(loc.locationName);
               setShowLocationList(false);
-              setUsingMap(false); // If the user chose one of the options, that means the user is not going to use the map address.
+              // setUsingMap(false); // If the user chose one of the options, that means the user is not going to use the map address.
             }}>
               <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
               <Text style={{color:"black", fontSize: 16, fontWeight:"500"}}>{loc.locationName}</Text>
@@ -320,7 +316,6 @@ const RideRequesterComponent = ({ token }) => {
           </View>
           <TouchableOpacity style={{backgroundColor:"white", borderRadius: 13, width: "40%", alignSelf:"center", marginTop:15}} onPress={()=>{
             setShowMap(false);
-            setUsingMap(false);
             setLocation(address);
           }}><Text style={{fontSize:20, fontWeight: "600", textAlign:"center", paddingVertical: 5}}>Confirm</Text></TouchableOpacity>
         </View>
