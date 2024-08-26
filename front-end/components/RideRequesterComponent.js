@@ -65,6 +65,9 @@ const RideRequesterComponent = ({ token }) => {
     console.log("Map region updated:", mapRegion);
   }, []);
 
+  // this is to reverseGeocode the long, lang coords to address
+  const [address, setAddress] = useState("");
+
   const handleRegionChangeComplete = async (region) => {
     // could put in the option name, which mostly says lawrence university.
     try {
@@ -84,8 +87,7 @@ const RideRequesterComponent = ({ token }) => {
     }
   };
 
-  // this is to reverseGeocode the long, lang coords to address
-  const [address, setAddress] = useState("");
+  
 
 
   // this is for the date picker for a reservation feature
@@ -278,6 +280,8 @@ const RideRequesterComponent = ({ token }) => {
             setShowMap(true);
             userCurrentLocation();
             console.log("Map region updated:", mapRegion);
+            handleRegionChangeComplete(mapRegion);
+            console.log("Address updated", address);
           }}
         >
           <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
@@ -298,7 +302,7 @@ const RideRequesterComponent = ({ token }) => {
 
 
         {showMap && (
-        <View>
+        <View style={{marginBottom: 25}}>
           <MapView
             region={mapRegion}
             style={{ width: "100%", height: 400, borderRadius: 10 }}
@@ -314,10 +318,10 @@ const RideRequesterComponent = ({ token }) => {
           }}>
             <Entypo name="location-pin" size={48} color="black" />
           </View>
-          <TouchableOpacity style={{backgroundColor:"white", borderRadius: 13, width: "40%", alignSelf:"center", marginTop:15}} onPress={()=>{
+          <TouchableOpacity style={{backgroundColor:"black", borderRadius: 13, width: "40%", alignSelf:"center", marginTop: -50}} onPress={()=>{
             setShowMap(false);
             setLocation(address);
-          }}><Text style={{fontSize:20, fontWeight: "600", textAlign:"center", paddingVertical: 5}}>Confirm</Text></TouchableOpacity>
+          }}><Text style={{color: "white", fontSize:20, fontWeight: "600", textAlign:"center", paddingVertical: 5}}>Confirm</Text></TouchableOpacity>
         </View>
       )}
 

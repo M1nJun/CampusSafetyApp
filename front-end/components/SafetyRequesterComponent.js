@@ -17,14 +17,75 @@ import Entypo from '@expo/vector-icons/Entypo';
 import styles from "../styles";
 import { useNavigation } from "@react-navigation/native";
 import debounce from "lodash.debounce"; 
+import MapView, {Marker} from 'react-native-maps';
+import * as Location from 'expo-location';
 
 const SafetyRequesterComponent = ({ token }) => {
   const navigation = useNavigation();
 
+  // this is for the dropdown list of locations, requests feature
   const [locationList, setLocationList] = useState([]); // Store location options
   const [showLocationList, setShowLocationList] = useState(false);
   const [requestList, setRequestList] = useState([]);
   const [showRequestList, setShowRequestList] = useState(false);
+
+  // this is for the map share current location feature
+  const [showMap, setShowMap] = useState(false);
+  const [mapRegion, setMapRegion] = useState({
+    latitude:44.260445,
+    longitude:-88.397713,
+    latitudeDelta:0.0015,
+    longitudeDelta:0.0015,
+  });
+
+  const userCurrentLocation = async () => {
+    try {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert("Permission Denied", "Permission to access location was denied.");
+        return;
+      }
+      
+      let currentLocation = await Location.getCurrentPositionAsync({ accuracy: 5});
+      setMapRegion({
+        latitude: currentLocation.coords.latitude,
+        longitude: currentLocation.coords.longitude,
+        latitudeDelta: 0.0015,
+        longitudeDelta: 0.0015,
+      });
+      
+    } catch (error) {
+      Alert.alert("Error", "Failed to fetch current location. Ensure location services are enabled.");
+      console.log("Location error:", error);
+    }
+  };
+
+  useEffect(() => {
+    userCurrentLocation();
+    console.log("Map region updated:", mapRegion);
+  }, []);
+
+    // this is to reverseGeocode the long, lang coords to address
+    const [address, setAddress] = useState("");
+
+    const handleRegionChangeComplete = async (region) => {
+      // could put in the option name, which mostly says lawrence university.
+      try {
+        const geocodedAddress = await Location.reverseGeocodeAsync({
+          latitude: region.latitude,
+          longitude: region.longitude,
+        });
+        if (geocodedAddress.length > 0) {
+          const { streetNumber, street, city,} = geocodedAddress[0];
+          setAddress(`${streetNumber}, ${street}, ${city}`);
+          console.log(address);
+          setMapRegion(region);
+        }
+      } catch (error) {
+        console.log("Reverse geocoding error:", error);
+        Alert.alert("Error", "Failed to fetch address for the selected location.");
+      }
+    };
 
   const [date, setDate] = useState(new Date(1598051730000));
   const [show, setShow] = useState(false);
@@ -191,7 +252,7 @@ const SafetyRequesterComponent = ({ token }) => {
           placeholderTextColor="gray"
           autoCapitalize="none"
           style={{...styles.input, marginBottom:5}}
-          value={location}
+          value={showMap ? address : location}
           onChangeText={(text) => {
             setLocation(text);
             text === "" ? fetchLocationList() :
@@ -202,8 +263,22 @@ const SafetyRequesterComponent = ({ token }) => {
       </View>
       {/* showing dropdown list on focus */}
       {showLocationList && (<View style={{...styles.widthControll, justifyContent:'center'}}><View style={{flex:0.9}}><ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
+      <TouchableOpacity 
+          style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
+          onPress={() => {
+            setLocation("Current Location");
+            setShowLocationList(false);
+            setShowMap(true);
+            userCurrentLocation();
+            console.log("Map region updated:", mapRegion);
+            handleRegionChangeComplete(mapRegion);
+            console.log("Address updated", address);
+          }}
+        >
+          <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
+          <Text style={{color:theme.lightBlue, fontSize: 16, fontWeight:"500"}}>Current Location</Text>
+        </TouchableOpacity>
           {locationList.map((loc) => (
-            
             <TouchableOpacity style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} key={loc.locationOptionID} onPress={() => {
               setLocation(loc.locationName);
               setShowLocationList(false);
@@ -213,6 +288,31 @@ const SafetyRequesterComponent = ({ token }) => {
             </TouchableOpacity>
           ))}
         </ScrollView></View></View>)}
+
+        {showMap && (
+        <View style={{marginBottom: 25}}>
+          <MapView
+            region={mapRegion}
+            style={{ width: "100%", height: 400, borderRadius: 10 }}
+            onRegionChangeComplete={handleRegionChangeComplete}
+          />
+          {/* Fixed location pin icon at the center of the map */}
+          <View style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            marginLeft: -24, // Half of the icon width
+            marginTop: -48, // Half of the icon height
+          }}>
+            <Entypo name="location-pin" size={48} color="black" />
+          </View>
+          <TouchableOpacity style={{backgroundColor:"black", borderRadius: 13, width: "40%", alignSelf:"center", marginTop: -50}} onPress={()=>{
+            setShowMap(false);
+            setLocation(address);
+          }}><Text style={{color: "white", fontSize:20, fontWeight: "600", textAlign:"center", paddingVertical: 5}}>Confirm</Text></TouchableOpacity>
+        </View>
+      )}
+
       <View style={styles.questionContainer}>
         <Text style={styles.question}>
           When do you want this ride to happen?
