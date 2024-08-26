@@ -27,18 +27,26 @@ const RideRequesterComponent = ({ token }) => {
   const [locationList, setLocationList] = useState([]); // Store location options
   const [destinationList, setDestinationList] = useState([]); 
   const [showDestinationDropdown, setShowDestinationDropdown] = useState(false); // State to toggle dropdown for destination
-  const [showLocationList, setShowLocationList] = useState(false);
+  const [showLocationDropdown, setShowLocationDropdown] = useState(false);
 
   // this is for the map share current location feature
-  const [showMap, setShowMap] = useState(false); // going to be also used as a flag to tell if the user is using the map or not.
-  const [mapRegion, setMapRegion] = useState({
+  const [showLocMap, setShowLocMap] = useState(false); // going to be also used as a flag to tell if the user is using the map or not.
+  const [locMapRegion, setLocMapRegion] = useState({
     latitude:44.260445,
     longitude:-88.397713,
     latitudeDelta:0.0015,
     longitudeDelta:0.0015,
   });
 
-  const userCurrentLocation = async () => {
+  const [showDestMap, setShowDestMap] = useState(false); // going to be also used as a flag to tell if the user is using the map or not.
+  const [destMapRegion, setDestMapRegion] = useState({
+    latitude:44.260445,
+    longitude:-88.397713,
+    latitudeDelta:0.0015,
+    longitudeDelta:0.0015,
+  });
+
+  const userCurrentLocation = async (isDestination) => {
     try {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -47,12 +55,15 @@ const RideRequesterComponent = ({ token }) => {
       }
       
       let currentLocation = await Location.getCurrentPositionAsync({ accuracy: 5});
-      setMapRegion({
+      
+      const region = {
         latitude: currentLocation.coords.latitude,
         longitude: currentLocation.coords.longitude,
         latitudeDelta: 0.0015,
         longitudeDelta: 0.0015,
-      });
+      };
+  
+      isDestination ? setDestMapRegion(region) : setLocMapRegion(region);
       
     } catch (error) {
       Alert.alert("Error", "Failed to fetch current location. Ensure location services are enabled.");
@@ -60,15 +71,11 @@ const RideRequesterComponent = ({ token }) => {
     }
   };
 
-  useEffect(() => {
-    userCurrentLocation();
-    console.log("Map region updated:", mapRegion);
-  }, []);
-
   // this is to reverseGeocode the long, lang coords to address
-  const [address, setAddress] = useState("");
+  const [locAddress, setLocAddress] = useState("");
+  const [destAddress, setDestAddress] = useState("");
 
-  const handleRegionChangeComplete = async (region) => {
+  const handleRegionChangeComplete = async (region, isDestination) => {
     // could put in the option name, which mostly says lawrence university.
     try {
       const geocodedAddress = await Location.reverseGeocodeAsync({
@@ -77,16 +84,19 @@ const RideRequesterComponent = ({ token }) => {
       });
       if (geocodedAddress.length > 0) {
         const { streetNumber, street, city,} = geocodedAddress[0];
-        setAddress(`${streetNumber}, ${street}, ${city}`);
-        console.log(address);
-        setMapRegion(region);
+        if (isDestination) {
+          setDestAddress(`${streetNumber}, ${street}, ${city}`);
+          console.log("Destination Address:", destAddress);
+        } else {
+          setLocAddress(`${streetNumber}, ${street}, ${city}`);
+          console.log("Location Address:", locAddress);
+        }
       }
     } catch (error) {
       console.log("Reverse geocoding error:", error);
       Alert.alert("Error", "Failed to fetch address for the selected location.");
     }
   };
-
   
 
 
@@ -231,7 +241,7 @@ const RideRequesterComponent = ({ token }) => {
           placeholderTextColor="gray"
           autoCapitalize="none"
           style={{...styles.input, marginBottom:5}}
-          value={destination}
+          value={showDestMap? destAddress: destination}
           onFocus={() => setShowDestinationDropdown(true)}
           onChangeText={(text) => {
             setDestination(text);
@@ -242,6 +252,20 @@ const RideRequesterComponent = ({ token }) => {
       </View>
       
       {showDestinationDropdown && (<View style={{...styles.widthControll, justifyContent:'center'}}><View style={{flex:0.9}}><ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
+      <TouchableOpacity 
+          style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
+          onPress={() => {
+            setShowDestinationDropdown(false);
+            setShowDestMap(true);
+            userCurrentLocation(true); //sending that isDestination is true
+            console.log("Dest Map region updated:", destMapRegion);
+            handleRegionChangeComplete(destMapRegion, true); //sending that isDestination is true
+            console.log("Dest Address updated", destAddress);
+          }}
+        >
+          <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
+          <Text style={{color:theme.lightBlue, fontSize: 16, fontWeight:"500"}}>Search Address</Text>
+        </TouchableOpacity>
           {destinationList.map((dest) => (
             
             <TouchableOpacity style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} key={dest.locationOptionID} onPress={() => {
@@ -253,60 +277,14 @@ const RideRequesterComponent = ({ token }) => {
             </TouchableOpacity>
           ))}
         </ScrollView></View></View>)}
-      
-      <View style={{ ...styles.widthControll, justifyContent: "center" }}>
-        <TextInput
-          placeholder="Where are you?"
-          placeholderTextColor="gray"
-          autoCapitalize="none"
-          style={{...styles.input, marginBottom:5}}
-          value={showMap ? address : location} // Show address if using map, otherwise show location
-          onChangeText={(text) => {
-            setLocation(text);
-            (text === "") ? fetchLocationList() : handleKeywordChange(text, false);
-          }}
-          onFocus={() => {setShowLocationList(true);
-            }}
-        ></TextInput>
-      </View>
 
-
-      {showLocationList && (<View style={{...styles.widthControll, justifyContent:'center'}}><View style={{flex:0.9}}><ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
-      <TouchableOpacity 
-          style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
-          onPress={() => {
-            setLocation("Current Location");
-            setShowLocationList(false);
-            setShowMap(true);
-            userCurrentLocation();
-            console.log("Map region updated:", mapRegion);
-            handleRegionChangeComplete(mapRegion);
-            console.log("Address updated", address);
-          }}
-        >
-          <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
-          <Text style={{color:theme.lightBlue, fontSize: 16, fontWeight:"500"}}>Current Location</Text>
-        </TouchableOpacity>
-          {locationList.map((loc) => (
-            
-            <TouchableOpacity style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} key={loc.locationOptionID} onPress={() => {
-              setLocation(loc.locationName);
-              setShowLocationList(false);
-              // setUsingMap(false); // If the user chose one of the options, that means the user is not going to use the map address.
-            }}>
-              <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
-              <Text style={{color:"black", fontSize: 16, fontWeight:"500"}}>{loc.locationName}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView></View></View>)}
-
-
-        {showMap && (
+        {showDestMap && (
         <View style={{marginBottom: 25}}>
           <MapView
-            region={mapRegion}
+            region={destMapRegion}
             style={{ width: "100%", height: 400, borderRadius: 10 }}
-            onRegionChangeComplete={handleRegionChangeComplete}
+            // learned that onRegionChangeComplete is not a function. I'm was not using this.props but instead directly passing a function reference to onRegionChangeComplete.
+            onRegionChangeComplete={(region) => handleRegionChangeComplete(region, true)}
           />
           {/* Fixed location pin icon at the center of the map */}
           <View style={{
@@ -319,8 +297,81 @@ const RideRequesterComponent = ({ token }) => {
             <Entypo name="location-pin" size={48} color="black" />
           </View>
           <TouchableOpacity style={{backgroundColor:"black", borderRadius: 13, width: "40%", alignSelf:"center", marginTop: -50}} onPress={()=>{
-            setShowMap(false);
-            setLocation(address);
+            setShowDestMap(false);
+            setDestination(destAddress);
+          }}><Text style={{color: "white", fontSize:20, fontWeight: "600", textAlign:"center", paddingVertical: 5}}>Confirm</Text></TouchableOpacity>
+        </View>
+      )}
+
+{/* location handling */}
+      
+      <View style={{ ...styles.widthControll, justifyContent: "center" }}>
+        <TextInput
+          placeholder="Where are you?"
+          placeholderTextColor="gray"
+          autoCapitalize="none"
+          style={{...styles.input, marginBottom:5}}
+          value={showLocMap ? locAddress : location} // Show address if using map, otherwise show location
+          onChangeText={(text) => {
+            setLocation(text);
+            (text === "") ? fetchLocationList() : handleKeywordChange(text, false);
+          }}
+          onFocus={() => {setShowLocationDropdown(true);
+            }}
+        ></TextInput>
+      </View>
+
+
+      {showLocationDropdown && (<View style={{...styles.widthControll, justifyContent:'center'}}><View style={{flex:0.9}}><ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
+      <TouchableOpacity 
+          style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
+          onPress={() => {
+            setShowLocationDropdown(false);
+            setShowLocMap(true);
+            userCurrentLocation(false); //sending that isDestination is false
+            console.log("Loc Map region updated:", locMapRegion);
+            handleRegionChangeComplete(locMapRegion, false); //sending that isDestination is false
+            console.log("Loc Address updated", locAddress);
+          }}
+        >
+          <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
+          <Text style={{color:theme.lightBlue, fontSize: 16, fontWeight:"500"}}>Current Location</Text>
+        </TouchableOpacity>
+          {locationList.map((loc) => (
+            
+            <TouchableOpacity style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} key={loc.locationOptionID} onPress={() => {
+              setLocation(loc.locationName);
+              setShowLocationDropdown(false);
+              // setUsingMap(false); // If the user chose one of the options, that means the user is not going to use the map address.
+            }}>
+              <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
+              <Text style={{color:"black", fontSize: 16, fontWeight:"500"}}>{loc.locationName}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView></View></View>)}
+
+
+        {showLocMap && (
+        <View style={{marginBottom: 25}}>
+          <MapView
+            region={locMapRegion}
+            style={{ width: "100%", height: 400, borderRadius: 10 }}
+            // learned that onRegionChangeComplete is not a function. I'm was not using this.props but instead directly passing a function reference to onRegionChangeComplete.
+            onRegionChangeComplete={(region) => handleRegionChangeComplete(region, false)}
+          />
+          {/* Fixed location pin icon at the center of the map */}
+          <View style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            marginLeft: -24, // Half of the icon width
+            marginTop: -48, // Half of the icon height
+          }}>
+            <Entypo name="location-pin" size={48} color="black" />
+          </View>
+          <TouchableOpacity style={{backgroundColor:"black", borderRadius: 13, width: "40%", alignSelf:"center", marginTop: -50}} onPress={()=>{
+            setShowLocMap(false);
+            setLocation(locAddress);
           }}><Text style={{color: "white", fontSize:20, fontWeight: "600", textAlign:"center", paddingVertical: 5}}>Confirm</Text></TouchableOpacity>
         </View>
       )}

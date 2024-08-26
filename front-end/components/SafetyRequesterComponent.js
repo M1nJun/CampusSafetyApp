@@ -79,7 +79,6 @@ const SafetyRequesterComponent = ({ token }) => {
           const { streetNumber, street, city,} = geocodedAddress[0];
           setAddress(`${streetNumber}, ${street}, ${city}`);
           console.log(address);
-          setMapRegion(region);
         }
       } catch (error) {
         console.log("Reverse geocoding error:", error);
@@ -266,7 +265,6 @@ const SafetyRequesterComponent = ({ token }) => {
       <TouchableOpacity 
           style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
           onPress={() => {
-            setLocation("Current Location");
             setShowLocationList(false);
             setShowMap(true);
             userCurrentLocation();
