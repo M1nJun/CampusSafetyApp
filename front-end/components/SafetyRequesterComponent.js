@@ -25,13 +25,131 @@ const SafetyRequesterComponent = ({ token }) => {
 
   // this is for the dropdown list of locations, requests feature
   const [locationList, setLocationList] = useState([]); // Store location options
-  const [showLocationList, setShowLocationList] = useState(false);
+  const [showLocationDropdown, setShowLocationDropdown] = useState(false);
   const [requestList, setRequestList] = useState([]);
-  const [showRequestList, setShowRequestList] = useState(false);
+  const [showRequestDropdown, setShowRequestDropdown] = useState(false);
+
+
+  // is the user searching address for "where are you input"?
+  const [locSearchAddress, setLocSearchAddress] = useState(false);
+
+  const [showLocAutoCompleteList, setShowLocAutoCompleteList] = useState(false);
+  const [locAutoCompleteList, setLocAutoCompleteList] = useState([]);
+
+  const API_KEY = "AIzaSyBP26jrlVQ062A5TJsu1rD3TQ49n7cto54";
+  // This function has 2 cases
+  // case 1: user chose to searchAddress on their own. In that case, we fetch autocompleted suggestions of the keyword on a list and show it to the user.
+  // case 2: user chose to select a location from the static lawrence building list. Then as the user types, the user will be given a list that consists of locations that contain that keyword.
+  const handleKeywordChange = debounce(async (keyword) => {
+    const fetchAutocomplete = async (url, setList) => {
+      try {
+        const response = await fetch(url, { method: "GET" });
+        if (response.ok) {
+          const data = await response.json();
+          // Get the place IDs and descriptions from the autocomplete results
+          const suggestions = data.predictions.map(prediction => ({
+            placeId: prediction.place_id,
+            description: prediction.description
+          }));
+          setList(suggestions);
+          console.log(suggestions);
+        } else {
+          Alert.alert("Error", "Failed to fetch location suggestions.");
+        }
+      } catch (error) {
+        Alert.alert("Error", "An error occurred while fetching location suggestions.");
+      }
+    };
+  
+    const fetchPlaceDetails = async (placeId) => {
+      try {
+        const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${API_KEY}`;
+        const response = await fetch(detailsUrl, { method: "GET" });
+        if (response.ok) {
+          const data = await response.json();
+          return data.result.formatted_address; // Get the formatted address
+        } else {
+          throw new Error("Failed to fetch place details.");
+        }
+      } catch (error) {
+        console.error("Error fetching place details:", error);
+        return "";
+      }
+    };
+  
+    const fetchAutocompleteAndDetails = async (url, setList) => {
+      await fetchAutocomplete(url, async (suggestions) => {
+        // Fetch place details for each suggestion
+        const suggestionsWithAddresses = await Promise.all(suggestions.map(async (suggestion) => {
+          const address = await fetchPlaceDetails(suggestion.placeId);
+          return { description: suggestion.description, address };
+        }));
+        setList(suggestionsWithAddresses);
+      });
+    };
+  
+    const fetchFilteredLocations = async (url, setList) => {
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setList(data);
+        } else {
+          Alert.alert("Error", "Failed to fetch filtered locations.");
+        }
+      } catch (error) {
+        Alert.alert("Error", "An error occurred while fetching filtered locations.");
+      }
+    };
+  
+    const baseUrl = 'http://localhost:8085/option/location';
+    const autocompleteUrl = (input) => `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${API_KEY}`;
+  
+      if (locSearchAddress) {
+        await fetchAutocompleteAndDetails(autocompleteUrl(keyword), setLocAutoCompleteList);
+        //kinda wondering if this is okay to be keep setting it true. waste maybe??
+        setShowLocAutoCompleteList(true);
+      } else {
+        await fetchFilteredLocations(`${baseUrl}/${keyword}`, setLocationList);
+        setShowLocationDropdown(true);
+      }
+  }, 300); // 300ms debounce delay
+
+
+  const handleGeocode = async (address) => {
+    try {
+      const geocodeResult = await Location.geocodeAsync(address);
+      if (geocodeResult.length > 0) {
+        const { latitude, longitude } = geocodeResult[0];
+        
+        // Update the destination map region with the geocoded coordinates
+        const newRegion = {
+          latitude,
+          longitude,
+          latitudeDelta: 0.0015,
+          longitudeDelta: 0.0015,
+        };
+        
+        setLocMapRegion(newRegion);
+        
+      } else {
+        Alert.alert("Error", "Unable to geocode the selected address.");
+      }
+    } catch (error) {
+      console.log("Geocoding error:", error);
+      Alert.alert("Error", "Failed to geocode the selected address.");
+    }
+  };
+
 
   // this is for the map share current location feature
-  const [showMap, setShowMap] = useState(false);
-  const [mapRegion, setMapRegion] = useState({
+  const [showLocMap, setShowLocMap] = useState(false);
+  const [locMapRegion, setLocMapRegion] = useState({
     latitude:44.260445,
     longitude:-88.397713,
     latitudeDelta:0.0015,
@@ -47,7 +165,7 @@ const SafetyRequesterComponent = ({ token }) => {
       }
       
       let currentLocation = await Location.getCurrentPositionAsync({ accuracy: 5});
-      setMapRegion({
+      setLocMapRegion({
         latitude: currentLocation.coords.latitude,
         longitude: currentLocation.coords.longitude,
         latitudeDelta: 0.0015,
@@ -62,11 +180,9 @@ const SafetyRequesterComponent = ({ token }) => {
 
   useEffect(() => {
     userCurrentLocation();
-    console.log("Map region updated:", mapRegion);
+    console.log("Map region updated:", locMapRegion);
   }, []);
 
-    // this is to reverseGeocode the long, lang coords to address
-    const [address, setAddress] = useState("");
 
     const handleRegionChangeComplete = async (region) => {
       // could put in the option name, which mostly says lawrence university.
@@ -77,8 +193,8 @@ const SafetyRequesterComponent = ({ token }) => {
         });
         if (geocodedAddress.length > 0) {
           const { streetNumber, street, city,} = geocodedAddress[0];
-          setAddress(`${streetNumber}, ${street}, ${city}`);
-          console.log(address);
+          setLocation(`${streetNumber}, ${street}, ${city}`);
+          console.log(location);
         }
       } catch (error) {
         console.log("Reverse geocoding error:", error);
@@ -137,25 +253,6 @@ const SafetyRequesterComponent = ({ token }) => {
     fetchRequestList();
   }, [token]);
 
-   // Function to handle location input change with debounce
-   const handleLocationKeywordChange = debounce(async (keyword) => {
-    try {
-      const response = await fetch(`http://localhost:8085/option/location/${keyword}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setLocationList(data);
-      } else {
-        Alert.alert("Error", "Failed to fetch filtered locations.");
-      }
-    } catch (error) {
-      Alert.alert("Error", "An error occurred while fetching filtered locations.");
-    }
-  }, 300); // 300ms debounce delay
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -225,15 +322,15 @@ const SafetyRequesterComponent = ({ token }) => {
           style={{...styles.input, marginBottom:5}}
           value={requestSubject}
           onChangeText={setRequestSubject}
-          onFocus={() => setShowRequestList(true)}
+          onFocus={() => setShowRequestDropdown(true)}
         ></TextInput>
       </View>
-      {showRequestList && (<View style={{...styles.widthControll, justifyContent:'center'}}><View style={{flex:0.9}}><ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
+      {showRequestDropdown && (<View style={{...styles.widthControll, justifyContent:'center'}}><View style={{flex:0.9}}><ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
           {requestList.map((req) => (
             
             <TouchableOpacity style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} key={req.requestOptionID} onPress={() => {
               setRequestSubject(req.requestTitle);
-              setShowRequestList(false);
+              setShowRequestDropdown(false);
             }}>
               <MaterialCommunityIcons
             name="shield-check"
@@ -251,35 +348,46 @@ const SafetyRequesterComponent = ({ token }) => {
           placeholderTextColor="gray"
           autoCapitalize="none"
           style={{...styles.input, marginBottom:5}}
-          value={showMap ? address : location}
+          value={location}
           onChangeText={(text) => {
             setLocation(text);
             text === "" ? fetchLocationList() :
-            handleLocationKeywordChange(text);
+            handleKeywordChange(text);
           }}
-          onFocus={() => setShowLocationList(true)}
+          onFocus={() => setShowLocationDropdown(true)}
         ></TextInput>
       </View>
       {/* showing dropdown list on focus */}
-      {showLocationList && (<View style={{...styles.widthControll, justifyContent:'center'}}><View style={{flex:0.9}}><ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
+      {showLocationDropdown && (<View style={{...styles.widthControll, justifyContent:'center'}}><View style={{flex:0.9}}><ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
       <TouchableOpacity 
           style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
           onPress={() => {
-            setShowLocationList(false);
-            setShowMap(true);
+            setShowLocationDropdown(false);
+            setShowLocMap(true);
             userCurrentLocation();
-            console.log("Map region updated:", mapRegion);
-            handleRegionChangeComplete(mapRegion);
-            console.log("Address updated", address);
+            console.log("Map region updated:", locMapRegion);
+            handleRegionChangeComplete(locMapRegion);
           }}
         >
           <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
           <Text style={{color:theme.lightBlue, fontSize: 16, fontWeight:"500"}}>Current Location</Text>
         </TouchableOpacity>
+        <TouchableOpacity 
+          style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
+          onPress={() => {
+            setShowLocationDropdown(false);
+            setShowLocMap(true);
+            setShowLocAutoCompleteList(true);
+            setLocSearchAddress(true);
+          }}
+        >
+          <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
+          <Text style={{color:theme.lightBlue, fontSize: 16, fontWeight:"500"}}>Search Address</Text>
+        </TouchableOpacity>
           {locationList.map((loc) => (
             <TouchableOpacity style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} key={loc.locationOptionID} onPress={() => {
               setLocation(loc.locationName);
-              setShowLocationList(false);
+              setShowLocationDropdown(false);
             }}>
               <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
               <Text style={{color:"black", fontSize: 16, fontWeight:"500"}}>{loc.locationName}</Text>
@@ -287,10 +395,44 @@ const SafetyRequesterComponent = ({ token }) => {
           ))}
         </ScrollView></View></View>)}
 
-        {showMap && (
+        {/* we'll come back */}
+
+        {showLocAutoCompleteList && (<View style={{...styles.widthControll, justifyContent:'center', marginBottom: 15}}><View style={{flex:0.9}}><ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
+        <TouchableOpacity 
+          style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
+          onPress={() => {
+            setShowLocAutoCompleteList(false);
+            setShowLocMap(false);
+            setShowLocationDropdown(true);
+          }}
+        >
+          <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
+          <Text style={{color:theme.lightBlue, fontSize: 16, fontWeight:"500"}}>Go back to Lawrence Building List</Text>
+        </TouchableOpacity>
+        {locAutoCompleteList.map((item, index) => (
+          <TouchableOpacity 
+            key={index} 
+            style={{flexDirection: "row", borderColor: "lightgray", borderBottomWidth: 0.8, marginVertical: 7}} 
+            onPress={() => {
+              setLocation(item.description);
+              setShowLocAutoCompleteList(false);
+              // Geocode this address then, update it to be the locMapRegion.
+              handleGeocode(item.address);
+            }}
+          >
+            <Entypo name="location-pin" size={24} color="black" style={{paddingRight: 5}} />
+            <View>
+              <Text style={{color: "black", fontSize: 16, fontWeight: "500"}}>{item.description}</Text>
+              <Text style={{color: "gray", fontSize: 14}}>{item.address}</Text>
+            </View>
+          </TouchableOpacity>
+        ))}
+        </ScrollView></View></View>)}
+
+        {showLocMap && (
         <View style={{marginBottom: 25}}>
           <MapView
-            region={mapRegion}
+            region={locMapRegion}
             style={{ width: "100%", height: 400, borderRadius: 10 }}
             onRegionChangeComplete={handleRegionChangeComplete}
           />
@@ -305,8 +447,9 @@ const SafetyRequesterComponent = ({ token }) => {
             <Entypo name="location-pin" size={48} color="black" />
           </View>
           <TouchableOpacity style={{backgroundColor:"black", borderRadius: 13, width: "40%", alignSelf:"center", marginTop: -50}} onPress={()=>{
-            setShowMap(false);
-            setLocation(address);
+            setShowLocMap(false);
+            setLocAutoCompleteList(false);
+            setLocSearchAddress(false);
           }}><Text style={{color: "white", fontSize:20, fontWeight: "600", textAlign:"center", paddingVertical: 5}}>Confirm</Text></TouchableOpacity>
         </View>
       )}
