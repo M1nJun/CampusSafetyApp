@@ -41,6 +41,13 @@ const SafetyRequesterComponent = ({ token }) => {
   // case 1: user chose to searchAddress on their own. In that case, we fetch autocompleted suggestions of the keyword on a list and show it to the user.
   // case 2: user chose to select a location from the static lawrence building list. Then as the user types, the user will be given a list that consists of locations that contain that keyword.
   const handleKeywordChange = debounce(async (keyword) => {
+    if (!keyword.trim()) {
+      if(!locSearchAddress){
+        await fetchLocationList();
+        return;
+      }
+    }
+
     const fetchAutocomplete = async (url, setList) => {
       try {
         const response = await fetch(url, { method: "GET" });

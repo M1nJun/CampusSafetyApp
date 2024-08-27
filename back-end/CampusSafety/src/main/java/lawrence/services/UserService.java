@@ -89,7 +89,7 @@ public class UserService {
         user.setFirstname(newProfile.getFirstname());
         user.setLastname(newProfile.getLastname());
         user.setPhone(newProfile.getPhone());
-        user.setUsername(newProfile.getStudentID());
+        user.setStudentID(newProfile.getStudentID());
         userRepository.save(user);
         return "Successfully Updated";
     }

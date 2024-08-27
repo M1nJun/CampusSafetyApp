@@ -1,5 +1,3 @@
-//rnf
-import React from "react";
 import {
   StyleSheet,
   View,
@@ -9,47 +7,64 @@ import {
   TextInput,
   ScrollView,
   ActivityIndicator,
+  Alert,
 } from "react-native";
-import { useEffect, useState } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { useRoute } from "@react-navigation/native";
 import styles from "../styles";
+
+
+// Memoized Input Fields: ProfileInput is memoized using React.memo. This prevents it from re-rendering unless its props change.
+const ProfileInput = memo(({ label, value, onChangeText, editable }) => {
+  return (
+    <View style={styles.categoryContainer}>
+      <Text style={styles.categoryText}>{label}: </Text>
+      <TextInput
+        value={value}
+        onChangeText={onChangeText}
+        autoCapitalize="none"
+        style={{
+          ...styles.input,
+          flex: 0.7,
+          color: editable ? "black" : "gray",
+        }}
+        editable={editable}
+      />
+    </View>
+  );
+});
 
 const ProfileComponent = () => {
   const route = useRoute();
   const { token } = route.params;
   const [profile, setProfile] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [phone, setPhone] = useState("");
   const [studentID, setStudentID] = useState("");
-  const edit = () => setIsEdit(true);
-  const notEdit = () => setIsEdit(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:8085/user/profile/self",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await fetch("http://localhost:8085/user/profile/self", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
         const data = await response.json();
         setProfile(data);
         setFirstname(data.firstname);
         setLastname(data.lastname);
         setPhone(data.phone);
         setStudentID(data.studentID);
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching profile", error);
+      } finally {
         setLoading(false);
       }
     };
@@ -77,8 +92,7 @@ const ProfileComponent = () => {
       );
 
       if (response.ok) {
-        const result = await response.text();
-        Alert.alert("Update Success", result); // Show success message
+        Alert.alert("Update Success", "Your profile has been updated.");
         setIsEdit(false);
       } else {
         Alert.alert("Update Failed", "Failed to update profile");
@@ -97,92 +111,15 @@ const ProfileComponent = () => {
 
   return (
     <ScrollView>
-      <View style={styles.categoryContainer}>
-        <Text style={styles.categoryText}>Email: </Text>
-        <TextInput
-          value={profile?.username || ""}
-          autoCapitalize="none"
-          style={{
-            ...styles.input,
-            flex: 0.7,
-            color: "gray",
-          }}
-          editable={false}
-        ></TextInput>
-      </View>
-      <View style={styles.categoryContainer}>
-        <Text style={styles.categoryText}>Password: </Text>
-        <TextInput
-          value={profile?.password || ""}
-          autoCapitalize="none"
-          style={{
-            ...styles.input,
-            flex: 0.7,
-            color: "gray",
-          }}
-          editable={false}
-        ></TextInput>
-      </View>
-      <View style={styles.categoryContainer}>
-        <Text style={styles.categoryText}>FirstName: </Text>
-        <TextInput
-          value={firstname}
-          onChangeText={setFirstname}
-          autoCapitalize="none"
-          style={{
-            ...styles.input,
-            flex: 0.7,
-            color: isEdit ? "black" : "gray",
-          }}
-          editable={isEdit}
-        ></TextInput>
-      </View>
-      <View style={styles.categoryContainer}>
-        <Text style={styles.categoryText}>LastName: </Text>
-        <TextInput
-          value={lastname}
-          onChangeText={setLastname}
-          autoCapitalize="none"
-          style={{
-            ...styles.input,
-            flex: 0.7,
-            color: isEdit ? "black" : "gray",
-          }}
-          editable={isEdit}
-        ></TextInput>
-      </View>
-      <View style={styles.categoryContainer}>
-        <Text style={styles.categoryText}>Phone: </Text>
-        <TextInput
-          value={phone}
-          onChangeText={setPhone}
-          autoCapitalize="none"
-          style={{
-            ...styles.input,
-            flex: 0.7,
-            color: isEdit ? "black" : "gray",
-          }}
-          editable={isEdit}
-        ></TextInput>
-      </View>
-      <View style={styles.categoryContainer}>
-        <Text style={styles.categoryText}>Student ID: </Text>
-        <TextInput
-          value={studentID}
-          onChangeText={setStudentID}
-          autoCapitalize="none"
-          style={{
-            ...styles.input,
-            flex: 0.7,
-            color: isEdit ? "black" : "gray",
-          }}
-          editable={isEdit}
-        ></TextInput>
-      </View>
+      <ProfileInput label="Email" value={profile?.username || ""} editable={false} />
+      <ProfileInput label="FirstName" value={firstname} onChangeText={setFirstname} editable={isEdit} />
+      <ProfileInput label="LastName" value={lastname} onChangeText={setLastname} editable={isEdit} />
+      <ProfileInput label="Phone" value={phone} onChangeText={setPhone} editable={isEdit} />
+      <ProfileInput label="Student ID" value={studentID} onChangeText={setStudentID} editable={isEdit} />
       <View style={{ ...styles.widthControll, justifyContent: "center" }}>
         <TouchableOpacity
           style={{ ...styles.blueBtn, flex: 0.45, borderRadius: 16 }}
-          onPress={isEdit ? handleSave : edit}
+          onPress={isEdit ? handleSave : () => setIsEdit(true)}
         >
           <Text style={styles.blueBtnText}>{isEdit ? "Save" : "Edit"}</Text>
         </TouchableOpacity>
