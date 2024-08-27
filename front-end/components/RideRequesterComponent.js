@@ -38,6 +38,10 @@ const RideRequesterComponent = ({ token }) => {
     longitudeDelta:0.0015,
   });
 
+
+  const [showAutoCompleteList, setShowAutoCompleteList] = useState(false);
+  const [autoCompleteList, setAutoCompleteList] = useState([]);
+  const [searchAddress, setSearchAddress] = useState(false); // to indicate if the input value should search for the destination list or the address.
   const [showDestMap, setShowDestMap] = useState(false); // going to be also used as a flag to tell if the user is using the map or not.
   const [destMapRegion, setDestMapRegion] = useState({
     latitude:44.260445,
@@ -73,7 +77,6 @@ const RideRequesterComponent = ({ token }) => {
 
   // this is to reverseGeocode the long, lang coords to address
   const [locAddress, setLocAddress] = useState("");
-  const [destAddress, setDestAddress] = useState("");
 
   const handleRegionChangeComplete = async (region, isDestination) => {
     // could put in the option name, which mostly says lawrence university.
@@ -84,12 +87,13 @@ const RideRequesterComponent = ({ token }) => {
       });
       if (geocodedAddress.length > 0) {
         const { streetNumber, street, city,} = geocodedAddress[0];
+        const address = `${streetNumber}, ${street}, ${city}`;
         if (isDestination) {
-          setDestAddress(`${streetNumber}, ${street}, ${city}`);
-          console.log("Destination Address:", destAddress);
+          setDestination(address); // Directly update the destination input
+          console.log("Destination Address:", address);
         } else {
-          setLocAddress(`${streetNumber}, ${street}, ${city}`);
-          console.log("Location Address:", locAddress);
+          setLocAddress(address);
+          console.log("Location Address:", address);
         }
       }
     } catch (error) {
@@ -97,6 +101,7 @@ const RideRequesterComponent = ({ token }) => {
       Alert.alert("Error", "Failed to fetch address for the selected location.");
     }
   };
+
   
 
 
@@ -155,7 +160,32 @@ const RideRequesterComponent = ({ token }) => {
     fetchDestinationList();
   }, [token]);
 
+
+
+  const API_KEY = "AIzaSyBP26jrlVQ062A5TJsu1rD3TQ49n7cto54";
+  // This function has 2 cases
+  // case 1: user chose to searchAddress on their own. In that case, we fetch autocompleted suggestions of the keyword on a list and show it to the user.
+  // case 2: user chose to select a location from the static lawrence building list. Then as the user types, the user will be given a list that consists of locations that contain that keyword.
   const handleKeywordChange = debounce(async (keyword, isDestination) => {
+    if (searchAddress) {
+    // Logic for autocomplete when searchAddress is true
+    try {
+      const autocompleteResponse = await fetch(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${keyword}&key=${API_KEY}`, {
+        method: "GET",
+      });
+      if (autocompleteResponse.ok) {
+        const autocompleteData = await autocompleteResponse.json();
+        const suggestions = autocompleteData.predictions.map((prediction) => prediction.description);
+        setAutoCompleteList(suggestions);
+        console.log(autoCompleteList);
+      } else {
+        Alert.alert("Error", "Failed to fetch location suggestions.");
+      }
+    } catch (error) {
+      Alert.alert("Error", "An error occurred while fetching location suggestions.");
+    }
+  } else {
+    // Existing logic when searchAddress is false
     try {
       const response = await fetch(`http://localhost:8085/option/location/${keyword}`, {
         method: "GET",
@@ -165,14 +195,41 @@ const RideRequesterComponent = ({ token }) => {
       });
       if (response.ok) {
         const data = await response.json();
-        isDestination? setDestinationList(data) : setLocationList(data);
+        isDestination ? setDestinationList(data) : setLocationList(data);
       } else {
         Alert.alert("Error", "Failed to fetch filtered locations.");
       }
     } catch (error) {
       Alert.alert("Error", "An error occurred while fetching filtered locations.");
     }
+  }
   }, 300); // 300ms debounce delay
+
+
+  const handleGeocode = async (address) => {
+    try {
+      const geocodeResult = await Location.geocodeAsync(address);
+      if (geocodeResult.length > 0) {
+        const { latitude, longitude } = geocodeResult[0];
+        
+        // Update the destination map region with the geocoded coordinates
+        const newRegion = {
+          latitude,
+          longitude,
+          latitudeDelta: 0.0015,
+          longitudeDelta: 0.0015,
+        };
+        
+        setDestMapRegion(newRegion);
+        
+      } else {
+        Alert.alert("Error", "Unable to geocode the selected address.");
+      }
+    } catch (error) {
+      console.log("Geocoding error:", error);
+      Alert.alert("Error", "Failed to geocode the selected address.");
+    }
+  };
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -241,7 +298,8 @@ const RideRequesterComponent = ({ token }) => {
           placeholderTextColor="gray"
           autoCapitalize="none"
           style={{...styles.input, marginBottom:5}}
-          value={showDestMap? destAddress: destination}
+          // value={showDestMap? destAddress: destination}
+          value={destination}
           onFocus={() => setShowDestinationDropdown(true)}
           onChangeText={(text) => {
             setDestination(text);
@@ -257,10 +315,8 @@ const RideRequesterComponent = ({ token }) => {
           onPress={() => {
             setShowDestinationDropdown(false);
             setShowDestMap(true);
-            userCurrentLocation(true); //sending that isDestination is true
-            console.log("Dest Map region updated:", destMapRegion);
-            handleRegionChangeComplete(destMapRegion, true); //sending that isDestination is true
-            console.log("Dest Address updated", destAddress);
+            setSearchAddress(true);
+            setShowAutoCompleteList(true);
           }}
         >
           <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
@@ -278,15 +334,45 @@ const RideRequesterComponent = ({ token }) => {
           ))}
         </ScrollView></View></View>)}
 
+
+
+        {showAutoCompleteList && (<View style={{...styles.widthControll, justifyContent:'center', marginBottom: 15}}><View style={{flex:0.9}}><ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
+        <TouchableOpacity 
+          style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
+          onPress={() => {
+            setShowAutoCompleteList(false);
+            setShowDestMap(false);
+            setSearchAddress(false);
+            setShowDestinationDropdown(true);
+          }}
+        >
+          <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
+          <Text style={{color:theme.lightBlue, fontSize: 16, fontWeight:"500"}}>Go back to Lawrence Building List</Text>
+        </TouchableOpacity>
+          {autoCompleteList.map((address, index) => (
+            
+            <TouchableOpacity key={index} style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} onPress={() => {
+              setDestination(address);
+              setShowAutoCompleteList(false);
+              //geocode this address then, update it to be the destMapRegion.
+              handleGeocode(address);
+            }}>
+              <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
+              <Text style={{color:"black", fontSize: 16, fontWeight:"500"}}>{address}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView></View></View>)}
+
+
+
         {showDestMap && (
         <View style={{marginBottom: 25}}>
           <MapView
             region={destMapRegion}
             style={{ width: "100%", height: 400, borderRadius: 10 }}
-            // learned that onRegionChangeComplete is not a function. I'm was not using this.props but instead directly passing a function reference to onRegionChangeComplete.
+            // I'm commenting this so that when the day comes for me to update the location when the user moves the map.
             onRegionChangeComplete={(region) => handleRegionChangeComplete(region, true)}
           />
-          {/* Fixed location pin icon at the center of the map */}
           <View style={{
             position: "absolute",
             top: "50%",
@@ -298,7 +384,7 @@ const RideRequesterComponent = ({ token }) => {
           </View>
           <TouchableOpacity style={{backgroundColor:"black", borderRadius: 13, width: "40%", alignSelf:"center", marginTop: -50}} onPress={()=>{
             setShowDestMap(false);
-            setDestination(destAddress);
+            setShowAutoCompleteList(false);
           }}><Text style={{color: "white", fontSize:20, fontWeight: "600", textAlign:"center", paddingVertical: 5}}>Confirm</Text></TouchableOpacity>
         </View>
       )}
@@ -472,7 +558,7 @@ const RideRequesterComponent = ({ token }) => {
           />
         )}
       </View>
-      <Text style={{ color: "white" }}>selected: {date.toLocaleString()}</Text>
+      {console.log("selected:", date.toLocaleString())}
       <View style={styles.questionContainer}>
         <Text style={styles.question}>
           Do you have any message for the driver?
