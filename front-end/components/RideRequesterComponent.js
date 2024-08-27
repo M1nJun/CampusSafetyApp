@@ -147,6 +147,7 @@ const RideRequesterComponent = ({ token }) => {
       if (response.ok) {
         const data = await response.json();
         setDestinationList(data); // Set the destination state
+   
       } else {
         Alert.alert("Error", "Failed to fetch filtered locations.");
       }
@@ -176,6 +177,23 @@ const RideRequesterComponent = ({ token }) => {
   // case 1: user chose to searchAddress on their own. In that case, we fetch autocompleted suggestions of the keyword on a list and show it to the user.
   // case 2: user chose to select a location from the static lawrence building list. Then as the user types, the user will be given a list that consists of locations that contain that keyword.
   const handleKeywordChange = debounce(async (keyword, isDestination) => {
+    // this is so that if the keyword is empty and the user is not seraching address, we fetch the full location list.
+    if (!keyword.trim()) {
+      if (isDestination) {
+        if(!destSearchAddress){
+          await fetchDestinationList();
+          return;
+          
+        }
+      } else {
+        // location
+        if(!locSearchAddress){
+          await fetchLocationList();
+          return;
+        }
+      }
+    }
+
     const fetchAutocomplete = async (url, setList) => {
       try {
         const response = await fetch(url, { method: "GET" });
@@ -390,7 +408,7 @@ const RideRequesterComponent = ({ token }) => {
           placeholder="Where to?"
           placeholderTextColor="gray"
           autoCapitalize="none"
-          style={{...styles.input, marginBottom:5}}
+          style={{...styles.input, marginBottom:5, fontSize: 17}}
           value={destination}
           //maybe should set up a conditional statement saying if !showDestinationAutoCompleteList
           onFocus={() => setShowDestinationDropdown(true)}
