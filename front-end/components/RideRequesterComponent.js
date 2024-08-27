@@ -39,8 +39,8 @@ const RideRequesterComponent = ({ token }) => {
   });
 
 
-  const [showAutoCompleteList, setShowAutoCompleteList] = useState(false);
-  const [autoCompleteList, setAutoCompleteList] = useState([]);
+  const [showDestAutoCompleteList, setShowDestAutoCompleteList] = useState(false);
+  const [destAutoCompleteList, setDestAutoCompleteList] = useState([]);
   const [searchAddress, setSearchAddress] = useState(false); // to indicate if the input value should search for the destination list or the address.
   const [showDestMap, setShowDestMap] = useState(false); // going to be also used as a flag to tell if the user is using the map or not.
   const [destMapRegion, setDestMapRegion] = useState({
@@ -176,8 +176,8 @@ const RideRequesterComponent = ({ token }) => {
       if (autocompleteResponse.ok) {
         const autocompleteData = await autocompleteResponse.json();
         const suggestions = autocompleteData.predictions.map((prediction) => prediction.description);
-        setAutoCompleteList(suggestions);
-        console.log(autoCompleteList);
+        setDestAutoCompleteList(suggestions);
+        console.log(destAutoCompleteList);
       } else {
         Alert.alert("Error", "Failed to fetch location suggestions.");
       }
@@ -316,7 +316,7 @@ const RideRequesterComponent = ({ token }) => {
             setShowDestinationDropdown(false);
             setShowDestMap(true);
             setSearchAddress(true);
-            setShowAutoCompleteList(true);
+            setShowDestAutoCompleteList(true);
           }}
         >
           <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
@@ -336,11 +336,11 @@ const RideRequesterComponent = ({ token }) => {
 
 
 
-        {showAutoCompleteList && (<View style={{...styles.widthControll, justifyContent:'center', marginBottom: 15}}><View style={{flex:0.9}}><ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
+        {showDestAutoCompleteList && (<View style={{...styles.widthControll, justifyContent:'center', marginBottom: 15}}><View style={{flex:0.9}}><ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
         <TouchableOpacity 
           style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
           onPress={() => {
-            setShowAutoCompleteList(false);
+            setShowDestAutoCompleteList(false);
             setShowDestMap(false);
             setSearchAddress(false);
             setShowDestinationDropdown(true);
@@ -349,11 +349,11 @@ const RideRequesterComponent = ({ token }) => {
           <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
           <Text style={{color:theme.lightBlue, fontSize: 16, fontWeight:"500"}}>Go back to Lawrence Building List</Text>
         </TouchableOpacity>
-          {autoCompleteList.map((address, index) => (
+          {destAutoCompleteList.map((address, index) => (
             
             <TouchableOpacity key={index} style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} onPress={() => {
               setDestination(address);
-              setShowAutoCompleteList(false);
+              setShowDestAutoCompleteList(false);
               //geocode this address then, update it to be the destMapRegion.
               handleGeocode(address);
             }}>
@@ -384,7 +384,7 @@ const RideRequesterComponent = ({ token }) => {
           </View>
           <TouchableOpacity style={{backgroundColor:"black", borderRadius: 13, width: "40%", alignSelf:"center", marginTop: -50}} onPress={()=>{
             setShowDestMap(false);
-            setShowAutoCompleteList(false);
+            setShowDestAutoCompleteList(false);
           }}><Text style={{color: "white", fontSize:20, fontWeight: "600", textAlign:"center", paddingVertical: 5}}>Confirm</Text></TouchableOpacity>
         </View>
       )}
@@ -423,6 +423,18 @@ const RideRequesterComponent = ({ token }) => {
           <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
           <Text style={{color:theme.lightBlue, fontSize: 16, fontWeight:"500"}}>Current Location</Text>
         </TouchableOpacity>
+        {/* <TouchableOpacity 
+          style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
+          onPress={() => {
+            setShowDestinationDropdown(false);
+            setShowDestMap(true);
+            setSearchAddress(true);
+            setShowAutoCompleteList(true);
+          }}
+        >
+          <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
+          <Text style={{color:theme.lightBlue, fontSize: 16, fontWeight:"500"}}>Search Address</Text>
+        </TouchableOpacity> */}
           {locationList.map((loc) => (
             
             <TouchableOpacity style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} key={loc.locationOptionID} onPress={() => {
