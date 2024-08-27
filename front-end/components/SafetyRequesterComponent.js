@@ -114,6 +114,7 @@ const SafetyRequesterComponent = ({ token }) => {
         await fetchAutocompleteAndDetails(autocompleteUrl(keyword), setLocAutoCompleteList);
         //kinda wondering if this is okay to be keep setting it true. waste maybe??
         setShowLocAutoCompleteList(true);
+        setShowLocMap(false);
       } else {
         await fetchFilteredLocations(`${baseUrl}/${keyword}`, setLocationList);
         setShowLocationDropdown(true);
@@ -351,7 +352,6 @@ const SafetyRequesterComponent = ({ token }) => {
           value={location}
           onChangeText={(text) => {
             setLocation(text);
-            text === "" ? fetchLocationList() :
             handleKeywordChange(text);
           }}
           onFocus={() => setShowLocationDropdown(true)}
@@ -376,9 +376,9 @@ const SafetyRequesterComponent = ({ token }) => {
           style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
           onPress={() => {
             setShowLocationDropdown(false);
-            setShowLocMap(true);
             setShowLocAutoCompleteList(true);
             setLocSearchAddress(true);
+            setLocation("");
           }}
         >
           <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
@@ -395,7 +395,7 @@ const SafetyRequesterComponent = ({ token }) => {
           ))}
         </ScrollView></View></View>)}
 
-        {/* we'll come back */}
+
 
         {showLocAutoCompleteList && (<View style={{...styles.widthControll, justifyContent:'center', marginBottom: 15}}><View style={{flex:0.9}}><ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
         <TouchableOpacity 
@@ -404,6 +404,8 @@ const SafetyRequesterComponent = ({ token }) => {
             setShowLocAutoCompleteList(false);
             setShowLocMap(false);
             setShowLocationDropdown(true);
+            fetchLocationList();
+            setLocation("");
           }}
         >
           <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
@@ -418,6 +420,7 @@ const SafetyRequesterComponent = ({ token }) => {
               setShowLocAutoCompleteList(false);
               // Geocode this address then, update it to be the locMapRegion.
               handleGeocode(item.address);
+              setShowLocMap(true);
             }}
           >
             <Entypo name="location-pin" size={24} color="black" style={{paddingRight: 5}} />

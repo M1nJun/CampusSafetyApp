@@ -250,6 +250,8 @@ const RideRequesterComponent = ({ token }) => {
         await fetchAutocompleteAndDetails(autocompleteUrl(keyword), setDestAutoCompleteList);
         //kinda wondering if this is okay to be keep setting it true. waste maybe??
         setShowDestAutoCompleteList(true);
+        //when this function is triggered, the user is searching the address, they don't need the map in the moment.
+        setShowDestMap(false);
       } else {
         await fetchFilteredLocations(`${baseUrl}/${keyword}`, setDestinationList);
         setShowDestinationDropdown(true);
@@ -258,6 +260,7 @@ const RideRequesterComponent = ({ token }) => {
       if (locSearchAddress) {
         await fetchAutocompleteAndDetails(autocompleteUrl(keyword), setLocAutoCompleteList);
         setShowLocAutoCompleteList(true);
+        setShowLocMap(false);
       } else {
         await fetchFilteredLocations(`${baseUrl}/${keyword}`, setLocationList);
         setShowLocationDropdown(true);
@@ -393,7 +396,7 @@ const RideRequesterComponent = ({ token }) => {
           onFocus={() => setShowDestinationDropdown(true)}
           onChangeText={(text) => {
             setDestination(text);
-            text === "" ? fetchDestinationList() : handleKeywordChange(text, true);
+            handleKeywordChange(text, true);
           }}
         ></TextInput>
         
@@ -417,10 +420,11 @@ const RideRequesterComponent = ({ token }) => {
           style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
           onPress={() => {
             setShowDestinationDropdown(false);
-            setShowDestMap(true);
             setShowDestAutoCompleteList(true);
             //for situations where the list is not showing but the search is still happening.
             setDestSearchAddress(true);
+            //clear out content of input when chosen
+            setDestination("");
           }}
         >
           <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
@@ -450,6 +454,8 @@ const RideRequesterComponent = ({ token }) => {
                     setShowDestAutoCompleteList(false);
                     setShowDestMap(false);
                     setShowDestinationDropdown(true);
+                    fetchDestinationList();
+                    setDestination("");
                   }}
                 >
                   <Entypo name="location-pin" size={24} color="black" style={{paddingRight: 5}} />
@@ -464,6 +470,7 @@ const RideRequesterComponent = ({ token }) => {
                       setShowDestAutoCompleteList(false);
                       // Geocode this address then, update it to be the destMapRegion.
                       handleGeocode(item.address, true);
+                      setShowDestMap(true);
                     }}
                   >
                     <Entypo name="location-pin" size={24} color="black" style={{paddingRight: 5}} />
@@ -516,7 +523,7 @@ const RideRequesterComponent = ({ token }) => {
           value={location} // Show address if using map, otherwise show location
           onChangeText={(text) => {
             setLocation(text);
-            (text === "") ? fetchLocationList() : handleKeywordChange(text, false);
+            handleKeywordChange(text, false);
           }}
           onFocus={() => {setShowLocationDropdown(true);
             }}
@@ -542,9 +549,10 @@ const RideRequesterComponent = ({ token }) => {
           style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
           onPress={() => {
             setShowLocationDropdown(false);
-            setShowLocMap(true);
             setShowLocAutoCompleteList(true);
             setLocSearchAddress(true);
+            //clear out content when chosen.
+            setLocation("");
           }}
         >
           <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
@@ -572,6 +580,8 @@ const RideRequesterComponent = ({ token }) => {
             setShowLocAutoCompleteList(false);
             setShowLocMap(false);
             setShowLocationDropdown(true);
+            fetchLocationList();
+            setLocation("");
           }}
         >
           <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
@@ -586,6 +596,7 @@ const RideRequesterComponent = ({ token }) => {
               setShowLocAutoCompleteList(false);
               // Geocode this address then, update it to be the locMapRegion.
               handleGeocode(item.address, false);
+              setShowLocMap(true);
             }}
           >
             <Entypo name="location-pin" size={24} color="black" style={{paddingRight: 5}} />
