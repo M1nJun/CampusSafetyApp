@@ -30,6 +30,8 @@ const RideRequesterComponent = ({ token }) => {
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
 
   // this is for the map share current location feature
+  const [showLocAutoCompleteList, setShowLocAutoCompleteList] = useState(false);
+  const [locAutoCompleteList, setLocAutoCompleteList] = useState([]);
   const [showLocMap, setShowLocMap] = useState(false); // going to be also used as a flag to tell if the user is using the map or not.
   const [locMapRegion, setLocMapRegion] = useState({
     latitude:44.260445,
@@ -41,7 +43,6 @@ const RideRequesterComponent = ({ token }) => {
 
   const [showDestAutoCompleteList, setShowDestAutoCompleteList] = useState(false);
   const [destAutoCompleteList, setDestAutoCompleteList] = useState([]);
-  const [searchAddress, setSearchAddress] = useState(false); // to indicate if the input value should search for the destination list or the address.
   const [showDestMap, setShowDestMap] = useState(false); // going to be also used as a flag to tell if the user is using the map or not.
   const [destMapRegion, setDestMapRegion] = useState({
     latitude:44.260445,
@@ -167,43 +168,59 @@ const RideRequesterComponent = ({ token }) => {
   // case 1: user chose to searchAddress on their own. In that case, we fetch autocompleted suggestions of the keyword on a list and show it to the user.
   // case 2: user chose to select a location from the static lawrence building list. Then as the user types, the user will be given a list that consists of locations that contain that keyword.
   const handleKeywordChange = debounce(async (keyword, isDestination) => {
-    if (searchAddress) {
-    // Logic for autocomplete when searchAddress is true
-    try {
-      const autocompleteResponse = await fetch(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${keyword}&key=${API_KEY}`, {
-        method: "GET",
-      });
-      if (autocompleteResponse.ok) {
-        const autocompleteData = await autocompleteResponse.json();
-        const suggestions = autocompleteData.predictions.map((prediction) => prediction.description);
-        setDestAutoCompleteList(suggestions);
-        console.log(destAutoCompleteList);
-      } else {
-        Alert.alert("Error", "Failed to fetch location suggestions.");
+    const fetchAutocomplete = async (url, setList) => {
+      try {
+        const response = await fetch(url, { method: "GET" });
+        if (response.ok) {
+          const data = await response.json();
+          const suggestions = data.predictions.map(prediction => prediction.description);
+          setList(suggestions);
+          console.log(suggestions);
+        } else {
+          Alert.alert("Error", "Failed to fetch location suggestions.");
+        }
+      } catch (error) {
+        Alert.alert("Error", "An error occurred while fetching location suggestions.");
       }
-    } catch (error) {
-      Alert.alert("Error", "An error occurred while fetching location suggestions.");
-    }
-  } else {
-    // Existing logic when searchAddress is false
-    try {
-      const response = await fetch(`http://localhost:8085/option/location/${keyword}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (response.ok) {
-        const data = await response.json();
-        isDestination ? setDestinationList(data) : setLocationList(data);
-      } else {
-        Alert.alert("Error", "Failed to fetch filtered locations.");
+    };
+  
+    const fetchFilteredLocations = async (url, setList) => {
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setList(data);
+        } else {
+          Alert.alert("Error", "Failed to fetch filtered locations.");
+        }
+      } catch (error) {
+        Alert.alert("Error", "An error occurred while fetching filtered locations.");
       }
-    } catch (error) {
-      Alert.alert("Error", "An error occurred while fetching filtered locations.");
+    };
+  
+    const baseUrl = 'http://localhost:8085/option/location';
+    const autocompleteUrl = (input) => `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${API_KEY}`;
+    
+    if (isDestination) {
+      if (showDestAutoCompleteList) {
+        await fetchAutocomplete(autocompleteUrl(keyword), setDestAutoCompleteList);
+      } else {
+        await fetchFilteredLocations(`${baseUrl}/${keyword}`, setDestinationList);
+      }
+    } else {
+      if (showLocAutoCompleteList) {
+        await fetchAutocomplete(autocompleteUrl(keyword), setLocAutoCompleteList);
+      } else {
+        await fetchFilteredLocations(`${baseUrl}/${keyword}`, setLocationList);
+      }
     }
-  }
   }, 300); // 300ms debounce delay
+  
 
 
   const handleGeocode = async (address) => {
@@ -315,7 +332,6 @@ const RideRequesterComponent = ({ token }) => {
           onPress={() => {
             setShowDestinationDropdown(false);
             setShowDestMap(true);
-            setSearchAddress(true);
             setShowDestAutoCompleteList(true);
           }}
         >
@@ -342,7 +358,6 @@ const RideRequesterComponent = ({ token }) => {
           onPress={() => {
             setShowDestAutoCompleteList(false);
             setShowDestMap(false);
-            setSearchAddress(false);
             setShowDestinationDropdown(true);
           }}
         >
@@ -428,7 +443,6 @@ const RideRequesterComponent = ({ token }) => {
           onPress={() => {
             setShowDestinationDropdown(false);
             setShowDestMap(true);
-            setSearchAddress(true);
             setShowAutoCompleteList(true);
           }}
         >
