@@ -121,7 +121,7 @@ const ProfileComponent = () => {
           style={{ ...styles.blueBtn, flex: 0.45, borderRadius: 16 }}
           onPress={isEdit ? handleSave : () => setIsEdit(true)}
         >
-          <Text style={styles.blueBtnText}>{isEdit ? "Save" : "Edit"}</Text>
+          <Text style={styles.blueBtnText}>{isEdit ? "Save Profile" : "Edit Profile"}</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

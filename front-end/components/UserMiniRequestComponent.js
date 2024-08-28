@@ -13,17 +13,19 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useEffect, useState } from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import styles from "../styles";
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const UserMiniRequestComponent = ({
   navigation,
   requestID,
   requestType,
   date,
+  reserved,
   token,
 }) => {
   return (
     <TouchableOpacity
-      style={styles.miniRequest}
+      style={{...styles.miniRequest, marginBottom: 10}}
       onPress={() =>
         navigation.navigate("RequestView", {
           token,
@@ -39,28 +41,26 @@ const UserMiniRequestComponent = ({
           alignItems: "center",
         }}
       >
-        <Text style={{ fontSize: 18, fontWeight: "700" }}>
-          {requestType === "ride" ? "Ride" : "Safety"} Request
-        </Text>
-        <Text style={{ fontSize: 18 }}>, </Text>
-        <Text style={{ fontSize: 18 }}>{new Date(date).toLocaleString()}</Text>
-      </View>
-
-      {/* {requestType === "ride" ? (
-        <FontAwesome5
-          name="shuttle-van"
-          size={30}
-          color="black"
-          style={{ paddingRight: 20 }}
-        />
+        {requestType === "ride" ? (
+          <FontAwesome5 name="car" size={22} color="black" style={{marginRight:8}} />
+        
       ) : (
         <MaterialCommunityIcons
           name="shield-check"
-          size={32}
+          size={22}
           color="black"
-          style={{ paddingRight: 20 }}
+          style={{marginRight:8}}
         />
-      )} */}
+      )}
+        <Text style={{ fontSize: 18, fontWeight: "700" }}>
+          {requestType === "ride" ? "Ride" : "Safety"} Request
+        </Text>
+        <Text style={{ fontSize: 15, marginLeft:13, color:theme.grey }}>{new Date(date).toDateString()}</Text>
+      </View>
+      {reserved? (<View style={{width:"30%", flexDirection:"row", alignItems:"center", justifyContent:"center", backgroundColor: "lightgray", borderRadius: 15, alignSelf:"flex-end", marginRight:10, marginTop: 3}}>
+        <Text style={{fontWeight: "500", paddingLeft: 4}}>Reserved</Text>
+        <Ionicons name="timer" size={18} color="black" style={{marginLeft:2}}/>
+      </View>) : null}
     </TouchableOpacity>
   );
 };

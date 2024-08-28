@@ -138,7 +138,7 @@ const Section = React.memo(({ title, data, navigation, token }) => {
         {title}
       </Text>
       {data.length === 0 ? (
-        <Text style={{ color: "white" }}>No {title.toLowerCase()}</Text>
+        <Text style={{ color: "white", marginTop: 5, marginBottom: 20 }}>No {title.toLowerCase()}</Text>
       ) : (
         data.map((request) => (
           <UserMiniRequestComponent
@@ -147,6 +147,7 @@ const Section = React.memo(({ title, data, navigation, token }) => {
             date={request.requestDate}
             requestType={request.requestType}
             requestID={request.requestID}
+            reserved={request.reserved}
             token={token}
           />
         ))

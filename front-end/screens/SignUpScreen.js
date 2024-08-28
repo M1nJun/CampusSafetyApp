@@ -12,6 +12,7 @@ import {
 import React from "react";
 import styles from "../styles";
 import { useNavigation } from "@react-navigation/native";
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function SignUpScreen() {
   const navigation = useNavigation();
@@ -21,6 +22,8 @@ export default function SignUpScreen() {
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [studentID, setStudentID] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSignUp = async () => {
     try {
@@ -65,7 +68,7 @@ export default function SignUpScreen() {
           onChangeText={setEmail}
         ></TextInput>
       </View>
-      <View style={styles.widthControll}>
+      <View style={{ ...styles.widthControll, alignItems: "center", position: "relative" }}>
         <TextInput
           placeholder="Password"
           placeholderTextColor="gray"
@@ -73,8 +76,20 @@ export default function SignUpScreen() {
           style={styles.input}
           value={password}
           onChangeText={setPassword}
-        ></TextInput>
+          secureTextEntry={!showPassword} // Hides the input content
+        />
+        {showPassword? <TouchableOpacity style={{ position: "absolute", right: 50, top: "50%", transform: [{ translateY: -12 }] }} onPress={() => setShowPassword(false)} >
+        <Ionicons name="eye-off" size={24} color="black" />
+        </TouchableOpacity> :  <TouchableOpacity style={{ position: "absolute", right: 50, top: "50%", transform: [{ translateY: -12 }] }} onPress={() => setShowPassword(true)} >
+          <Ionicons 
+            name="eye" 
+            size={24} 
+            color="black" 
+          />
+        </TouchableOpacity>}
+        
       </View>
+
       <View style={styles.widthControll}>
         <TextInput
           placeholder="First Name"

@@ -87,11 +87,9 @@ const styles = StyleSheet.create({
   },
   miniRequest: {
     backgroundColor: "white",
-    paddingVertical: 18,
+    paddingVertical: 15,
     borderRadius: 22,
     marginTop: 15,
-    flexDirection: "row",
-    justifyContent: "space-between",
   },
   verificationInput: {
     fontSize: 24,

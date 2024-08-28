@@ -103,7 +103,7 @@ const UserRequestViewComponent = () => {
   }
 
   return (
-    <View style={{ backgroundColor: "white", borderRadius: 15 }}>
+    <View style={{ backgroundColor: "white", borderRadius: 15, marginBottom: 80 }}>
       <View
         style={{
           flexDirection: "row",
@@ -124,12 +124,7 @@ const UserRequestViewComponent = () => {
             : "Safety Request"}
         </Text>
         {requestData.requestType === "ride" ? (
-          <FontAwesome5
-            name="shuttle-van"
-            size={30}
-            color="black"
-            style={{ paddingRight: 20 }}
-          />
+          <FontAwesome5 name="car" size={37} color="black" style={{ marginRight: 20 }} />
         ) : (
           <MaterialCommunityIcons
             name="shield-check"
@@ -139,37 +134,120 @@ const UserRequestViewComponent = () => {
           />
         )}
       </View>
+      
+      {requestData.requestType === "ride" ? (
+        <View style={{paddingLeft:20}}>
+          <Text style={{
+            fontSize: 18,
+            fontWeight: "600",
+            marginVertical: 4,
+            }}>Destination:
+          </Text>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "400",
+              marginBottom: 13,
+            }}
+          >
+            {requestData.destination}
+          </Text>
+        </View>
+      ): (
+        <View style={{paddingLeft:20}}>
+          <Text style={{
+            fontSize: 18,
+            fontWeight: "600",
+            marginVertical: 4,
+            }}>Subject:
+          </Text>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "400",
+              marginBottom: 13,
+            }}
+          >
+            {requestData.requestSubject}
+          </Text>
+        </View>
+      )}
+      
+      <View style={{paddingLeft:20}}>
+        <Text style={{
+            fontSize: 18,
+            fontWeight: "600",
+            marginVertical: 4,
+            }}>Location:
+        </Text>
+        <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "400",
+              marginBottom: 13,
+            }}
+          >
+            {requestData.location}
+        </Text>
+      </View>
 
-      <Text
-        style={{
-          fontSize: 17,
-          fontWeight: "500",
-          paddingLeft: 20,
-          marginVertical: 10,
-        }}
-      >
-        Location: {requestData.location}
-      </Text>
-      <Text
-        style={{
-          fontSize: 17,
-          fontWeight: "500",
-          paddingLeft: 20,
-          marginVertical: 10,
-        }}
-      >
-        Details: {requestData.message}
-      </Text>
-      <Text
-        style={{
-          fontSize: 17,
-          fontWeight: "500",
-          paddingLeft: 20,
-          marginVertical: 10,
-        }}
-      >
-        Date: {new Date(requestData.requestDate).toLocaleString()}
-      </Text>
+      <View style={{paddingLeft:20}}>
+        <Text style={{
+            fontSize: 18,
+            fontWeight: "600",
+            marginVertical: 4,
+            }}>{requestData.requestType === "ride"? "Message to driver" : "Message to officer"}:
+        </Text>
+        <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "400",
+              marginBottom: 13,
+            }}
+          >
+            {requestData.message}
+        </Text>
+      </View>
+
+
+      {requestData.reserved? (
+      <View style={{paddingLeft:20}}>
+        <Text style={{
+            fontSize: 18,
+            fontWeight: "600",
+            marginVertical: 4,
+            }}>Reserved at:
+        </Text>
+        <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "400",
+              marginBottom: 13,
+            }}
+          >
+            {new Date(requestData.reservationDue).toLocaleString()}
+        </Text>
+      </View>): null}
+
+      <View style={{paddingLeft:20}}>
+        <Text style={{
+            fontSize: 18,
+            fontWeight: "600",
+            marginVertical: 4,
+            }}>Request made on:
+        </Text>
+        <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "400",
+              marginBottom: 13,
+            }}
+          >
+            {new Date(requestData.requestDate).toDateString()}
+        </Text>
+      </View>
+      
+
       {requestData.requestStatus === "pending" ||
       requestData.requestStatus === "accepted" ? (
         <View
