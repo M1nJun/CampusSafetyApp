@@ -10,13 +10,13 @@ import {
   ScrollView,
 } from "react-native";
 import { useEffect, useState } from "react";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { useRoute, useNavigation } from "@react-navigation/native";
 import styles from "../styles";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import OfficerMiniRequestComponent from "./OfficerMiniRequestComponent";
 
 const RequestReceiverComponent = ({ navigation }) => {
+  const route = useRoute();
+  const { token } = route.params;
   return (
     <ScrollView>
       <OfficerMiniRequestComponent navigation={navigation} />

@@ -46,7 +46,7 @@ export default function LoginScreen() {
         if (usertype === "student") {
           navigation.navigate("StudentHome", { token });
         } else if (usertype === "officer") {
-          navigation.push("OfficerHome");
+          navigation.navigate("OfficerHome", { token });
         } else {
           // Handle other user types or errors
           throw new Error("Unknown user type!");

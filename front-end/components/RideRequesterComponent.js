@@ -385,7 +385,11 @@ const RideRequesterComponent = ({ token }) => {
         // upon submittion, you get the string form of the key not a JSON object.
         // needs to be mirrored on the SafetyRequesterComponent.
         Alert.alert("Success", "Your ride request has been submitted.");
-        navigation.navigate("StudentRequestLock", { token, requestID });
+        isReserve?(navigation.navigate("RequestView", {
+          token,
+          requestID,
+          userType: "student",
+        })): (navigation.navigate("StudentRequestLock", { token, requestID }));
       } else {
         Alert.alert("Error", "Failed to submit the request. Please try again.");
       }

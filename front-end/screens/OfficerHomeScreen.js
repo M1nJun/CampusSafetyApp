@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import React from "react";
 import { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 import styles from "../styles";
 import TopToggleComponent from "../components/TopToggleComponent";
 import BottomNavigationBarComponent from "../components/BottomNavigationBarComponent";
@@ -19,6 +19,8 @@ import RequestReceiverComponent from "../components/RequestReceiverComponent";
 import ReservedRequestReceiverComponent from "../components/ReservedRequestReceiverComponent";
 
 export default function OfficerHomeScreen({ navigation }) {
+  const route = useRoute();
+  const { token } = route.params;
   const [isLeft, setIsLeft] = useState(true);
   return (
     <View style={styles.container}>
@@ -31,9 +33,9 @@ export default function OfficerHomeScreen({ navigation }) {
       />
       {/* conditional scrollview rendering */}
       {isLeft ? (
-        <RequestReceiverComponent navigation={navigation} />
+        <RequestReceiverComponent navigation={navigation} token={ token } />
       ) : (
-        <ReservedRequestReceiverComponent navigation={navigation} />
+        <ReservedRequestReceiverComponent navigation={navigation} token={ token } />
       )}
 
       <BottomNavigationBarComponent type="Student" />

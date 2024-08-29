@@ -262,7 +262,7 @@ const SafetyRequesterComponent = ({ token }) => {
   }, [token]);
 
 
-  const onChange = (event, selectedDate) => {
+  const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate;
     setDate(currentDate);
   };
@@ -305,7 +305,11 @@ const SafetyRequesterComponent = ({ token }) => {
         // upon submittion, you get the string form of the key not a JSON object.
         // needs to be mirrored on the SafetyRequesterComponent.
         Alert.alert("Success", "Your safety request has been submitted.");
-        navigation.navigate("StudentRequestLock", { token, requestID });
+        isReserve?(navigation.navigate("RequestView", {
+          token,
+          requestID,
+          userType: "student",
+        })): (navigation.navigate("StudentRequestLock", { token, requestID }));
       } else {
         Alert.alert("Error", "Failed to submit the request. Please try again.");
       }
@@ -544,7 +548,7 @@ const SafetyRequesterComponent = ({ token }) => {
             value={date}
             mode="date"
             is24Hour={true}
-            onChange={onChange}
+            onChange={onChangeDate}
             themeVariant="dark"
           />
         )}
@@ -553,13 +557,14 @@ const SafetyRequesterComponent = ({ token }) => {
             value={date}
             mode="time"
             is24Hour={true}
-            onChange={onChange}
+            onChange={onChangeDate}
             themeVariant="dark"
             style={{ marginLeft: 0 }}
           />
         )}
       </View>
-      <Text style={{ color: "white" }}>selected: {date.toLocaleString()}</Text>
+
+
       <View style={styles.questionContainer}>
         <Text style={styles.question}>
           Do you have any message for the officer?
