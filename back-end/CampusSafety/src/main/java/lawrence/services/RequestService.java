@@ -48,8 +48,9 @@ public class RequestService {
         return requestDTOS;
     }
 
-    public List<RequestDTO> getPendingRequests() {
-        List<Request> requests = requestRepository.findByRequestStatus("pending");
+    // for officers to view all instant requests depending on status
+    public List<RequestDTO> getInstantRequests(String status) {
+        List<Request> requests = requestRepository.findByReservedAndRequestStatus(false, status);
         List<RequestDTO> result = new ArrayList<RequestDTO>();
         for (Request r : requests) {
             result.add(new RequestDTO(r));
@@ -57,10 +58,32 @@ public class RequestService {
         return result;
     }
 
-    public List<RequestDTO> getReservedRequests() {
-        List<String> statuses = Arrays.asList("pending", "accepted");
-        List<Request> requests = requestRepository.findByReservedTrueAndRequestStatusIn(statuses);
+    // for officers to view all instant requests that they have personally accepted
+    public List<RequestDTO> getInstantRequestsAcceptedByOfficer(UUID officerID) {
+        User officer = userRepository.findById(officerID).orElse(null);
+        List<Request> requests = requestRepository.findByReservedAndRequestStatusAndReceiver(false,"accepted", officer);
+        List<RequestDTO> result = new ArrayList<RequestDTO>();
+        for (Request r : requests) {
+            result.add(new RequestDTO(r));
+        }
+        return result;
+    }
+
+    // for officers to view all reserved depending on status
+    public List<RequestDTO> getReservedRequests(String status) {
+        List<Request> requests = requestRepository.findByReservedAndRequestStatus(true, status);
         List<RequestDTO> result = new ArrayList<>();
+        for (Request r : requests) {
+            result.add(new RequestDTO(r));
+        }
+        return result;
+    }
+
+    // for officers to view all instant requests that they have personally accepted
+    public List<RequestDTO> getReservedRequestsAcceptedByOfficer(UUID officerID) {
+        User officer = userRepository.findById(officerID).orElse(null);
+        List<Request> requests = requestRepository.findByReservedAndRequestStatusAndReceiver(true,"accepted", officer);
+        List<RequestDTO> result = new ArrayList<RequestDTO>();
         for (Request r : requests) {
             result.add(new RequestDTO(r));
         }
