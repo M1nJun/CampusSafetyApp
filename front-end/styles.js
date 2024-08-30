@@ -101,6 +101,11 @@ const styles = StyleSheet.create({
     borderRadius: 11,
     marginHorizontal: 6,
   },
+  titleText: {
+    color: "white",
+    fontSize: 20,
+    marginBottom: 5,
+  },
 });
 
 export default styles;

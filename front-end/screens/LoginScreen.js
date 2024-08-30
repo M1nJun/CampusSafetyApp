@@ -45,11 +45,8 @@ export default function LoginScreen() {
         // Use the userType to navigate
         if (usertype === "student") {
           navigation.navigate("StudentHome", { token });
-        } else if (usertype === "officer") {
-          navigation.navigate("OfficerHome", { token });
         } else {
-          // Handle other user types or errors
-          throw new Error("Unknown user type!");
+          navigation.navigate("OfficerHome", { token, usertype });
         }
       } else {
         // handle when user is not verified yet

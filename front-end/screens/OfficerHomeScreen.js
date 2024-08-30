@@ -33,11 +33,10 @@ export default function OfficerHomeScreen({ navigation }) {
       />
       {/* conditional scrollview rendering */}
       {isLeft ? (
-        <RequestReceiverComponent navigation={navigation} token={ token } />
+        <RequestReceiverComponent navigation={navigation} token={token} />
       ) : (
-        <ReservedRequestReceiverComponent navigation={navigation} token={ token } />
+        <ReservedRequestReceiverComponent navigation={navigation} token={token} />
       )}
-
       <BottomNavigationBarComponent type="Student" />
     </View>
   );

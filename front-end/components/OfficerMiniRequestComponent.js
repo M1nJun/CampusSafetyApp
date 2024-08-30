@@ -14,12 +14,52 @@ import { useEffect, useState } from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import styles from "../styles";
 
-const OfficerMiniRequestComponent = ({ navigation }) => {
+const OfficerMiniRequestComponent = ({ requestID, requestData, token, navigation }) => {
+  const [requestDetails, setRequestDetails] = useState(requestData);
+
+  // Optional: If you need to refetch data by requestID
+  const fetchRequestData = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8085/request/${requestID}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setRequestDetails(data);
+      } else {
+        Alert.alert("Error", "Failed to fetch the request data.");
+      }
+    } catch (error) {
+      Alert.alert(
+        "Error",
+        "An error occurred while fetching the request data."
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (!requestDetails) {
+      fetchRequestData();
+    }
+  }, [requestID]);
+
+  const borderColor =
+    requestDetails?.requestStatus === "accepted" ? "#7FA1C3" : "#F7B5CA";
+
+
   return (
     <TouchableOpacity
-      style={{ backgroundColor: "white", borderRadius: 15, marginBottom: 17 }}
+      style={{ backgroundColor: "white", borderRadius: 15, marginBottom: 17, paddingBottom: 7, borderWidth: 5, borderColor: borderColor,}}
       onPress={() =>
-        navigation.navigate("RequestView", { userType: "officer" })
+        navigation.navigate("RequestView", { userType: "officer", requestID })
       }
     >
       <View
@@ -27,46 +67,107 @@ const OfficerMiniRequestComponent = ({ navigation }) => {
           flexDirection: "row",
           justifyContent: "space-between",
           paddingTop: 13,
-          paddingBottom: 5,
+          marginBottom: 10,
           paddingLeft: 20,
         }}
       >
+        <View>
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: "700",
+              marginBottom: 3
+            }}
+          >
+            {requestDetails?.requestType === "ride" ? "Ride Request" : "Safety Request"}
+          </Text>
+          <Text
+            style={{
+              fontSize: 14, fontWeight: "400", color: theme.grey
+            }}
+          >
+            {new Date(requestDetails?.requestDate).toLocaleDateString([], {
+              month: "numeric",
+              day: "numeric",
+            })}{" "}
+            {new Date(requestDetails?.requestDate).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </Text>
+        </View>
+        {requestDetails?.requestType === "ride" ? (
+          <FontAwesome5 name="car" size={34} color="black" style={{ marginRight: 20 }} />
+        ) : (
+          <MaterialCommunityIcons
+            name="shield-check"
+            size={34}
+            color="black"
+            style={{ paddingRight: 20 }}
+          />
+        )}
+      </View>
+
+      <View style={{flexDirection:"row", marginLeft: 20, alignItems:"center"}}>
         <Text
           style={{
-            fontSize: 23,
-            fontWeight: "700",
+            fontSize: 15,
+            fontWeight: "600",
+            marginBottom: 7,
           }}
         >
-          Safety Request
+          Subject:{" "}
         </Text>
-        <MaterialCommunityIcons
-          name="shield-check"
-          size={37}
-          color="black"
-          style={{ paddingRight: 20 }}
-        />
+        <Text
+          style={{
+            fontSize: 15,
+              fontWeight: "400",
+            marginBottom: 7,
+          }}
+        >
+          {requestDetails?.requestSubject}
+        </Text>
       </View>
-      <Text
-        style={{
-          fontSize: 16,
-          fontWeight: "500",
-          paddingHorizontal: 20,
-          marginBottom: 7,
-        }}
-      >
-        Location: Hiett Hall
-      </Text>
-      <Text
-        style={{
-          fontSize: 16,
-          fontWeight: "500",
-          paddingHorizontal: 20,
-          marginBottom: 13,
-        }}
-      >
-        Details: My room number is 203. I am locked out of my room. Please help
-        me.
-      </Text>
+      
+      {requestDetails?.requestType === "ride" ? (
+        <View style={{marginLeft: 20}}>
+          <Text style={{
+            fontSize: 15,
+            fontWeight: "600",
+            marginVertical: 4,
+            }}>Destination:
+          </Text>
+          <Text
+            style={{
+              fontSize: 15,
+              fontWeight: "400",
+              marginBottom: 7,
+            }}
+          >
+            {requestDetails.destination}
+          </Text>
+        </View>
+      ):(
+        null
+      )}
+
+      <View style={{marginLeft: 20}}>
+        <Text style={{
+          fontSize: 15,
+          fontWeight: "600",
+          }}>Location:
+        </Text>
+        <Text
+          style={{
+            fontSize: 15,
+            fontWeight: "400",
+            marginBottom: 7,
+          }}
+        >
+          {requestDetails.location}
+        </Text>
+      </View>
+      
     </TouchableOpacity>
   );
 };
