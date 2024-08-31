@@ -15,6 +15,7 @@ import SignUpScreen from "./screens/SignUpScreen";
 import StudentHomeScreen from "./screens/StudentHomeScreen";
 import VerificationScreen from "./screens/VerificationScreen";
 import StudentAccountScreen from "./screens/StudentAccountScreen";
+import OfficerAccountScreen from "./screens/OfficerAccountScreen";
 import RequestViewScreen from "./screens/RequestViewScreen";
 import OfficerHomeScreen from "./screens/OfficerHomeScreen";
 import OfficerRequestLockScreen from "./screens/OfficerRequestLockScreen";
@@ -34,6 +35,7 @@ export default function App() {
         <Stack.Screen name="OfficerHome" component={OfficerHomeScreen} />
         <Stack.Screen name="Verification" component={VerificationScreen} />
         <Stack.Screen name="StudentAccount" component={StudentAccountScreen} />
+        <Stack.Screen name="OfficerAccount" component={OfficerAccountScreen} />
         <Stack.Screen
           name="OfficerRequestLock"
           component={OfficerRequestLockScreen}
