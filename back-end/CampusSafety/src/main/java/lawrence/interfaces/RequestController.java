@@ -73,6 +73,16 @@ public class RequestController  {
         return ResponseEntity.ok(requests);
     }
 
+    @GetMapping("/officer/self/completed/all")
+    public ResponseEntity<List<RequestDTO>> findCompletedRequestsByOfficer(Authentication authentication) {
+        CampusSafetyUserDetails details = (CampusSafetyUserDetails) authentication.getPrincipal();
+        UUID id = UUID.fromString(details.getUsername());
+        // also driver.
+        List<RequestDTO> requests = rs.findCertainStatusRequestsByOfficer(id, "completed");
+
+        return ResponseEntity.ok(requests);
+    }
+
 
     @GetMapping("/{id}/status")
     public ResponseEntity<String>findStatusByRequestId(Authentication authentication, @PathVariable String id) {
@@ -81,17 +91,6 @@ public class RequestController  {
 
         return ResponseEntity.ok(status);
     }
-
-    // need to make a method that searches all the request that are in completed status.
-
-    // need to make a method that searches for reserved requests that are 30 minutes away from the reservation time.
-
-    // need to make a method that searches for instant requests in time order
-
-    // need to make a method that searches for reserved requests that are more than 30 minutes away from the reservation time.
-
-    // need to make a method that cancels the request
-
 
     // all user's instant request
     @GetMapping("/instant/pending/all")
@@ -191,5 +190,7 @@ public class RequestController  {
             return ResponseEntity.badRequest().body(response);
         }
     }
-    // at some point we'll need a method that queries for just the ride requests for the driver app.
+
+
+
 }

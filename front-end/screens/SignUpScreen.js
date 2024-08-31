@@ -35,7 +35,7 @@ export default function SignUpScreen() {
         body: JSON.stringify({
           username: email,
           password: password,
-          usertype: "student",
+          usertype: "Student",
           firstname: firstName,
           lastname: lastName,
           phone: phone,

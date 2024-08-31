@@ -328,10 +328,10 @@ const OfficerRequestViewComponent = () => {
             if (requestStatus === "pending") {
               handleDecisionOnRequest("accept");
               setRequestStatus("accepted");
-              // navigation.push("OfficerRequestLock");
             } else if (requestStatus === "accepted") {
               handleDecisionOnRequest("complete");
               setRequestStatus("completed");
+              navigation.goBack();
             }
             // navigation.push("OfficerRequestLock");
           }}

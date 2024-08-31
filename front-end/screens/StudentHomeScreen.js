@@ -12,7 +12,7 @@ import BottomNavigationBarComponent from "../components/BottomNavigationBarCompo
 
 export default function StudentHomeScreen() {
   const route = useRoute();
-  const { token } = route.params;
+  const { token, usertype } = route.params;
   const [isRide, setIsRide] = useState(true);
   return (
     <View style={styles.container}>
@@ -30,7 +30,7 @@ export default function StudentHomeScreen() {
         <SafetyRequesterComponent token={token} />
       )}
 
-      <BottomNavigationBarComponent type="Student" token={token} />
+      <BottomNavigationBarComponent usertype={usertype} token={token} />
     </View>
   );
 }

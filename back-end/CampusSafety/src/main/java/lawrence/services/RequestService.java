@@ -48,6 +48,17 @@ public class RequestService {
         return requestDTOS;
     }
 
+    public List<RequestDTO> findCertainStatusRequestsByOfficer(UUID userId, String status) {
+        User user = userRepository.findById(userId).orElse(null);
+        List<Request> result = requestRepository.findByRequestStatusAndReceiver(status, user);
+        List<RequestDTO> requestDTOS = new ArrayList<>();
+        for(Request request : result) {
+            RequestDTO dto = new RequestDTO(request);
+            requestDTOS.add(dto);
+        }
+        return requestDTOS;
+    }
+
     // for officers to view all instant requests depending on status
     public List<RequestDTO> getInstantRequests(String status) {
         List<Request> requests = requestRepository.findByReservedAndRequestStatus(false, status);

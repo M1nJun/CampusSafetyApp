@@ -7,7 +7,7 @@ import LottieView from "lottie-react-native";
 
 const MyRequestComponent = ({ navigation }) => {
   const route = useRoute();
-  const { token } = route.params;
+  const { token, usertype } = route.params;
 
   const [pendingRequests, setPendingRequests] = useState([]);
   const [acceptedRequests, setAcceptedRequests] = useState([]);
@@ -105,18 +105,21 @@ const MyRequestComponent = ({ navigation }) => {
         title="Pending Requests"
         data={pendingRequests}
         navigation={navigation}
+        usertype={usertype}
         token={token}
       />
       <Section
         title="Accepted Requests"
         data={acceptedRequests}
         navigation={navigation}
+        usertype={usertype}
         token={token}
       />
       <Section
         title="Past Requests"
         data={completedRequests}
         navigation={navigation}
+        usertype={usertype}
         token={token}
       />
     </ScrollView>
@@ -124,7 +127,7 @@ const MyRequestComponent = ({ navigation }) => {
 };
 
 // Section component to handle rendering of each request type
-const Section = React.memo(({ title, data, navigation, token }) => {
+const Section = React.memo(({ title, data, navigation, usertype, token }) => {
   return (
     <>
       <Text
@@ -144,6 +147,7 @@ const Section = React.memo(({ title, data, navigation, token }) => {
           <UserMiniRequestComponent
             key={request.requestID}
             navigation={navigation}
+            usertype={usertype}
             date={request.requestDate}
             requestType={request.requestType}
             requestID={request.requestID}

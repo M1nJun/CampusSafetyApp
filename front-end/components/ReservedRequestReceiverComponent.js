@@ -73,6 +73,7 @@ const ReservedRequestReceiverComponent = ({ navigation }) => {
             key={request.requestID}
             requestID={request.requestID}
             requestData={request}
+            usertype={usertype}
             token={token}
             navigation={navigation}
           />
@@ -84,6 +85,7 @@ const ReservedRequestReceiverComponent = ({ navigation }) => {
             key={request.requestID}
             requestID={request.requestID}
             requestData={request}
+            usertype={usertype}
             token={token}
             navigation={navigation}
           />

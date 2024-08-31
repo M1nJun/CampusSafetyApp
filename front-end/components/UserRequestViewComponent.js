@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 
 const UserRequestViewComponent = () => {
   const route = useRoute();
-  const { token, requestID } = route.params;
+  const { token, usertype, requestID } = route.params;
 
   const navigation = useNavigation();
 
@@ -269,7 +269,24 @@ const UserRequestViewComponent = () => {
             <Text style={styles.blueBtnText}>Cancel this Request</Text>
           </TouchableOpacity>
         </View>
-      ) : null}
+      ) :  (
+      <View style={{paddingLeft:20}}>
+        <Text style={{
+            fontSize: 18,
+            fontWeight: "600",
+            marginVertical: 4,
+            }}>Request Status:
+        </Text>
+        <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "400",
+              marginBottom: 18,
+            }}
+          >
+            {requestData.requestStatus}
+        </Text>
+      </View>)}
     </View>
   );
 };

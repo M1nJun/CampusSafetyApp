@@ -7,11 +7,11 @@ import { useRoute, useNavigation } from "@react-navigation/native";
 import TopToggleComponent from "../components/TopToggleComponent";
 import BottomNavigationBarComponent from "../components/BottomNavigationBarComponent";
 import ProfileComponent from "../components/ProfileComponent";
-import MyRequestComponent from "../components/MyRequestComponent";
+import MyRequestHistoryComponent from "../components/MyRequestHistoryComponent";
 
 export default function OfficerAccountScreen({ navigation }) {
   const route = useRoute();
-  const { token } = route.params;
+  const { token, usertype } = route.params;
   const [isProfile, setIsProfile] = useState(true);
   return (
     <View style={styles.container}>
@@ -25,9 +25,9 @@ export default function OfficerAccountScreen({ navigation }) {
       {isProfile ? (
         <ProfileComponent token={token} />
       ) : (
-        <MyRequestHistoryComponent navigation={navigation} token={token} />
+        <MyRequestHistoryComponent navigation={navigation} usertype={usertype} token={token} />
       )}
-      <BottomNavigationBarComponent type="Officer" token={token} />
+      <BottomNavigationBarComponent usertype={usertype} token={token} />
     </View>
   );
 }

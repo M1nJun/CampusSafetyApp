@@ -18,14 +18,14 @@ import OfficerRequestViewComponent from "../components/OfficerRequestViewCompone
 import { useRoute } from "@react-navigation/native";
 
 const RequestViewScreen = ({ route }) => {
-  const { token, userType, requestID } = route.params;
-  console.log(userType);
+  const { token, usertype, requestID } = route.params;
+  console.log(usertype);
   return (
     <View style={styles.container}>
-      {userType === "student" ? (
-        <UserRequestViewComponent token={token} requestID={requestID} />
+      {usertype === "Student" ? (
+        <UserRequestViewComponent token={token} requestID={requestID} usertype={usertype} />
       ) : (
-        <OfficerRequestViewComponent token={token} requestID={requestID} />
+        <OfficerRequestViewComponent token={token} requestID={requestID} usertype={usertype} />
       )}
     </View>
   );

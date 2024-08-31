@@ -43,8 +43,8 @@ export default function LoginScreen() {
       if (verified) {
         console.log(usertype);
         // Use the userType to navigate
-        if (usertype === "student") {
-          navigation.navigate("StudentHome", { token });
+        if (usertype === "Student") {
+          navigation.navigate("StudentHome", { token, usertype });
         } else {
           navigation.navigate("OfficerHome", { token, usertype });
         }

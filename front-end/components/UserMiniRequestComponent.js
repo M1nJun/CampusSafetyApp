@@ -17,6 +17,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 const UserMiniRequestComponent = ({
   navigation,
+  usertype,
   requestID,
   requestType,
   date,
@@ -30,10 +31,11 @@ const UserMiniRequestComponent = ({
         navigation.navigate("RequestView", {
           token,
           requestID,
-          userType: "student",
+          usertype: usertype,
         })
       }
     >
+      {console.log(usertype)}
       <View
         style={{
           flexDirection: "row",

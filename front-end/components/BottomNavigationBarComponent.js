@@ -13,14 +13,14 @@ import Entypo from "@expo/vector-icons/Entypo";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
-const BottomNavigationBarComponent = ({ type, token }) => {
+const BottomNavigationBarComponent = ({ usertype, token }) => {
   const navigation = useNavigation();
   const route = useRoute(); // To get the current route name
 
   const handleNavigation = (screen) => {
     if (route.name !== screen) {
       // Check if we're already on the target screen
-      navigation.navigate(screen, { token });
+      navigation.navigate(screen, { token, usertype });
     }
   };
   return (
@@ -34,7 +34,8 @@ const BottomNavigationBarComponent = ({ type, token }) => {
     >
       <TouchableOpacity
         style={{ alignItems: "center", marginHorizontal: 50 }}
-        onPress={() => handleNavigation(type + "Home")}
+        // if the user is driver, make them go to the same screen as officers, but stil send the driver as usertype.
+        onPress={() => handleNavigation(usertype === "Driver"? "OfficerHome" : usertype + "Home")}
       >
         <Entypo name="home" size={30} color="white" />
         <Text style={{ color: "white", fontWeight: "600", marginTop: 4 }}>
@@ -43,7 +44,7 @@ const BottomNavigationBarComponent = ({ type, token }) => {
       </TouchableOpacity>
       <TouchableOpacity
         style={{ alignItems: "center", marginHorizontal: 50 }}
-        onPress={() => handleNavigation(type + "Account")}
+        onPress={() => handleNavigation(usertype === "Driver"? "OfficerAccount" : usertype + "Account")}
       >
         <MaterialIcons name="account-circle" size={30} color="white" />
         <Text style={{ color: "white", fontWeight: "600", marginTop: 4 }}>

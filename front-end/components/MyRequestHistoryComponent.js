@@ -7,10 +7,8 @@ import LottieView from "lottie-react-native";
 
 const MyRequestHistoryComponent = ({ navigation }) => {
   const route = useRoute();
-  const { token } = route.params;
+  const { token, usertype} = route.params;
 
-  const [pendingRequests, setPendingRequests] = useState([]);
-  const [acceptedRequests, setAcceptedRequests] = useState([]);
   const [completedRequests, setCompletedRequests] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -41,37 +39,17 @@ const MyRequestHistoryComponent = ({ navigation }) => {
     useCallback(() => {
       setLoading(true);
       fetchRequests(
-        "pending",
-        setPendingRequests,
-        "http://localhost:8085/request/self/pending/all"
-      );
-      fetchRequests(
-        "accepted",
-        setAcceptedRequests,
-        "http://localhost:8085/request/self/accepted/all"
-      );
-      fetchRequests(
         "completed",
         setCompletedRequests,
-        "http://localhost:8085/request/self/completed/all"
+        "http://localhost:8085/request/officer/self/completed/all"
       );
       setLoading(false);
 
       const intervalId = setInterval(() => {
         fetchRequests(
-          "pending",
-          setPendingRequests,
-          "http://localhost:8085/request/self/pending/all"
-        );
-        fetchRequests(
-          "accepted",
-          setAcceptedRequests,
-          "http://localhost:8085/request/self/accepted/all"
-        );
-        fetchRequests(
           "completed",
           setCompletedRequests,
-          "http://localhost:8085/request/self/completed/all"
+          "http://localhost:8085/request/officer/self/completed/all"
         );
       }, 10000);
 
@@ -101,21 +79,17 @@ const MyRequestHistoryComponent = ({ navigation }) => {
 
   return (
     <ScrollView>
-      <Section
-        title="Pending Requests"
-        data={pendingRequests}
-        navigation={navigation}
-        token={token}
-      />
-      <Section
+      {/* <Section
         title="Accepted Requests"
         data={acceptedRequests}
         navigation={navigation}
         token={token}
-      />
+      /> */}
+      {console.log(usertype)}
       <Section
         title="Past Requests"
         data={completedRequests}
+        usertype={usertype}
         navigation={navigation}
         token={token}
       />
@@ -124,7 +98,7 @@ const MyRequestHistoryComponent = ({ navigation }) => {
 };
 
 // Section component to handle rendering of each request type
-const Section = React.memo(({ title, data, navigation, token }) => {
+const Section = React.memo(({ title, data, navigation, usertype, token }) => {
   return (
     <>
       <Text
@@ -144,6 +118,7 @@ const Section = React.memo(({ title, data, navigation, token }) => {
           <UserMiniRequestComponent
             key={request.requestID}
             navigation={navigation}
+            usertype={usertype}
             date={request.requestDate}
             requestType={request.requestType}
             requestID={request.requestID}

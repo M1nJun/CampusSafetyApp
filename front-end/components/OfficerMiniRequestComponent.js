@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import styles from "../styles";
 
-const OfficerMiniRequestComponent = ({ requestID, requestData, token, navigation }) => {
+const OfficerMiniRequestComponent = ({ requestID, requestData, usertype, token, navigation }) => {
   const [requestDetails, setRequestDetails] = useState(requestData);
 
   // Optional: If you need to refetch data by requestID
@@ -60,7 +60,7 @@ const OfficerMiniRequestComponent = ({ requestID, requestData, token, navigation
       style={{ backgroundColor: "white", borderRadius: 15, marginBottom: 17, paddingBottom: 7, borderWidth: 6, borderColor: borderColor,}}
       onPress={() =>
         //works the same for officer and driver. So we'll leave it like this for now.
-        navigation.navigate("RequestView", { userType: "officer", token, requestID })
+        navigation.navigate("RequestView", { usertype, token, requestID })
       }
     >
       <View

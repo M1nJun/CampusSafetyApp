@@ -73,6 +73,7 @@ const RequestReceiverComponent = ({ navigation }) => {
             requestID={request.requestID}
             requestData={request}
             token={token}
+            usertype={usertype}
             navigation={navigation}
           />
         ))}
@@ -84,6 +85,7 @@ const RequestReceiverComponent = ({ navigation }) => {
             requestID={request.requestID}
             requestData={request}
             token={token}
+            usertype={usertype}
             navigation={navigation}
           />
         ))}

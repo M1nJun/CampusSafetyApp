@@ -37,7 +37,7 @@ export default function OfficerHomeScreen({ navigation }) {
       ) : (
         <ReservedRequestReceiverComponent navigation={navigation} token={token} usertype={usertype}/>
       )}
-      <BottomNavigationBarComponent token={token} type="Officer" />
+      <BottomNavigationBarComponent token={token} usertype={usertype} />
     </View>
   );
 }
