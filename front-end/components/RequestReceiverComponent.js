@@ -49,14 +49,20 @@ const RequestReceiverComponent = ({ navigation }) => {
   useFocusEffect(
     useCallback(() => {
       setLoading(true);
-      fetchRequests("accepted", setAcceptedRequests,
-      "http://localhost:8085/request/instant/accepted/all");
-      fetchRequests("pending", setPendingRequests,
-      "http://localhost:8085/request/instant/pending/all");
+      fetchRequests("accepted", setAcceptedRequests, usertype === "officer"?
+      "http://localhost:8085/request/instant/accepted/all":"http://localhost:8085/request/instant/accepted/ride");
+      
+
+      fetchRequests("pending", setPendingRequests, usertype === "officer"?
+      "http://localhost:8085/request/instant/pending/all":"http://localhost:8085/request/instant/pending/ride");
       setLoading(false);
       const intervalId = setInterval(() => {
-        fetchRequests("accepted", setAcceptedRequests, "http://localhost:8085/request/instant/accepted/all");
-        fetchRequests("pending", setPendingRequests, "http://localhost:8085/request/instant/pending/all");
+        fetchRequests("accepted", setAcceptedRequests, usertype === "officer"?
+        "http://localhost:8085/request/instant/accepted/all":"http://localhost:8085/request/instant/accepted/ride");
+      
+
+        fetchRequests("pending", setPendingRequests, usertype === "officer"?
+        "http://localhost:8085/request/instant/pending/all":"http://localhost:8085/request/instant/pending/ride");
       }, 5000);
 
       return () => clearInterval(intervalId);

@@ -9,7 +9,9 @@ import java.util.UUID;
 
 public interface RequestRepository extends JpaRepository<Request, Integer> {
     List<Request> findByReservedAndRequestStatus(Boolean reserved, String requestStatus);
+    List<Request> findByRequestTypeAndReservedAndRequestStatus(String requestType, Boolean reserved, String requestStatus);
     List<Request> findByRequestStatusAndRequester(String requestStatus, User requester);
     List<Request> findByReservedAndRequestStatusAndReceiver(Boolean reserved, String requestStatus, User receiver);
+    List<Request> findByRequestTypeAndReservedAndRequestStatusAndReceiver(String requestType, Boolean reserved, String requestStatus, User receiver);
 
 }

@@ -100,12 +100,27 @@ public class RequestController  {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    // instant requests that have been accepted by "me"
+    @GetMapping("/instant/pending/ride")
+    public ResponseEntity<List<RequestDTO>> findRideInstantPendingRequest() {
+        List<RequestDTO> result = rs.getInstantRideRequests("pending");
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    // instant requests that have been accepted by a particular officer
     @GetMapping("/instant/accepted/all")
     public ResponseEntity<List<RequestDTO>> getInstantRequestsAcceptedByOfficer(Authentication authentication) {
         CampusSafetyUserDetails details = (CampusSafetyUserDetails) authentication.getPrincipal();
         UUID officerID = UUID.fromString(details.getUsername());
         List<RequestDTO> result = rs.getInstantRequestsAcceptedByOfficer(officerID);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    // instant requests that have been accepted by a particular driver
+    @GetMapping("/instant/accepted/ride")
+    public ResponseEntity<List<RequestDTO>> getInstantRequestsAcceptedByDriver(Authentication authentication) {
+        CampusSafetyUserDetails details = (CampusSafetyUserDetails) authentication.getPrincipal();
+        UUID driverID = UUID.fromString(details.getUsername());
+        List<RequestDTO> result = rs.getInstantRequestsAcceptedByDriver(driverID);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

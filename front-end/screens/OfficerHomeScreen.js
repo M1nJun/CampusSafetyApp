@@ -20,7 +20,7 @@ import ReservedRequestReceiverComponent from "../components/ReservedRequestRecei
 
 export default function OfficerHomeScreen({ navigation }) {
   const route = useRoute();
-  const { token } = route.params;
+  const { token, usertype } = route.params;
   const [isLeft, setIsLeft] = useState(true);
   return (
     <View style={styles.container}>
@@ -33,9 +33,9 @@ export default function OfficerHomeScreen({ navigation }) {
       />
       {/* conditional scrollview rendering */}
       {isLeft ? (
-        <RequestReceiverComponent navigation={navigation} token={token} />
+        <RequestReceiverComponent navigation={navigation} token={token} usertype={usertype}/>
       ) : (
-        <ReservedRequestReceiverComponent navigation={navigation} token={token} />
+        <ReservedRequestReceiverComponent navigation={navigation} token={token} usertype={usertype}/>
       )}
       <BottomNavigationBarComponent type="Student" />
     </View>

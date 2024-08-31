@@ -58,10 +58,31 @@ public class RequestService {
         return result;
     }
 
+    // for drivers to view all instant requests depending on status
+    public List<RequestDTO> getInstantRideRequests(String status) {
+        List<Request> requests = requestRepository.findByRequestTypeAndReservedAndRequestStatus("ride",false, status);
+        List<RequestDTO> result = new ArrayList<RequestDTO>();
+        for (Request r : requests) {
+            result.add(new RequestDTO(r));
+        }
+        return result;
+    }
+
     // for officers to view all instant requests that they have personally accepted
     public List<RequestDTO> getInstantRequestsAcceptedByOfficer(UUID officerID) {
         User officer = userRepository.findById(officerID).orElse(null);
         List<Request> requests = requestRepository.findByReservedAndRequestStatusAndReceiver(false,"accepted", officer);
+        List<RequestDTO> result = new ArrayList<RequestDTO>();
+        for (Request r : requests) {
+            result.add(new RequestDTO(r));
+        }
+        return result;
+    }
+
+    // for drivers to view all instant requests that they have personally accepted
+    public List<RequestDTO> getInstantRequestsAcceptedByDriver(UUID driverID) {
+        User driver = userRepository.findById(driverID).orElse(null);
+        List<Request> requests = requestRepository.findByRequestTypeAndReservedAndRequestStatusAndReceiver("ride",false,"accepted", driver);
         List<RequestDTO> result = new ArrayList<RequestDTO>();
         for (Request r : requests) {
             result.add(new RequestDTO(r));
