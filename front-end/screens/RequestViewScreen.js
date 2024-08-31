@@ -25,7 +25,7 @@ const RequestViewScreen = ({ route }) => {
       {userType === "student" ? (
         <UserRequestViewComponent token={token} requestID={requestID} />
       ) : (
-        <OfficerRequestViewComponent />
+        <OfficerRequestViewComponent token={token} requestID={requestID} />
       )}
     </View>
   );

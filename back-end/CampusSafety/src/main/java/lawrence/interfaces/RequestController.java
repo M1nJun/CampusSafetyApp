@@ -130,12 +130,27 @@ public class RequestController  {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @GetMapping("/reserved/pending/ride")
+    public ResponseEntity<List<RequestDTO>> findRideReservedPendingRequests() {
+        List<RequestDTO> result = rs.getReservedRideRequests("pending");
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
     // reserved requests that have been accepted by "me"
     @GetMapping("/reserved/accepted/all")
     public ResponseEntity<List<RequestDTO>> getReservedRequestsAcceptedByOfficer(Authentication authentication) {
         CampusSafetyUserDetails details = (CampusSafetyUserDetails) authentication.getPrincipal();
         UUID officerID = UUID.fromString(details.getUsername());
         List<RequestDTO> result = rs.getReservedRequestsAcceptedByOfficer(officerID);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    // reserved requests that have been accepted by "me"
+    @GetMapping("/reserved/accepted/ride")
+    public ResponseEntity<List<RequestDTO>> getReservedRequestsAcceptedByDriver(Authentication authentication) {
+        CampusSafetyUserDetails details = (CampusSafetyUserDetails) authentication.getPrincipal();
+        UUID driverID = UUID.fromString(details.getUsername());
+        List<RequestDTO> result = rs.getReservedRequestsAcceptedByDriver(driverID);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
@@ -163,14 +178,13 @@ public class RequestController  {
         }
     }
 
-    @PostMapping("/{requestID}/cancel")
-    public ResponseEntity<String> cancelRequest(Authentication authentication, @PathVariable String requestID) {
+    @PostMapping("/cancel")
+    public ResponseEntity<String> cancelRequest(Authentication authentication, @RequestParam Integer requestID) {
 //        CampusSafetyUserDetails details = (CampusSafetyUserDetails) authentication.getPrincipal();
 //        UUID receiverId = UUID.fromString(details.getUsername());
         // as of right now, I just set it up so that the person who cancelled it is not important
         // working on the student cancellation tho.
-        Integer requestIDInt = Integer.parseInt(requestID);
-        String response = rs.cancelRequest(requestIDInt);
+        String response = rs.cancelRequest(requestID);
         if (response.equals("Request successfully cancelled")) {
             return ResponseEntity.ok(response);
         } else {

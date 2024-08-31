@@ -17,7 +17,7 @@ const UserRequestViewComponent = () => {
   const cancelRequest = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8085/request/${requestID}/cancel`,
+        `http://localhost:8085/request/cancel?requestID=${requestID}`,
         {
           method: "POST",
           headers: {
@@ -243,7 +243,15 @@ const UserRequestViewComponent = () => {
               marginBottom: 13,
             }}
           >
-            {new Date(requestData.requestDate).toDateString()}
+            {new Date(requestData.requestDate).toLocaleString("en-US", {
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true,
+              weekday: "short",
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
         </Text>
       </View>
       

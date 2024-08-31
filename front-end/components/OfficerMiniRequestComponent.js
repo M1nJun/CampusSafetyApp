@@ -57,9 +57,10 @@ const OfficerMiniRequestComponent = ({ requestID, requestData, token, navigation
 
   return (
     <TouchableOpacity
-      style={{ backgroundColor: "white", borderRadius: 15, marginBottom: 17, paddingBottom: 7, borderWidth: 5, borderColor: borderColor,}}
+      style={{ backgroundColor: "white", borderRadius: 15, marginBottom: 17, paddingBottom: 7, borderWidth: 6, borderColor: borderColor,}}
       onPress={() =>
-        navigation.navigate("RequestView", { userType: "officer", requestID })
+        //works the same for officer and driver. So we'll leave it like this for now.
+        navigation.navigate("RequestView", { userType: "officer", token, requestID })
       }
     >
       <View
