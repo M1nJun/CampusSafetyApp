@@ -6,6 +6,7 @@ import lawrence.entities.User;
 import lawrence.repositories.RequestRepository;
 import lawrence.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -48,9 +49,20 @@ public class RequestService {
         return requestDTOS;
     }
 
-    public List<RequestDTO> findCertainStatusRequestsByOfficer(UUID userId, String status) {
-        User user = userRepository.findById(userId).orElse(null);
-        List<Request> result = requestRepository.findByRequestStatusAndReceiver(status, user);
+    public List<RequestDTO> findCertainStatusRequestsByOfficer(UUID officerId, String status) {
+        User officer = userRepository.findById(officerId).orElse(null);
+        List<Request> result = requestRepository.findByRequestStatusAndReceiver(status, officer);
+        List<RequestDTO> requestDTOS = new ArrayList<>();
+        for(Request request : result) {
+            RequestDTO dto = new RequestDTO(request);
+            requestDTOS.add(dto);
+        }
+        return requestDTOS;
+    }
+
+    public List<RequestDTO> findCertainStatusesRequestsByOfficer(UUID officerId, List<String> statuses) {
+        User officer = userRepository.findById(officerId).orElse(null);
+        List<Request> result = requestRepository.findByRequestStatusInAndReceiver(statuses, officer);
         List<RequestDTO> requestDTOS = new ArrayList<>();
         for(Request request : result) {
             RequestDTO dto = new RequestDTO(request);
@@ -189,17 +201,28 @@ public class RequestService {
         return "Request completed and receiver marked as not busy";
     }
 
-    public String cancelRequest(Integer requestID) {
+    public String cancelRequest(UUID cancelerID, Integer requestID) {
+        Optional<User> maybeCanceler = userRepository.findById(cancelerID);
+        if (!maybeCanceler.isPresent()) {
+            return "Canceler not found";
+        }
+        User canceler = maybeCanceler.get();
+
         Optional<Request> maybeRequest = requestRepository.findById(requestID);
         if (!maybeRequest.isPresent()) {
             return "Request not found";
         }
         Request request = maybeRequest.get();
 
+        String userType = canceler.getUsertype();
+        if (userType.equals("Officer") || userType.equals("Driver")) {
+            request.setReceiver(canceler);
+        }
+
         request.cancelRequest();
         requestRepository.save(request);
 
-        return "Request successfully cancelled";
+        return "Request successfully canceled";
     }
 
 

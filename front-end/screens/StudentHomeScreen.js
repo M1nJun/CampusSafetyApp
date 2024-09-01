@@ -25,9 +25,9 @@ export default function StudentHomeScreen() {
       />
       {/* conditional scrollview rendering */}
       {isRide ? (
-        <RideRequesterComponent token={token} />
+        <RideRequesterComponent usertype={usertype} token={token} />
       ) : (
-        <SafetyRequesterComponent token={token} />
+        <SafetyRequesterComponent usertype={usertype} token={token} />
       )}
 
       <BottomNavigationBarComponent usertype={usertype} token={token} />

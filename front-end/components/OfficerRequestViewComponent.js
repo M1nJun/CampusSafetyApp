@@ -112,7 +112,7 @@ const OfficerRequestViewComponent = () => {
   }
 
   return (
-    <View style={{ backgroundColor: "white", borderRadius: 15, marginBottom: 40 }}>
+    <View style={{ backgroundColor: "white", borderRadius: 15, paddingBottom:15, marginBottom: 40 }}>
       <View
         style={{
           flexDirection: "row",
@@ -167,7 +167,7 @@ const OfficerRequestViewComponent = () => {
           style={{
             fontSize: 16,
             fontWeight: "400",
-            marginBottom: 13,
+            marginBottom: 12,
           }}
         >
           {requestData.requestSubject}
@@ -186,7 +186,7 @@ const OfficerRequestViewComponent = () => {
             style={{
               fontSize: 16,
               fontWeight: "400",
-              marginBottom: 13,
+              marginBottom: 12,
             }}
           >
             {requestData.destination}
@@ -205,7 +205,7 @@ const OfficerRequestViewComponent = () => {
             style={{
               fontSize: 16,
               fontWeight: "400",
-              marginBottom: 13,
+              marginBottom: 12,
             }}
           >
             {requestData.location}
@@ -223,7 +223,7 @@ const OfficerRequestViewComponent = () => {
             style={{
               fontSize: 16,
               fontWeight: "400",
-              marginBottom: 13,
+              marginBottom: 12,
             }}
           >
             {requestData.message}
@@ -242,7 +242,7 @@ const OfficerRequestViewComponent = () => {
             style={{
               fontSize: 16,
               fontWeight: "400",
-              marginBottom: 13,
+              marginBottom: 12,
             }}
           >
             {new Date(requestData.reservationDue).toLocaleString()}
@@ -260,7 +260,7 @@ const OfficerRequestViewComponent = () => {
             style={{
               fontSize: 16,
               fontWeight: "400",
-              marginBottom: 13,
+              marginBottom: 12,
             }}
           >
             {new Date(requestData.requestDate).toLocaleString("en-US", {
@@ -274,85 +274,112 @@ const OfficerRequestViewComponent = () => {
             })}
         </Text>
       </View>
-
-      <View style={{ ...styles.widthControll, marginTop: 40 }}>
-        <TextInput
-          placeholder="Officer Name"
-          placeholderTextColor="white"
-          autoCapitalize="none"
+      
+      {requestStatus === "pending"? (
+        <View style={{ ...styles.widthControll, marginTop: 10 }}>
+          <TextInput
+            placeholder="Officer Name"
+            placeholderTextColor="white"
+            autoCapitalize="none"
+            style={{
+              paddingVertical: 11,
+              paddingLeft: 15,
+              borderRadius: 10,
+              fontSize: 17,
+              marginLeft: 20,
+              flex: 0.65,
+              backgroundColor: "#D3D3D3",
+              fontWeight: "600",
+              color: "white",
+            }}
+          ></TextInput>
+        </View>
+      ): null}
+      
+      {/* we don't need the cancel, complete buttons if it is alreayd canceled and completed */}
+      {requestStatus === "pending" || requestStatus === "accepted" ? (
+        <View
           style={{
-            paddingVertical: 11,
-            paddingLeft: 15,
-            borderRadius: 10,
-            marginVertical: 10,
-            fontSize: 17,
-            marginLeft: 20,
-            flex: 0.65,
-            backgroundColor: "#D3D3D3",
+            ...styles.widthControll,
+            justifyContent: "space-between",
+            marginBottom:5
+          }}
+        >
+          <TouchableOpacity
+            onPress={async () => {
+              try {
+                await handleDecisionOnRequest("cancel");
+                Alert.alert("Success", "Request successfully canceled.");
+                navigation.goBack(); // Navigate back to the previous screen
+              } catch (error) {
+                Alert.alert("Error", "Failed to cancel the request.");
+              }
+            }}
+            style={{
+              ...styles.blueBtn,
+              backgroundColor: "black",
+              flex: 0.4,
+              borderRadius: 17,
+              marginLeft: 20,
+            }}
+          >
+            <Text style={{ ...styles.blueBtnText, paddingVertical: 6 }}>
+              Cancel
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              if (requestStatus === "pending") {
+                handleDecisionOnRequest("accept");
+                setRequestStatus("accepted");
+              } else if (requestStatus === "accepted") {
+                handleDecisionOnRequest("complete");
+                setRequestStatus("completed");
+                navigation.goBack();
+              }
+              // navigation.push("OfficerRequestLock");
+            }}
+            style={{
+              ...styles.blueBtn,
+              flex: 0.4,
+              borderRadius: 17,
+              marginRight: 20,
+              opacity: requestStatus === "completed" ? 0.5 : 1, // Deactivate button when completed
+            }}
+            disabled={requestStatus === "completed"} // Disable button when completed
+          >
+            <Text style={{ ...styles.blueBtnText, paddingVertical: 6 }}>
+            {requestStatus === "pending"
+              ? "Accept"
+              : requestStatus === "accepted"
+              ? "Complete"
+              : requestStatus === "completed"
+              ? "Completed"
+              : "Canceled"
+            }
+            </Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+      <View style={{paddingLeft:20}}>
+        <Text style={{
+            fontSize: 18,
             fontWeight: "600",
-            color: "white",
-          }}
-        ></TextInput>
-      </View>
-      <View
-        style={{
-          ...styles.widthControll,
-          justifyContent: "space-between",
-          paddingBottom: 25,
-        }}
-      >
-        <TouchableOpacity
-          onPress={async () => {
-            try {
-              await handleDecisionOnRequest("cancel");
-              Alert.alert("Success", "Request successfully canceled.");
-              navigation.goBack(); // Navigate back to the previous screen
-            } catch (error) {
-              Alert.alert("Error", "Failed to cancel the request.");
-            }
-          }}
-          style={{
-            ...styles.blueBtn,
-            backgroundColor: "black",
-            flex: 0.4,
-            borderRadius: 17,
-            marginLeft: 20,
-          }}
-        >
-          <Text style={{ ...styles.blueBtnText, paddingVertical: 6 }}>
-            Cancel
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            if (requestStatus === "pending") {
-              handleDecisionOnRequest("accept");
-              setRequestStatus("accepted");
-            } else if (requestStatus === "accepted") {
-              handleDecisionOnRequest("complete");
-              setRequestStatus("completed");
-              navigation.goBack();
-            }
-            // navigation.push("OfficerRequestLock");
-          }}
-          style={{
-            ...styles.blueBtn,
-            flex: 0.4,
-            borderRadius: 17,
-            marginRight: 20,
-            opacity: requestStatus === "completed" ? 0.5 : 1, // Deactivate button when completed
-          }}
-          disabled={requestStatus === "completed"} // Disable button when completed
-        >
-          <Text style={{ ...styles.blueBtnText, paddingVertical: 6 }}>
-          {requestStatus === "pending"
-            ? "Accept"
-            : requestStatus === "accepted"
-            ? "Complete"
-            : "Completed"}
-          </Text>
-        </TouchableOpacity>
-      </View>
+            marginVertical: 4,
+            }}>Request Status:
+        </Text>
+        <Text
+            style={{
+              color:requestData.requestStatus === "completed" ? "blue":"red",
+              fontSize: 16,
+              fontWeight: "400",
+              marginBottom: 12,
+            }}
+          >
+            {requestData.requestStatus}
+        </Text>
+      </View>)}
+      
     </View>
   );
 };

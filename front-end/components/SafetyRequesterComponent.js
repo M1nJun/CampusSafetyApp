@@ -15,13 +15,16 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Entypo from '@expo/vector-icons/Entypo';
 import styles from "../styles";
+import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import debounce from "lodash.debounce"; 
 import MapView, {Marker} from 'react-native-maps';
 import * as Location from 'expo-location';
 
-const SafetyRequesterComponent = ({ token }) => {
+const SafetyRequesterComponent = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+  const { token, usertype } = route.params;
 
   // this is for the dropdown list of locations, requests feature
   const [locationList, setLocationList] = useState([]); // Store location options
@@ -305,11 +308,12 @@ const SafetyRequesterComponent = ({ token }) => {
         // upon submittion, you get the string form of the key not a JSON object.
         // needs to be mirrored on the SafetyRequesterComponent.
         Alert.alert("Success", "Your safety request has been submitted.");
-        isReserve?(navigation.navigate("RequestView", {
+        navigation.navigate("RequestView", {
           token,
           requestID,
-          userType: "student",
-        })): (navigation.navigate("StudentRequestLock", { token, requestID }));
+          usertype,
+          requestType:"safety"
+        })
       } else {
         Alert.alert("Error", "Failed to submit the request. Please try again.");
       }

@@ -20,14 +20,14 @@ import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 
 const RequestViewScreen = ({ route }) => {
-  const { token, usertype, requestID } = route.params;
+  const { token, usertype, requestID, requestType } = route.params;
   console.log(usertype);
   return (
     <View style={styles.container}>
       {usertype === "Student" ? (
         <View>
           <UserRequestViewComponent token={token} requestID={requestID} usertype={usertype} />
-          <WaitingForOfficerAnimationComponent />
+          <WaitingForOfficerAnimationComponent requestType={requestType}/>
         </View>
       ) : (
         <OfficerRequestViewComponent token={token} requestID={requestID} usertype={usertype} />

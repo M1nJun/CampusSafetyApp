@@ -71,7 +71,7 @@ public class Request {
     }
 
     public void cancelRequest() {
-        this.requestStatus = "cancelled";
+        this.requestStatus = "canceled";
         this.lastModifiedDate = LocalDateTime.now();
     }
 

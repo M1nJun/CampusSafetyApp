@@ -20,8 +20,10 @@ import debounce from "lodash.debounce";
 import MapView, {Marker} from 'react-native-maps';
 import * as Location from 'expo-location';
 
-const RideRequesterComponent = ({ token }) => {
+const RideRequesterComponent = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+  const { token, usertype } = route.params;
 
   // this is for the dropdown list of locations feature
   const [locationList, setLocationList] = useState([]); // Store location options
@@ -385,11 +387,12 @@ const RideRequesterComponent = ({ token }) => {
         // upon submittion, you get the string form of the key not a JSON object.
         // needs to be mirrored on the SafetyRequesterComponent.
         Alert.alert("Success", "Your ride request has been submitted.");
-        isReserve?(navigation.navigate("RequestView", {
+        navigation.navigate("RequestView", {
           token,
           requestID,
-          userType: "student",
-        })): (navigation.navigate("StudentRequestLock", { token, requestID }));
+          usertype,
+          requestType:"ride"
+        })
       } else {
         Alert.alert("Error", "Failed to submit the request. Please try again.");
       }

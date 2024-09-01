@@ -10,7 +10,7 @@ import LottieView from "lottie-react-native";
 const WaitingForOfficerAnimationComponent = () => {
     const route = useRoute();
   const navigation = useNavigation();
-  const { token, requestID } = route.params;
+  const { token, requestID, requestType } = route.params;
 
   const [status, setStatus] = useState("pending");
 
@@ -73,15 +73,16 @@ const WaitingForOfficerAnimationComponent = () => {
               loop
             />
             <Text style={{ color: "white", fontSize: 20, textAlign: "center" }}>
-              Waiting for a driver to accept{"\n"} your request.
+              Waiting for {requestType === "ride"? "a Driver" : "an Officer"} to accept{"\n"} your request.
             </Text>
           </>
         ) : status === "accepted" ? (
           <>
             <LottieView
               style={{
-                width: 150,
-                height: 150,
+                width: 120,
+                height: 120,
+                marginTop: 20,
                 marginBottom: 5,
               }}
               source={require("../assets/Accepted.json")}
@@ -95,7 +96,7 @@ const WaitingForOfficerAnimationComponent = () => {
               }}
             />
             <Text style={{ color: "white", fontSize: 20, textAlign: "center" }}>
-              Driver accepted{"\n"} your request.
+             {requestType === "ride"? " A Driver" : "An Officer"} accepted{"\n"} your request.
             </Text>
           </>
         ) : status === "completed" ? (

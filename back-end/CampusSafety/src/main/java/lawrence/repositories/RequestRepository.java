@@ -12,6 +12,7 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
     List<Request> findByRequestTypeAndReservedAndRequestStatus(String requestType, Boolean reserved, String requestStatus);
     List<Request> findByRequestStatusAndRequester(String requestStatus, User requester);
     List<Request> findByRequestStatusAndReceiver(String requestStatus, User receiver);
+    List<Request> findByRequestStatusInAndReceiver(List<String> requestStatus, User receiver);
     List<Request> findByReservedAndRequestStatusAndReceiver(Boolean reserved, String requestStatus, User receiver);
     List<Request> findByRequestTypeAndReservedAndRequestStatusAndReceiver(String requestType, Boolean reserved, String requestStatus, User receiver);
 

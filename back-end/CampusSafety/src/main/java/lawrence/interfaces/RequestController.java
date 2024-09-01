@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -79,6 +80,18 @@ public class RequestController  {
         UUID id = UUID.fromString(details.getUsername());
         // also driver.
         List<RequestDTO> requests = rs.findCertainStatusRequestsByOfficer(id, "completed");
+
+        return ResponseEntity.ok(requests);
+    }
+
+    @GetMapping("/officer/self/completed/canceled/all")
+    public ResponseEntity<List<RequestDTO>> findCompletedAndCanceledRequestsByOfficer(Authentication authentication) {
+        CampusSafetyUserDetails details = (CampusSafetyUserDetails) authentication.getPrincipal();
+        UUID id = UUID.fromString(details.getUsername());
+
+        List<String> statuses = Arrays.asList("completed", "canceled");
+        // also driver.
+        List<RequestDTO> requests = rs.findCertainStatusesRequestsByOfficer(id, statuses);
 
         return ResponseEntity.ok(requests);
     }
@@ -179,12 +192,12 @@ public class RequestController  {
 
     @PostMapping("/cancel")
     public ResponseEntity<String> cancelRequest(Authentication authentication, @RequestParam Integer requestID) {
-//        CampusSafetyUserDetails details = (CampusSafetyUserDetails) authentication.getPrincipal();
-//        UUID receiverId = UUID.fromString(details.getUsername());
-        // as of right now, I just set it up so that the person who cancelled it is not important
+        CampusSafetyUserDetails details = (CampusSafetyUserDetails) authentication.getPrincipal();
+        UUID cancelerID = UUID.fromString(details.getUsername());
+        // as of right now, I just set it up so that the person who canceled it is not important
         // working on the student cancellation tho.
-        String response = rs.cancelRequest(requestID);
-        if (response.equals("Request successfully cancelled")) {
+        String response = rs.cancelRequest(cancelerID, requestID);
+        if (response.equals("Request successfully canceled")) {
             return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.badRequest().body(response);

@@ -58,7 +58,7 @@ const ReservedRequestReceiverComponent = ({ navigation }) => {
 
         fetchRequests("pending", setPendingRequests, usertype === "officer"?
         "http://localhost:8085/request/reserved/pending/all":"http://localhost:8085/request/reserved/pending/ride");
-      }, 5000);
+      }, 2000);
 
       return () => clearInterval(intervalId);
     }, [token])

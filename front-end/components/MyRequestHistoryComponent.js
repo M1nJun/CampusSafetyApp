@@ -41,7 +41,7 @@ const MyRequestHistoryComponent = ({ navigation }) => {
       fetchRequests(
         "completed",
         setCompletedRequests,
-        "http://localhost:8085/request/officer/self/completed/all"
+        "http://localhost:8085/request/officer/self/completed/canceled/all"
       );
       setLoading(false);
 
@@ -49,7 +49,7 @@ const MyRequestHistoryComponent = ({ navigation }) => {
         fetchRequests(
           "completed",
           setCompletedRequests,
-          "http://localhost:8085/request/officer/self/completed/all"
+          "http://localhost:8085/request/officer/self/completed/canceled/all"
         );
       }, 10000);
 

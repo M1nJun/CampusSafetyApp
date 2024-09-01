@@ -31,7 +31,8 @@ const UserMiniRequestComponent = ({
         navigation.navigate("RequestView", {
           token,
           requestID,
-          usertype: usertype,
+          usertype,
+          requestType
         })
       }
     >
