@@ -43,6 +43,15 @@ export default function App() {
         <Stack.Screen
           name="StudentRequestLock"
           component={StudentRequestLockScreen}
+          options={{
+            headerShown: true,
+            headerTitle: "",
+            headerBackTitleVisible: false,
+            headerStyle: {
+              backgroundColor: "black",
+            },
+            headerTintColor: "white",
+          }}
         />
         <Stack.Screen
           name="RequestView"

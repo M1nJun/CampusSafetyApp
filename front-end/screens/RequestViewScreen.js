@@ -15,7 +15,9 @@ import { useEffect, useState } from "react";
 import styles from "../styles";
 import UserRequestViewComponent from "../components/UserRequestViewComponent";
 import OfficerRequestViewComponent from "../components/OfficerRequestViewComponent";
+import WaitingForOfficerAnimationComponent from "../components/WaitingForOfficerAnimationComponent";
 import { useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 const RequestViewScreen = ({ route }) => {
   const { token, usertype, requestID } = route.params;
@@ -23,7 +25,10 @@ const RequestViewScreen = ({ route }) => {
   return (
     <View style={styles.container}>
       {usertype === "Student" ? (
-        <UserRequestViewComponent token={token} requestID={requestID} usertype={usertype} />
+        <View>
+          <UserRequestViewComponent token={token} requestID={requestID} usertype={usertype} />
+          <WaitingForOfficerAnimationComponent />
+        </View>
       ) : (
         <OfficerRequestViewComponent token={token} requestID={requestID} usertype={usertype} />
       )}
