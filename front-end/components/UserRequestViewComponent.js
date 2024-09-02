@@ -135,8 +135,16 @@ const UserRequestViewComponent = () => {
           />
         )}
       </View>
+      {requestData.requestStatus === "pending"? null : (
+        <RequestMatchProfileComponent 
+          token={token}
+          usertype={usertype}
+          profileToShow={usertype === "Student" || usertype === "Faculty" 
+            ? requestData.receiver 
+            : requestData.requester} 
+      />)}
+      
 
-      <RequestMatchProfileComponent />
       
       {requestData.requestType === "ride" ? (
         <View style={{paddingLeft:20}}>
