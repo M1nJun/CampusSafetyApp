@@ -4,6 +4,7 @@ import { useRoute, useNavigation } from "@react-navigation/native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import React, { useEffect, useState } from "react";
+import RequestMatchProfileComponent from "./RequestMatchProfileComponent"
 
 const UserRequestViewComponent = () => {
   const route = useRoute();
@@ -109,7 +110,7 @@ const UserRequestViewComponent = () => {
           flexDirection: "row",
           justifyContent: "space-between",
           paddingTop: 20,
-          paddingBottom: 40,
+          paddingBottom: 20,
           paddingLeft: 20,
         }}
       >
@@ -134,6 +135,8 @@ const UserRequestViewComponent = () => {
           />
         )}
       </View>
+
+      <RequestMatchProfileComponent />
       
       {requestData.requestType === "ride" ? (
         <View style={{paddingLeft:20}}>
@@ -225,10 +228,19 @@ const UserRequestViewComponent = () => {
               marginBottom: 13,
             }}
           >
-            {new Date(requestData.reservationDue).toLocaleString()}
+            {new Date(requestData.reservationDue).toLocaleString("en-US", {
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true,
+              weekday: "short",
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
         </Text>
       </View>): null}
-
+      
+      {/* Let's think about if Request made on: is an essential part of a request view!
       <View style={{paddingLeft:20}}>
         <Text style={{
             fontSize: 18,
@@ -253,7 +265,9 @@ const UserRequestViewComponent = () => {
               day: "numeric",
             })}
         </Text>
-      </View>
+      </View> */}
+
+      
       
 
       {requestData.requestStatus === "pending" ||

@@ -12,6 +12,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import React, { useEffect, useState } from "react";
 import { useRoute, useNavigation } from "@react-navigation/native";
+import RequestMatchProfileComponent from "./RequestMatchProfileComponent"
 
 const OfficerRequestViewComponent = () => {
   const route = useRoute();
@@ -118,19 +119,20 @@ const OfficerRequestViewComponent = () => {
           flexDirection: "row",
           justifyContent: "space-between",
           paddingTop: 20,
-          paddingBottom: 40,
+          paddingBottom: 20,
           paddingLeft: 20,
         }}
       >
-        <TouchableOpacity
-          style={{ flexDirection: "row", alignItems: "center" }}
+        <Text
+          style={{
+            fontSize: 25,
+            fontWeight: "700",
+          }}
         >
-          <FontAwesome name="user-circle" size={50} color="gray" />
-          <View style={{ paddingLeft: 10 }}>
-            <Text style={{ fontWeight: "600", fontSize: 16 }}>Minjun Lee</Text>
-            <Text style={{ color: "gray" }}>Profile</Text>
-          </View>
-        </TouchableOpacity>
+          {requestData.requestType === "ride"
+            ? "Ride Request"
+            : "Safety Request"}
+        </Text>
         {requestData.requestType === "ride" ? (
           <FontAwesome5 name="car" size={37} color="black" style={{ marginRight: 20 }} />
         ) : (
@@ -143,36 +145,7 @@ const OfficerRequestViewComponent = () => {
         )}
       </View>
 
-      <Text
-        style={{
-          fontSize: 25,
-          fontWeight: "700",
-          marginLeft: 20,
-          marginBottom:10
-        }}
-      >
-        {requestData.requestType === "ride"
-          ? "Ride Request"
-          : "Safety Request"}
-      </Text>
-
-      <View style={{paddingLeft:20}}>
-        <Text style={{
-          fontSize: 18,
-          fontWeight: "600",
-          marginVertical: 4,
-          }}>Subject:
-        </Text>
-        <Text
-          style={{
-            fontSize: 16,
-            fontWeight: "400",
-            marginBottom: 12,
-          }}
-        >
-          {requestData.requestSubject}
-        </Text>
-      </View>
+      <RequestMatchProfileComponent />
 
       {requestData.requestType === "ride" ? (
         <View style={{paddingLeft:20}}>
