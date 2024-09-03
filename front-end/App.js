@@ -20,6 +20,7 @@ import RequestViewScreen from "./screens/RequestViewScreen";
 import OfficerHomeScreen from "./screens/OfficerHomeScreen";
 import OfficerRequestLockScreen from "./screens/OfficerRequestLockScreen";
 import StudentRequestLockScreen from "./screens/StudentRequestLockScreen";
+import ProfileViewScreen from "./screens/ProfileViewScreen";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -56,6 +57,19 @@ export default function App() {
         <Stack.Screen
           name="RequestView"
           component={RequestViewScreen}
+          options={{
+            headerShown: true,
+            headerTitle: "",
+            headerBackTitleVisible: false,
+            headerStyle: {
+              backgroundColor: "black",
+            },
+            headerTintColor: "white",
+          }}
+        />
+        <Stack.Screen
+          name="ProfileView"
+          component={ProfileViewScreen}
           options={{
             headerShown: true,
             headerTitle: "",

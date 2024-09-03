@@ -167,10 +167,11 @@ public class RequestController  {
     }
 
     @PostMapping("/accept")
-    public ResponseEntity<String> acceptRequest(Authentication authentication, @RequestParam Integer requestID) {
+    public ResponseEntity<String> acceptRequest(Authentication authentication, @RequestParam Integer requestID, @RequestParam String receiverName) {
         CampusSafetyUserDetails details = (CampusSafetyUserDetails) authentication.getPrincipal();
+        System.out.println(receiverName);
         UUID receiverID = UUID.fromString(details.getUsername());
-        String response = rs.acceptRequest(requestID, receiverID);
+        String response = rs.acceptRequest(requestID, receiverID, receiverName);
         if (response.equals("Request accepted and receiver marked as busy")) {
             return ResponseEntity.ok(response);
         } else {

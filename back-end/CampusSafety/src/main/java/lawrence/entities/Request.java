@@ -20,6 +20,7 @@ public class Request {
     @ManyToOne
     @JoinColumn(name="receiverID")
     private User receiver;
+    private String receiverName;
     private LocalDateTime requestDate;
     private LocalDateTime lastModifiedDate;
     private String requestType;
@@ -35,6 +36,7 @@ public class Request {
     public Request() {}
 
     public Request(RequestDTO core) {
+        receiverName = core.getReceiverName();
         requestDate = LocalDateTime.now();
         lastModifiedDate = this.requestDate;
         requestType = core.getRequestType();
@@ -97,6 +99,14 @@ public class Request {
 
     public void setReceiver(User receiver) {
         this.receiver = receiver;
+    }
+
+    public String getReceiverName() {
+        return receiverName;
+    }
+
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
     }
 
     public LocalDateTime getLastModifiedDate() {

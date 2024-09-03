@@ -36,7 +36,7 @@ const ProfileInput = memo(({ label, value, onChangeText, editable }) => {
 
 const ProfileComponent = () => {
   const route = useRoute();
-  const { token } = route.params;
+  const { token, profileToShow, mode } = route.params;
   const [profile, setProfile] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -48,8 +48,11 @@ const ProfileComponent = () => {
 
   useEffect(() => {
     const fetchProfile = async () => {
+      const url = mode === "View"
+      ? `http://localhost:8085/user/profile/${profileToShow}`
+      : "http://localhost:8085/user/profile/self";
       try {
-        const response = await fetch("http://localhost:8085/user/profile/self", {
+        const response = await fetch(url, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -116,14 +119,16 @@ const ProfileComponent = () => {
       <ProfileInput label="LastName" value={lastname} onChangeText={setLastname} editable={isEdit} />
       <ProfileInput label="Phone" value={phone} onChangeText={setPhone} editable={isEdit} />
       <ProfileInput label="Student ID" value={studentID} onChangeText={setStudentID} editable={isEdit} />
-      <View style={{ ...styles.widthControll, justifyContent: "center" }}>
-        <TouchableOpacity
-          style={{ ...styles.blueBtn, flex: 0.45, borderRadius: 16 }}
-          onPress={isEdit ? handleSave : () => setIsEdit(true)}
-        >
-          <Text style={styles.blueBtnText}>{isEdit ? "Save Profile" : "Edit Profile"}</Text>
-        </TouchableOpacity>
-      </View>
+      {mode === "View"? null : (
+        <View style={{ ...styles.widthControll, justifyContent: "center" }}>
+          <TouchableOpacity
+            style={{ ...styles.blueBtn, flex: 0.45, borderRadius: 16 }}
+            onPress={isEdit ? handleSave : () => setIsEdit(true)}
+          >
+            <Text style={styles.blueBtnText}>{isEdit ? "Save Profile" : "Edit Profile"}</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </ScrollView>
   );
 };

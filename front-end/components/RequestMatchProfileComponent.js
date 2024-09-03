@@ -14,10 +14,12 @@ import React, { useEffect, useState } from "react";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-const RequestMatchProfileComponent = ({ token, usertype, profileToShow }) => {
+const RequestMatchProfileComponent = ({ token, usertype, nameToShow, profileToShow }) => {
 
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const navigation = useNavigation();
 
   const fetchProfileData = async () => {
     try {
@@ -98,10 +100,13 @@ const RequestMatchProfileComponent = ({ token, usertype, profileToShow }) => {
       >
         <TouchableOpacity
           style={{ flexDirection: "row", alignItems: "center" }}
+          onPress={() => navigation.navigate('ProfileView', { token, profileToShow, mode: "View" })}
         >
           <FontAwesome name="user-circle" size={50} color="gray" />
           <View style={{ paddingLeft: 10 }}>
-            <Text style={{ fontWeight: "600", fontSize: 16 }}>{profileData.firstname}{" "}{profileData.lastname}</Text>
+            <Text style={{ fontWeight: "600", fontSize: 16 }}>
+              {usertype === "Student" || usertype === "Faculty" ? nameToShow : `${profileData.firstname} ${profileData.lastname}`}
+            </Text>
             <Text style={{ color: "gray" }}>Profile</Text>
           </View>
         </TouchableOpacity>

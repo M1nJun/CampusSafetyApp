@@ -139,6 +139,7 @@ const UserRequestViewComponent = () => {
         <RequestMatchProfileComponent 
           token={token}
           usertype={usertype}
+          nameToShow={requestData.receiverName}
           profileToShow={usertype === "Student" || usertype === "Faculty" 
             ? requestData.receiver 
             : requestData.requester} 

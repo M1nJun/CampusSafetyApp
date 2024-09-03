@@ -8,6 +8,7 @@ public class RequestDTO {
     private int requestID;
     private String requester;
     private String receiver;
+    private String receiverName;
     private LocalDateTime requestDate;
     private LocalDateTime lastModifiedDate;
     private String requestType;
@@ -25,6 +26,7 @@ public class RequestDTO {
         requestID = core.getRequestID().intValue();
         requester = core.getRequester().getUserID().toString();
         receiver = (core.getReceiver() != null) ? core.getReceiver().getUserID().toString() : null;
+        receiverName = (core.getReceiverName() != null) ? core.getReceiverName() : null;
         requestDate = core.getRequestDate();
         lastModifiedDate = core.getLastModifiedDate();
         requestType = core.getRequestType();
@@ -59,6 +61,14 @@ public class RequestDTO {
 
     public void setReceiver(String receiver) {
         this.receiver = receiver;
+    }
+
+    public String getReceiverName() {
+        return receiverName;
+    }
+
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
     }
 
     public LocalDateTime getRequestDate() {

@@ -2,6 +2,7 @@ package lawrence.interfaces;
 
 
 import lawrence.dtos.LocationOptionDTO;
+import lawrence.dtos.OfficerDriverOptionDTO;
 import lawrence.dtos.RequestOptionDTO;
 import lawrence.services.OptionService;
 import org.springframework.http.ResponseEntity;
@@ -49,4 +50,17 @@ public class OptionController {
         List<LocationOptionDTO> result = os.findLocationOptionsByKeyword(keyword);
         return ResponseEntity.ok(result);
     }
+
+    @PostMapping("/officer/driver")
+    public ResponseEntity<String> saveOfficerOption(@RequestBody OfficerDriverOptionDTO dto) {
+        String key = os.saveOfficerDriverOption(dto);
+        return ResponseEntity.ok(key);
+    }
+
+    @GetMapping("/officer/driver/all")
+    public ResponseEntity<List<OfficerDriverOptionDTO>> getAllOfficerDriverOptions() {
+        List<OfficerDriverOptionDTO> result = os.findAllOfficerDriverOptions();
+        return ResponseEntity.ok(result);
+    }
+
 }

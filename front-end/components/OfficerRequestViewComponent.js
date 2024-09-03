@@ -4,6 +4,7 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  ScrollView,
   Alert,
 } from "react-native";
 import styles from "../styles";
@@ -13,40 +14,71 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import React, { useEffect, useState } from "react";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import RequestMatchProfileComponent from "./RequestMatchProfileComponent"
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 const OfficerRequestViewComponent = () => {
   const route = useRoute();
-  const { token, requestID } = route.params;
+  const { token, requestID, usertype } = route.params;
 
   const navigation = useNavigation();
 
   const [requestData, setRequestData] = useState(null);
+  const [receiverName, setReceiverName] = useState("");
   const [requestStatus, setRequestStatus] = useState("");
   const [loading, setLoading] = useState(true);
 
+  const [nameList, setNameList] = useState([]);
+  const [showNameDropdown, setShowNameDropdown] = useState(false);
+  
+
   const handleDecisionOnRequest = async (decision) => {
+    const url = decision === "accept"
+      ? `http://localhost:8085/request/${decision}?requestID=${requestID}&receiverName=${receiverName}`
+      : `http://localhost:8085/request/${decision}?requestID=${requestID}`;
+  
     try {
-      const response = await fetch(
-        `http://localhost:8085/request/${decision}?requestID=${requestID}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
   
       if (response.ok) {
         Alert.alert("Success", `Request ${decision} successful.`);
-        
       } else {
-        Alert.alert("Error", `Failed to request ${decision}.`);
+        Alert.alert("Error", `Failed to ${decision} request.`);
       }
     } catch (error) {
-      Alert.alert("Error", `An error occured while request ${decision}.`);
+      Alert.alert("Error", `An error occurred while ${decision} the request.`);
     }
   };
+
+  const fetchNameList = async () => {
+    try {
+      const response = await fetch("http://localhost:8085/option/officer/driver/all", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setNameList(data); // Set the locations state
+      } else {
+        Alert.alert("Error", "Failed to fetch names list.");
+      }
+    } catch (error) {
+      Alert.alert("Error", "An error occurred while fetching names list.");
+    }
+  };
+
+  useEffect(() => {
+    console.log(receiverName);
+  }, [receiverName]);
+  
 
   useEffect(() => {
     const fetchRequestData = async () => {
@@ -80,6 +112,7 @@ const OfficerRequestViewComponent = () => {
     };
 
     fetchRequestData();
+    fetchNameList();
   }, [requestID, token]);
 
 
@@ -134,6 +167,7 @@ const OfficerRequestViewComponent = () => {
             : "Safety Request"}
         </Text>
         {requestData.requestType === "ride" ? (
+          // <FontAwesome6 name="bus" size={37} color="black" style={{ marginRight: 20 }} />
           <FontAwesome5 name="car" size={37} color="black" style={{ marginRight: 20 }} />
         ) : (
           <MaterialCommunityIcons
@@ -145,7 +179,13 @@ const OfficerRequestViewComponent = () => {
         )}
       </View>
 
-      <RequestMatchProfileComponent />
+      <RequestMatchProfileComponent
+        token={token}
+        usertype={usertype}
+        profileToShow={usertype === "Student" || usertype === "Faculty" 
+          ? requestData.receiver 
+          : requestData.requester} 
+      />
 
       {requestData.requestType === "ride" ? (
         <View style={{paddingLeft:20}}>
@@ -251,9 +291,14 @@ const OfficerRequestViewComponent = () => {
       {requestStatus === "pending"? (
         <View style={{ ...styles.widthControll, marginTop: 10 }}>
           <TextInput
-            placeholder="Officer Name"
-            placeholderTextColor="white"
+            placeholder="Officer/Driver Name"
+            placeholderTextColor="black"
             autoCapitalize="none"
+            value={receiverName}
+            onChangeText={(text) => {
+              setReceiverName(text)
+            }}
+            onFocus={() => setShowNameDropdown(true)}
             style={{
               paddingVertical: 11,
               paddingLeft: 15,
@@ -263,11 +308,31 @@ const OfficerRequestViewComponent = () => {
               flex: 0.65,
               backgroundColor: "#D3D3D3",
               fontWeight: "600",
-              color: "white",
+              color: "black",
             }}
           ></TextInput>
         </View>
       ): null}
+
+      {showNameDropdown && (
+        <View style={{...styles.widthControll, justifyContent:"flex-start"}}>
+          <View style={{flex:0.9}}>
+            <ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
+              {nameList.map((nameData) => (
+                <TouchableOpacity style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} key={nameData.OfficerDriverOptionID} onPress={() => {
+                  setReceiverName(`${nameData.firstname} ${nameData.lastname}`);
+                  setShowNameDropdown(false);
+                }}>
+                  {nameData.type === "Officer" ? (<MaterialIcons name="local-police" size={24} color="black" style={{paddingRight:5}}/>) : (<FontAwesome6 name="bus" size={22} color="black" style={{paddingRight:5}}/>)}
+                  <Text style={{color:"black", fontSize: 16, fontWeight:"500"}}>{`${nameData.firstname} ${nameData.lastname}`}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        </View>
+      )}
+
+
       
       {/* we don't need the cancel, complete buttons if it is alreayd canceled and completed */}
       {requestStatus === "pending" || requestStatus === "accepted" ? (

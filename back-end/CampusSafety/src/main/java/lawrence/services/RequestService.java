@@ -155,7 +155,7 @@ public class RequestService {
         return result;
     }
 
-    public String acceptRequest(Integer requestID, UUID receiverID) {
+    public String acceptRequest(Integer requestID, UUID receiverID, String receiverName) {
         Optional<Request> maybeRequest = requestRepository.findById(requestID);
         if (!maybeRequest.isPresent()) {
             return "Request not found";
@@ -169,6 +169,7 @@ public class RequestService {
         User receiver = maybeReceiver.get();
 
         request.setReceiver(receiver);
+        request.setReceiverName(receiverName);
         request.acceptRequest();
         requestRepository.save(request);
 

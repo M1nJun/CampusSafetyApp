@@ -1,10 +1,13 @@
 package lawrence.services;
 
 import lawrence.dtos.LocationOptionDTO;
+import lawrence.dtos.OfficerDriverOptionDTO;
 import lawrence.dtos.RequestOptionDTO;
 import lawrence.entities.LocationOption;
+import lawrence.entities.OfficerDriverOption;
 import lawrence.entities.RequestOption;
 import lawrence.repositories.LocationOptionRepository;
+import lawrence.repositories.OfficerDriverOptionRepository;
 import lawrence.repositories.RequestOptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,9 @@ public class OptionService {
 
     @Autowired
     RequestOptionRepository requestOptionRepository;
+
+    @Autowired
+    OfficerDriverOptionRepository officerDriverOptionRepository;
 
     public String saveLocationOption(LocationOptionDTO dto) {
         LocationOption newLocationOption = new LocationOption(dto);
@@ -59,4 +65,22 @@ public class OptionService {
         }
         return dtos;
     }
+
+    // to save and fetch names of officers/drivers
+
+    public String saveOfficerDriverOption(OfficerDriverOptionDTO dto) {
+        OfficerDriverOption newOfficerDriverOption = new OfficerDriverOption(dto);
+        officerDriverOptionRepository.save(newOfficerDriverOption);
+        return newOfficerDriverOption.getOfficerDriverOptionID().toString();
+    }
+
+    public List<OfficerDriverOptionDTO> findAllOfficerDriverOptions() {
+        List<OfficerDriverOption> officerDriverOptions = officerDriverOptionRepository.findAll();
+        List<OfficerDriverOptionDTO> dtos = new ArrayList<>();
+        for (OfficerDriverOption officerDriverOption : officerDriverOptions) {
+            dtos.add(new OfficerDriverOptionDTO(officerDriverOption));
+        }
+        return dtos;
+    }
+
 }
