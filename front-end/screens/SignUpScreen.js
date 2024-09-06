@@ -23,9 +23,18 @@ export default function SignUpScreen() {
   const [phone, setPhone] = useState("");
   const [studentID, setStudentID] = useState("");
 
+  const [usernameError, setUsernameError] = useState(false);
+
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSignUp = async () => {
+    if (email.endsWith('@lawrence.edu')) {
+      setUsernameError(false); // Clear error if email is valid
+    } else {
+      setUsernameError(true);
+      return;
+    }
+
     try {
       const response = await fetch("http://localhost:8085/user", {
         method: "POST",
@@ -65,9 +74,10 @@ export default function SignUpScreen() {
           autoCapitalize="none"
           style={styles.input}
           value={email}
-          onChangeText={setEmail}
+          onChangeText={(text) => {setEmail(text)}}
         ></TextInput>
       </View>
+      {usernameError ? <Text style={{marginLeft: 10, color: 'white', fontSize: 14,}}>{"Email must end with @lawrence.edu"}</Text> : null}
       <View style={{ ...styles.widthControll, alignItems: "center", position: "relative" }}>
         <TextInput
           placeholder="Password"
