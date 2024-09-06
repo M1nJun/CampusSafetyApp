@@ -420,8 +420,10 @@ const RideRequesterComponent = () => {
           //maybe should set up a conditional statement saying if !showDestinationAutoCompleteList
           onFocus={() => setShowDestinationDropdown(true)}
           onChangeText={(text) => {
-            setDestination(text);
-            handleKeywordChange(text, true);
+            // Replace problematic characters with an empty string
+            const sanitizedText = text.replace(/[\/\\;\.]/g, '');
+            setDestination(sanitizedText);
+            handleKeywordChange(sanitizedText, true);
           }}
         ></TextInput>
         
@@ -547,8 +549,9 @@ const RideRequesterComponent = () => {
           style={{...styles.input, marginBottom:5}}
           value={location} // Show address if using map, otherwise show location
           onChangeText={(text) => {
-            setLocation(text);
-            handleKeywordChange(text, false);
+            const sanitizedText = text.replace(/[\/\\;\.]/g, '');
+            setLocation(sanitizedText);
+            handleKeywordChange(sanitizedText, false);
           }}
           onFocus={() => {setShowLocationDropdown(true);
             }}

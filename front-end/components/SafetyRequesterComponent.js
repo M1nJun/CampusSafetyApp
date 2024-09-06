@@ -366,8 +366,9 @@ const SafetyRequesterComponent = () => {
           style={{...styles.input, marginBottom:5}}
           value={location}
           onChangeText={(text) => {
-            setLocation(text);
-            handleKeywordChange(text);
+            const sanitizedText = text.replace(/[\/\\;\.]/g, '');
+            setLocation(sanitizedText);
+            handleKeywordChange(sanitizedText);
           }}
           onFocus={() => setShowLocationDropdown(true)}
         ></TextInput>
