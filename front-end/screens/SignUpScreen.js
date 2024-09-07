@@ -1,15 +1,14 @@
 import { theme } from "../colors";
-import { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   StyleSheet,
   View,
   Text,
-  Image,
+  Animated,
   TouchableOpacity,
   TextInput,
   Alert,
 } from "react-native";
-import React from "react";
 import styles from "../styles";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -27,11 +26,25 @@ export default function SignUpScreen() {
 
   const [showPassword, setShowPassword] = useState(false);
 
+  // Shake animation value
+  const shakeAnimation = useRef(new Animated.Value(0)).current;
+
+  const shakeButton = () => {
+    // Define the shake animation
+    Animated.sequence([
+      Animated.timing(shakeAnimation, { toValue: 10, duration: 50, useNativeDriver: true }),
+      Animated.timing(shakeAnimation, { toValue: -10, duration: 50, useNativeDriver: true }),
+      Animated.timing(shakeAnimation, { toValue: 10, duration: 50, useNativeDriver: true }),
+      Animated.timing(shakeAnimation, { toValue: 0, duration: 50, useNativeDriver: true }),
+    ]).start();
+  };
+
   const handleSignUp = async () => {
     if (email.endsWith('@lawrence.edu')) {
       setUsernameError(false); // Clear error if email is valid
     } else {
       setUsernameError(true);
+      shakeButton();
       return;
     }
 
@@ -77,7 +90,7 @@ export default function SignUpScreen() {
           onChangeText={(text) => {setEmail(text)}}
         ></TextInput>
       </View>
-      {usernameError ? <Text style={{marginLeft: 10, color: 'white', fontSize: 14,}}>{"Email must end with @lawrence.edu"}</Text> : null}
+      {usernameError ? <Animated.Text style={{marginLeft: 10, color: 'white', fontSize: 14, transform: [{ translateX: shakeAnimation }]}}>{"Email must end with @lawrence.edu"}</Animated.Text> : null}
       <View style={{ ...styles.widthControll, alignItems: "center", position: "relative" }}>
         <TextInput
           placeholder="Password"
@@ -140,11 +153,14 @@ export default function SignUpScreen() {
           onChangeText={setStudentID}
         ></TextInput>
       </View>
-      <View style={styles.widthControll}>
-        <TouchableOpacity style={styles.blueBtn} onPress={handleSignUp}>
+      <Animated.View style={{ flexDirection:"row", transform: [{ translateX: shakeAnimation }] }}>
+        <TouchableOpacity
+          style={styles.blueBtn}
+          onPress={handleSignUp}
+        >
           <Text style={styles.blueBtnText}>SignUp</Text>
         </TouchableOpacity>
-      </View>
+      </Animated.View>
       <View style={styles.signUp}>
         <Text style={{ color: "white", fontWeight: "500" }}>
           Already have an account?{" "}

@@ -1,22 +1,34 @@
-import { theme } from "../colors";
 import {
-  StyleSheet,
   View,
   Text,
-  Image,
   TouchableOpacity,
   Alert,
   TextInput,
+  Animated
 } from "react-native";
 import React from "react";
 import styles from "../styles";
 import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function LoginScreen() {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+
+  // Shake animation value
+  const shakeAnimation = useRef(new Animated.Value(0)).current;
+
+  const shakeButton = () => {
+    // Define the shake animation
+    Animated.sequence([
+      Animated.timing(shakeAnimation, { toValue: 10, duration: 50, useNativeDriver: true }),
+      Animated.timing(shakeAnimation, { toValue: -10, duration: 50, useNativeDriver: true }),
+      Animated.timing(shakeAnimation, { toValue: 10, duration: 50, useNativeDriver: true }),
+      Animated.timing(shakeAnimation, { toValue: 0, duration: 50, useNativeDriver: true }),
+    ]).start();
+  };
 
   const handleLogin = async () => {
     try {
@@ -31,6 +43,8 @@ export default function LoginScreen() {
         }),
       });
       if (!response.ok) {
+        shakeButton();
+        setLoginError("Incorrect email or password.");
         throw new Error("Login failed!");
       }
 
@@ -104,11 +118,24 @@ export default function LoginScreen() {
           onChangeText={setPassword}
         ></TextInput>
       </View>
-      <View style={styles.widthControll}>
+      {loginError ? (
+        <Animated.Text
+          style={{
+            alignSelf: "left",
+            marginLeft: 22,
+            color: "white",
+            fontSize: 14,
+            transform: [{ translateX: shakeAnimation }],
+          }}
+        >
+          {loginError}
+        </Animated.Text>
+      ) : null}
+      <Animated.View style={{...styles.widthControll,  transform: [{ translateX: shakeAnimation }]}}>
         <TouchableOpacity style={styles.blueBtn} onPress={handleLogin}>
           <Text style={styles.blueBtnText}>Login</Text>
         </TouchableOpacity>
-      </View>
+      </Animated.View>
       <View style={styles.signUp}>
         <Text style={{ color: "white", fontWeight: "500" }}>
           Don't have an account?{" "}
