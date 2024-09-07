@@ -106,6 +106,24 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 5,
   },
+
+  //in MiniProfileComponent
+  profileLabel: {
+    fontSize: 17,
+    fontWeight: '500',
+    marginBottom: 5,
+    color: '#A4A4A4',
+  },
+  profileValue: {
+    fontSize: 17,
+    fontWeight: '500',
+    marginBottom: 10,
+  },
+  profileDivider: {
+    height: 1,
+    backgroundColor: '#A4A4A4',
+    marginBottom: 15,
+  },
 });
 
 export default styles;

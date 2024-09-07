@@ -15,10 +15,10 @@ import styles from "../styles";
 
 
 // Memoized Input Fields: ProfileInput is memoized using React.memo. This prevents it from re-rendering unless its props change.
-const ProfileInput = memo(({ label, value, onChangeText, editable, mode }) => {
+const ProfileInput = memo(({ label, value, onChangeText, editable}) => {
   return (
     <View style={styles.categoryContainer}>
-      <Text style={{ ...styles.categoryText, flex: mode === "View" ? 0.4 : 0.3, color: mode === "View" ? "black" : "white" }}>{label}: </Text>
+      <Text style={{ ...styles.categoryText, flex: 0.3, color: "white" }}>{label}: </Text>
       <TextInput
         value={value}
         onChangeText={onChangeText}
@@ -27,7 +27,7 @@ const ProfileInput = memo(({ label, value, onChangeText, editable, mode }) => {
           ...styles.input,
           flex: 0.7,
           color: editable ? "black" : "gray",
-          paddingLeft: mode === "View"? 0 : 15
+          paddingLeft: 15
         }}
         editable={editable}
       />
@@ -35,9 +35,7 @@ const ProfileInput = memo(({ label, value, onChangeText, editable, mode }) => {
   );
 });
 
-const ProfileComponent = ({ token, profileToShow, mode }) => {
-  // const route = useRoute();
-  // const { token, profileToShow, mode } = route.params;
+const ProfileComponent = ({ token, profileToShow}) => {
   const [profile, setProfile] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -49,9 +47,7 @@ const ProfileComponent = ({ token, profileToShow, mode }) => {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const url = mode === "View"
-      ? `http://localhost:8085/user/profile/${profileToShow}`
-      : "http://localhost:8085/user/profile/self";
+      const url = "http://localhost:8085/user/profile/self";
       try {
         const response = await fetch(url, {
           method: "GET",
@@ -115,21 +111,20 @@ const ProfileComponent = ({ token, profileToShow, mode }) => {
 
   return (
     <ScrollView>
-      <ProfileInput label="Email" value={profile?.username || ""} editable={false} mode={mode}/>
-      <ProfileInput label="FirstName" value={firstname} onChangeText={setFirstname} editable={isEdit} mode={mode}/>
-      <ProfileInput label="LastName" value={lastname} onChangeText={setLastname} editable={isEdit} mode={mode}/>
-      <ProfileInput label="Phone" value={phone} onChangeText={setPhone} editable={isEdit} mode={mode}/>
-      <ProfileInput label="Student ID" value={studentID} onChangeText={setStudentID} editable={isEdit} mode={mode}/>
-      {mode === "View"? null : (
-        <View style={{ ...styles.widthControll, justifyContent: "center" }}>
-          <TouchableOpacity
-            style={{ ...styles.blueBtn, flex: 0.45, borderRadius: 16 }}
-            onPress={isEdit ? handleSave : () => setIsEdit(true)}
-          >
-            <Text style={styles.blueBtnText}>{isEdit ? "Save Profile" : "Edit Profile"}</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+      <ProfileInput label="Email" value={profile?.username || ""} editable={false} />
+      <ProfileInput label="FirstName" value={firstname} onChangeText={setFirstname} editable={false} />
+      <ProfileInput label="LastName" value={lastname} onChangeText={setLastname} editable={false} />
+      <ProfileInput label="Phone" value={phone} onChangeText={setPhone} editable={isEdit} />
+      <ProfileInput label="Student ID" value={studentID} onChangeText={setStudentID} editable={false} />
+    
+      <View style={{ ...styles.widthControll, justifyContent: "center" }}>
+        <TouchableOpacity
+          style={{ ...styles.blueBtn, flex: 0.45, borderRadius: 16 }}
+          onPress={isEdit ? handleSave : () => setIsEdit(true)}
+        >
+          <Text style={styles.blueBtnText}>{isEdit ? "Save" : "Edit"}</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };

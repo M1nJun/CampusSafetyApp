@@ -7,21 +7,16 @@ import {
   Modal,
   Alert,
 } from "react-native";
-import styles from "../styles";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import React, { useEffect, useState } from "react";
-import { useRoute, useNavigation } from "@react-navigation/native";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { openURL, canOpenURL } from 'expo-linking';
-import ProfileComponent from './ProfileComponent'; // Import the ProfileComponent
+import MiniProfileComponent from "./MiniProfileComponent";
 
 const RequestMatchProfileComponent = ({ token, usertype, nameToShow, profileToShow }) => {
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false); // State to control the modal visibility
-  const mode = "View";
 
   const fetchProfileData = async () => {
     try {
@@ -138,7 +133,7 @@ const RequestMatchProfileComponent = ({ token, usertype, nameToShow, profileToSh
       >
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
           <View style={{ width: '90%', padding: 20, backgroundColor: 'white', borderRadius: 10 }}>
-            <ProfileComponent token={token} profileToShow={profileToShow} mode={mode} />
+            <MiniProfileComponent name={usertype === 'Student' || usertype === 'Faculty' ? nameToShow : `${profileData.firstname} ${profileData.lastname}`} phone={profileData.phone} email={profileData.username} studentID={profileData.studentID} type={profileData.usertype}/>
             <TouchableOpacity onPress={() => setModalVisible(false)}>
               <Text style={{ textAlign: 'center', marginTop: 20, color: '#00a6fb' }}>Close</Text>
             </TouchableOpacity>
