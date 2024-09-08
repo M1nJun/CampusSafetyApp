@@ -15,22 +15,28 @@ import styles from "../styles";
 
 
 // Memoized Input Fields: ProfileInput is memoized using React.memo. This prevents it from re-rendering unless its props change.
-const ProfileInput = memo(({ label, value, onChangeText, editable}) => {
+const ProfileInput = memo(({ label, value, onChangeText, editable }) => {
   return (
-    <View style={styles.categoryContainer}>
-      <Text style={{ ...styles.categoryText, flex: 0.3, color: "white" }}>{label}: </Text>
-      <TextInput
-        value={value}
-        onChangeText={onChangeText}
-        autoCapitalize="none"
-        style={{
-          ...styles.input,
-          flex: 0.7,
-          color: editable ? "black" : "gray",
-          paddingLeft: 15
-        }}
-        editable={editable}
-      />
+    <View>
+      <Text style={{ ...styles.profileLabel }}>{label}: </Text>
+      {editable ? (
+        <TextInput
+          value={value}
+          onChangeText={onChangeText}
+          autoCapitalize="none"
+          style={{
+            ...styles.input,
+            flex: 0.7,
+            color: "black",
+            backgroundColor: "white",
+            paddingLeft: 15,
+          }}
+          editable={editable}
+        />
+      ) : (
+        <Text style={{ ...styles.profileValue, color:"white" }}>{value}</Text>
+      )}
+      <View style={styles.profileDivider} />
     </View>
   );
 });

@@ -107,6 +107,20 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 
+  //in UserRequestViewComponent
+  infoLabel: {
+
+  },
+  infoValue: {
+
+  },
+  infoDivider: {
+    height: 1,
+    backgroundColor: '#A4A4A4',
+    marginBottom: 15,
+    paddingLeft: -20
+  },
+
   //in MiniProfileComponent
   profileLabel: {
     fontSize: 17,
