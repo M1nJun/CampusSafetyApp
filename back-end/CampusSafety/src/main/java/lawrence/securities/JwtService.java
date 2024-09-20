@@ -3,6 +3,7 @@ package lawrence.securities;
 import java.util.Date;
 
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,8 @@ import io.jsonwebtoken.Jwts;
 @Service
 public class JwtService {
 
-    SecretKey key = Jwts.SIG.HS256.key().build();
+    String secret = "MyNameIsMinJunLeeAndThisIsTheCampusSafetyApp0407!";
+    SecretKey key = new SecretKeySpec(secret.getBytes(), "HmacSHA256");
 
     public boolean isValid(String token) {
         try {

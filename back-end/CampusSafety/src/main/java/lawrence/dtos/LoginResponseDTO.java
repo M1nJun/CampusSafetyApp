@@ -2,12 +2,14 @@ package lawrence.dtos;
 
 public class LoginResponseDTO {
     private String token;
+    private String refreshToken;
     private Boolean verified;
     private String usertype;
 
     // Constructor
-    public LoginResponseDTO(String token, String usertype, Boolean verified) {
+    public LoginResponseDTO(String token, String refreshToken, String usertype, Boolean verified) {
         this.token = token;
+        this.refreshToken = refreshToken;
         this.usertype = usertype;
         this.verified = verified;
     }
@@ -19,6 +21,14 @@ public class LoginResponseDTO {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
     public String getUsertype() {

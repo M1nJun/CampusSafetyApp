@@ -62,9 +62,7 @@ public class UserService {
         if(existing.size() != 1)
             return null;
         User u = existing.get(0);
-        if(passwordService.verifyHash(password, u.getPassword())) {
-            u.setPassword("Undisclosed");
-        } else{
+        if(!passwordService.verifyHash(password, u.getPassword())) {
             u = null;
         }
         return u;

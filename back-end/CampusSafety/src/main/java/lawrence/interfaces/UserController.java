@@ -1,12 +1,17 @@
 package lawrence.interfaces;
 
+import lawrence.dtos.JwtResponseDTO;
 import lawrence.dtos.LoginResponseDTO;
+import lawrence.dtos.RefreshTokenRequestDTO;
+import lawrence.entities.RefreshToken;
 import lawrence.entities.User;
 import lawrence.securities.CampusSafetyUserDetails;
 import lawrence.services.EmailService;
+import lawrence.services.RefreshTokenService;
 import lawrence.services.UserService;
 import lawrence.dtos.UserDTO;
 import lawrence.securities.JwtService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -23,11 +28,12 @@ public class UserController {
 
     private UserService us;
     private JwtService jwtService;
-    private EmailService emailService;
+    private RefreshTokenService refreshTokenService;
 
-    public UserController(UserService us, JwtService jwtService) {
+    public UserController(UserService us, JwtService jwtService, RefreshTokenService refreshTokenService) {
         this.us = us;
         this.jwtService = jwtService;
+        this.refreshTokenService = refreshTokenService;
     }
 
     @PostMapping
@@ -91,11 +97,24 @@ public class UserController {
         String token = jwtService.makeJwt(result.getUserID().toString());
         String usertype = result.getUsertype();
         Boolean verified = result.getVerified();
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(result.getUserID());
 
-        LoginResponseDTO responseDTO = new LoginResponseDTO(token, usertype, verified);
+        LoginResponseDTO responseDTO = new LoginResponseDTO(token, refreshToken.getToken(), usertype, verified);
         return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
+    @PostMapping("/refreshToken")
+    public JwtResponseDTO refreshToken(@RequestBody RefreshTokenRequestDTO refreshTokenRequestDTO) {
+        return refreshTokenService.findByToken(refreshTokenRequestDTO.getToken())
+                .map(refreshTokenService::verifyExpiration)
+                .map(RefreshToken::getUser)
+                .map(user -> {
+                    String accessToken = jwtService.makeJwt(user.getUserID().toString());
+                    return JwtResponseDTO.builder()
+                            .accessToken(accessToken)
+                            .refreshToken(refreshTokenRequestDTO.getToken()).build();
+                }).orElseThrow(() -> new RuntimeException("Refresh token not found"));
+    }
 
 
     @GetMapping("/profile/self")
