@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -113,7 +114,8 @@ public class UserController {
                     return JwtResponseDTO.builder()
                             .accessToken(accessToken)
                             .refreshToken(refreshTokenRequestDTO.getToken()).build();
-                }).orElseThrow(() -> new RuntimeException("Refresh token not found"));
+                }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Refresh token not found. Please login again."));
+        // maybe I should send a message to the front end to show that they need to log in again!
     }
 
 

@@ -5,7 +5,9 @@ import lawrence.entities.User;
 import lawrence.repositories.RefreshTokenRepository;
 import lawrence.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -29,7 +31,9 @@ public class RefreshTokenService {
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + userID));
 
         // Calculate expiry for 3 months (in milliseconds)
-        long threeMonthsInMillis = 1000L * 60 * 60 * 24 * 90;
+//        long threeMonthsInMillis = 1000L * 60 * 60 * 24 * 90;
+        long threeMonthsInMillis = 1000L * 30;
+
 
         // Create a new RefreshToken object
         RefreshToken refreshToken = RefreshToken.builder()
@@ -50,7 +54,8 @@ public class RefreshTokenService {
     public RefreshToken verifyExpiration(RefreshToken token){
         if(token.getExpiryDate().compareTo(Instant.now())<0){
             refreshTokenRepository.delete(token);
-            throw new RuntimeException(token.getToken() + " Refresh token is expired. Please make a new login..!");
+//            throw new RuntimeException(token.getToken() + " Refresh token is expired. Please make a new login..!");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh token expired. Please login again.");
         }
         return token;
     }
