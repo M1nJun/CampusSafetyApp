@@ -32,7 +32,7 @@ public class RefreshTokenService {
 
         // Calculate expiry for 3 months (in milliseconds)
 //        long threeMonthsInMillis = 1000L * 60 * 60 * 24 * 90;
-        long threeMonthsInMillis = 1000L * 30;
+        long threeMonthsInMillis = 1000L * 600;
 
 
         // Create a new RefreshToken object
@@ -58,6 +58,18 @@ public class RefreshTokenService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh token expired. Please login again.");
         }
         return token;
+    }
+
+    public RefreshToken findByUser(User user) {
+        Optional<RefreshToken> token = refreshTokenRepository.findByUser(user);
+        if(token.isPresent()){
+            return token.get();
+        }
+        return null;
+    }
+
+    public void deleteRefreshToken(RefreshToken refreshToken) {
+        refreshTokenRepository.delete(refreshToken);
     }
 
 }

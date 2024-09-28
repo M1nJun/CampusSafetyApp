@@ -98,6 +98,13 @@ public class UserController {
         String token = jwtService.makeJwt(result.getUserID().toString());
         String usertype = result.getUsertype();
         Boolean verified = result.getVerified();
+
+        // Check for an existing refresh token
+        RefreshToken existingRefreshToken = refreshTokenService.findByUser(result);
+        if (existingRefreshToken != null) {
+            refreshTokenService.deleteRefreshToken(existingRefreshToken);
+        }
+
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(result.getUserID());
 
         LoginResponseDTO responseDTO = new LoginResponseDTO(token, refreshToken.getToken(), usertype, verified);
@@ -113,7 +120,8 @@ public class UserController {
                     String accessToken = jwtService.makeJwt(user.getUserID().toString());
                     return JwtResponseDTO.builder()
                             .accessToken(accessToken)
-                            .refreshToken(refreshTokenRequestDTO.getToken()).build();
+                            .refreshToken(refreshTokenRequestDTO.getToken())
+                            .userType(user.getUsertype()).build();
                 }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Refresh token not found. Please login again."));
         // maybe I should send a message to the front end to show that they need to log in again!
     }

@@ -10,12 +10,14 @@ import React from "react";
 import styles from "../styles";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
+import * as TokenService from '../services/tokenService';
 
 export default function LoginScreen() {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
+
 
   // Shake animation value
   const shakeAnimation = useRef(new Animated.Value(0)).current;
@@ -50,8 +52,12 @@ export default function LoginScreen() {
 
       const data = await response.json();
       const token = data.token;
+      const refreshToken = data.refreshToken;
       const usertype = data.usertype;
       const verified = data.verified;
+
+      // Store the tokens in AsyncStorage
+      await TokenService.storeTokens(token, refreshToken);
 
       // on login check if the user is verified, if not send them to verify screen
       if (verified) {

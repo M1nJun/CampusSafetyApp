@@ -1,14 +1,6 @@
-import { theme } from "./colors";
-import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { navigationRef } from './services/navigationService';  // Import the reference
 import { NavigationContainer } from "@react-navigation/native";
 import LoginScreen from "./screens/LoginScreen";
 import SignUpScreen from "./screens/SignUpScreen";
@@ -21,11 +13,41 @@ import OfficerHomeScreen from "./screens/OfficerHomeScreen";
 import OfficerRequestLockScreen from "./screens/OfficerRequestLockScreen";
 import StudentRequestLockScreen from "./screens/StudentRequestLockScreen";
 import ProfileViewScreen from "./screens/ProfileViewScreen";
+import * as TokenService from './services/tokenService';
+import { AppState } from 'react-native';
+
 
 export default function App() {
   const Stack = createNativeStackNavigator();
+  const appState = useRef(AppState.currentState); // Reference to store the current app state
+  const [appStateVisible, setAppStateVisible] = useState(appState.current); // State to track the app state
+
+  useEffect(() => {
+    // Function to handle app state change
+    const handleAppStateChange = (nextAppState) => {
+      if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+        console.log('App has come to the foreground, refreshing access token...');
+        TokenService.refreshAccessToken(); // Refresh token when app comes to foreground
+      }
+      appState.current = nextAppState; // Update the current app state
+      setAppStateVisible(appState.current); // Update the state
+    };
+
+    const subscription = AppState.addEventListener('change', handleAppStateChange);
+
+    return () => {
+      subscription.remove(); // Cleanup the event listener on component unmount
+    };
+  }, []);
+
+  useEffect(() => {
+    // Check for refresh token on app load
+    TokenService.refreshAccessToken();
+  }, []);
+  
+
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         initialRouteName="Login"
         screenOptions={{ headerShown: false }}
