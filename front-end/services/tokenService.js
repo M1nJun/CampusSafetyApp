@@ -1,6 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { navigate } from './navigationService';
 
+const REFRESH_INTERVAL = 30 * 1000; 
+// Set an initial variable for the timer to hold the reference
+let tokenRefreshTimer;
 
 const storeTokens = async (accessToken, refreshToken) => {
   try {
@@ -11,9 +14,24 @@ const storeTokens = async (accessToken, refreshToken) => {
     console.log('Tokens stored successfully:');
     console.log('Access Token:', accessToken);
     console.log('Refresh Token:', refreshToken);
+
+    // Start a timer to refresh the token after 14 minutes
+    scheduleTokenRefresh();
+
   } catch (error) {
     console.error('Error storing tokens', error);
   }
+};
+
+const scheduleTokenRefresh = async () => {
+  // Clear any existing timers (if necessary)
+  clearTimeout(tokenRefreshTimer);
+
+  // Schedule the refresh after 14 minutes
+  tokenRefreshTimer = setTimeout(async () => {
+    console.log("30 seconds passed automatically refreshing token");
+    await refreshAccessToken();
+  }, REFRESH_INTERVAL);
 };
 
 const getAccessToken = async () => {
@@ -55,7 +73,6 @@ const refreshAccessToken = async () => {
     }
 
     console.log('Sending refresh token to the server...');
-    console.log('Request body:', JSON.stringify({ token: refreshToken }));
 
     const response = await fetch('http://localhost:8085/user/refreshToken', {
       method: 'POST',
@@ -66,8 +83,6 @@ const refreshAccessToken = async () => {
         token: refreshToken // Send the refresh token in the body
       }),
     });
-
-    console.log('Response Status:', response.status);
     
     // Use response.json() to parse response only if response is OK
     const data = response.ok ? await response.json() : null;

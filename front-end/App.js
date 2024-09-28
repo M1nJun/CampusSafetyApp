@@ -20,7 +20,6 @@ import { AppState } from 'react-native';
 export default function App() {
   const Stack = createNativeStackNavigator();
   const appState = useRef(AppState.currentState); // Reference to store the current app state
-  const [appStateVisible, setAppStateVisible] = useState(appState.current); // State to track the app state
 
   useEffect(() => {
     // Function to handle app state change
@@ -30,7 +29,6 @@ export default function App() {
         TokenService.refreshAccessToken(); // Refresh token when app comes to foreground
       }
       appState.current = nextAppState; // Update the current app state
-      setAppStateVisible(appState.current); // Update the state
     };
 
     const subscription = AppState.addEventListener('change', handleAppStateChange);
