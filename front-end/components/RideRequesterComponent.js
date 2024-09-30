@@ -19,11 +19,13 @@ import { useNavigation } from "@react-navigation/native";
 import debounce from "lodash.debounce"; 
 import MapView, {Marker} from 'react-native-maps';
 import * as Location from 'expo-location';
+import * as TokenService from '../services/tokenService';
 
 const RideRequesterComponent = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { token, usertype } = route.params;
+  // const { token, usertype } = route.params;
+  const { usertype } = route.params;
 
   // this is for the dropdown list of locations feature
   const [locationList, setLocationList] = useState([]); // Store location options
@@ -118,15 +120,27 @@ const RideRequesterComponent = () => {
   const [destination, setDestination] = useState("");
   const [message, setMessage] = useState("");
 
-
+//think about what to do in case of refresh token expiry.
   const fetchLocationList = async () => {
     try {
+      const tokenRefreshed = await TokenService.refreshAccessToken();
+
+      if (!tokenRefreshed) {
+        console.log('Token refresh failed, not retrying fetch.');
+        
+        return;
+      }
+
+      const token = await TokenService.getAccessToken();
+
       const response = await fetch("http://localhost:8085/option/location/all", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+
+
       if (response.ok) {
         const data = await response.json();
         setLocationList(data); // Set the locations state
@@ -140,12 +154,23 @@ const RideRequesterComponent = () => {
 
   const fetchDestinationList = async () => {
     try {
-      const response = await fetch(`http://localhost:8085/option/location/all`, {
+      const tokenRefreshed = await TokenService.refreshAccessToken();
+
+      if (!tokenRefreshed) {
+        console.log('Token refresh failed, not retrying fetch.');
+        
+        return;
+      }
+
+      const token = await TokenService.getAccessToken();
+
+      const response = await fetch("http://localhost:8085/option/location/all", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+
       if (response.ok) {
         const data = await response.json();
         setDestinationList(data); // Set the destination state
@@ -162,7 +187,7 @@ const RideRequesterComponent = () => {
   useEffect(() => {
     fetchLocationList();
     fetchDestinationList();
-  }, [token]);
+  }, []);
 
 
 
@@ -245,12 +270,23 @@ const RideRequesterComponent = () => {
   
     const fetchFilteredLocations = async (url, setList) => {
       try {
+        const tokenRefreshed = await TokenService.refreshAccessToken();
+
+        if (!tokenRefreshed) {
+          console.log('Token refresh failed, not retrying fetch.');
+          
+          return;
+        }
+
+        const token = await TokenService.getAccessToken();
+
         const response = await fetch(url, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
+
         if (response.ok) {
           const data = await response.json();
           setList(data);
@@ -373,6 +409,16 @@ const RideRequesterComponent = () => {
     };
 
     try {
+      const tokenRefreshed = await TokenService.refreshAccessToken();
+
+      if (!tokenRefreshed) {
+        console.log('Token refresh failed, not retrying fetch.');
+        
+        return;
+      }
+
+      const token = await TokenService.getAccessToken();
+
       const response = await fetch("http://localhost:8085/request", {
         method: "POST",
         headers: {

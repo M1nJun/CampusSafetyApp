@@ -1,13 +1,9 @@
 import React from "react";
 import { theme } from "../colors";
 import {
-  StyleSheet,
   View,
   Text,
-  Image,
   TouchableOpacity,
-  TextInput,
-  ScrollView,
 } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useEffect, useState } from "react";

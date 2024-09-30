@@ -14,6 +14,7 @@ import OfficerRequestLockScreen from "./screens/OfficerRequestLockScreen";
 import StudentRequestLockScreen from "./screens/StudentRequestLockScreen";
 import ProfileViewScreen from "./screens/ProfileViewScreen";
 import * as TokenService from './services/tokenService';
+import { navigate } from './services/navigationService';
 import { AppState } from 'react-native';
 
 
@@ -23,10 +24,25 @@ export default function App() {
 
   useEffect(() => {
     // Function to handle app state change
-    const handleAppStateChange = (nextAppState) => {
+    const handleAppStateChange = async (nextAppState) => {
       if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
         console.log('App has come to the foreground, refreshing access token...');
-        TokenService.refreshAccessToken(); // Refresh token when app comes to foreground
+        const tokenRefreshed = await TokenService.refreshAccessToken(); // Refresh token when app comes to foreground
+
+        const accessToken = await TokenService.getAccessToken();
+        const userType = await TokenService.getUserType();
+
+        if (!tokenRefreshed) {
+          // If token refresh fails, stop further execution
+          console.log('Token refresh failed, user redirected to login.');
+          return;
+        }
+
+        if (userType === "Student") {
+          navigate('StudentHome', { token: accessToken, usertype: userType });
+        } else if (userType === "Officer") {
+          navigate('OfficerHome', { token: accessToken, usertype: userType });
+        }
       }
       appState.current = nextAppState; // Update the current app state
     };
@@ -38,9 +54,40 @@ export default function App() {
     };
   }, []);
 
+  // useEffect(() => {
+  //   // Check for refresh token on app load
+  //   TokenService.refreshAccessToken();
+  // }, []);
+
   useEffect(() => {
-    // Check for refresh token on app load
-    TokenService.refreshAccessToken();
+    const initializeApp = async () => {
+      try {
+        // Try to refresh the access token on app load
+        const tokenRefreshed = await TokenService.refreshAccessToken();
+
+        if (!tokenRefreshed) {
+          // If token refresh fails, stop further execution
+          console.log('Token refresh failed, user redirected to login.');
+          return;
+        }
+  
+        // After refreshing the token, decide which home screen to navigate to based on userType
+        const accessToken = await TokenService.getAccessToken();
+        const userType = await TokenService.getUserType();
+        if (userType === "Student") {
+          navigate('StudentHome', { token: accessToken, usertype: userType });
+        } else if (userType === "Officer") {
+          navigate('OfficerHome', { token: accessToken, usertype: userType });
+        }
+      } catch (error) {
+        // If there's an issue (e.g., token refresh failed), navigate to login
+        console.log('Error during initialization:', error);
+        navigate('Login');
+      }
+    };
+  
+    // Call the initialization logic on app load
+    initializeApp();
   }, []);
   
 

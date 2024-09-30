@@ -31,8 +31,7 @@ public class RefreshTokenService {
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + userID));
 
         // Calculate expiry for 3 months (in milliseconds)
-//        long threeMonthsInMillis = 1000L * 60 * 60 * 24 * 90;
-        long threeMonthsInMillis = 1000L * 600;
+        long threeMonthsInMillis = 1000L * 60 * 60 * 24 * 90;
 
 
         // Create a new RefreshToken object

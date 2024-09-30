@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { navigate } from './navigationService';
 
-const REFRESH_INTERVAL = 30 * 1000; 
+const REFRESH_INTERVAL = 10 * 60 * 1000; 
 // Set an initial variable for the timer to hold the reference
 let tokenRefreshTimer;
 
@@ -23,6 +23,16 @@ const storeTokens = async (accessToken, refreshToken) => {
   }
 };
 
+const storeUserType = async (userType) => {
+  try {
+    await AsyncStorage.setItem('userType', userType);
+
+    console.log('User Type:', userType);
+  } catch (error) {
+    console.error('Error storing usertype', error);
+  }
+}
+
 const scheduleTokenRefresh = async () => {
   // Clear any existing timers (if necessary)
   clearTimeout(tokenRefreshTimer);
@@ -42,6 +52,14 @@ const getAccessToken = async () => {
   }
   return null;
 };
+
+const getUserType = async () => {
+  try {
+    return await AsyncStorage.getItem('userType');
+  } catch (error) {
+    console.error('Error getting user type', error);
+  }
+}
 
 const getRefreshToken = async () => {
   try {
@@ -69,7 +87,7 @@ const refreshAccessToken = async () => {
       // No refresh token, send user to login
       console.log('No refresh token found, navigating to login.');
       navigate('Login');
-      return;
+      return false;
     }
 
     console.log('Sending refresh token to the server...');
@@ -94,7 +112,7 @@ const refreshAccessToken = async () => {
       console.error('Error message:', errorMessage);
       await removeTokens(); // Clear invalid tokens
       navigate('Login');
-      return;
+      return false;
     }
 
     console.log('Access token refreshed successfully:', data);
@@ -107,20 +125,23 @@ const refreshAccessToken = async () => {
 
     // Store new access token and navigate to home
     await storeTokens(accessToken, newRefreshToken);
-    console.log('New tokens stored. Navigating to home...');
+    await storeUserType(userType);
+    console.log('New tokens stored. UserType Stored.');
+    return true;
 
-    if (userType === "Student") {
-      navigate('StudentHome', { token: accessToken, usertype: userType });
-    } else {
-      navigate('OfficerHome', { token: accessToken, usertype: userType });
-    }
+    // if (userType === "Student") {
+    //   navigate('StudentHome', { token: accessToken, usertype: userType });
+    // } else {
+    //   navigate('OfficerHome', { token: accessToken, usertype: userType });
+    // }
 
   } catch (error) {
     console.error('Failed to refresh access token', error);
     await removeTokens(); // Clear tokens on error
     navigate('Login');
+    return false;
   }
 };
 
   
-  export { storeTokens, getAccessToken, getRefreshToken, removeTokens, refreshAccessToken };
+export { storeTokens, getAccessToken, getRefreshToken, removeTokens, refreshAccessToken, getUserType };

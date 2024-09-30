@@ -6,8 +6,8 @@ import {
 import { useEffect, useState } from "react";
 import { useCallback } from "react";
 import { useRoute, useNavigation, useFocusEffect } from "@react-navigation/native";
-import styles from "../styles";
 import OfficerMiniRequestComponent from "./OfficerMiniRequestComponent";
+import * as TokenService from '../services/tokenService';
 
 
 const ReservedRequestReceiverComponent = ({ navigation }) => {
@@ -29,6 +29,26 @@ const ReservedRequestReceiverComponent = ({ navigation }) => {
           "Content-Type": "application/json",
         },
       });
+
+      // If the response is not OK, check for a 403 (forbidden) or 401 (unauthorized) error
+      if (response.status === 403) {
+        console.log(`Token expired (${response.status}), refreshing token...`);
+        
+        // Attempt to refresh the token
+        await TokenService.refreshAccessToken();
+        
+        // Get the new access token
+        token = await TokenService.getAccessToken();
+        
+        // Retry the original request with the new token
+        response = await fetch(url, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+      }
 
       if (response.ok) {
         const data = await response.json();
