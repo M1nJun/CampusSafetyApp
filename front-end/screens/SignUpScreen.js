@@ -1,7 +1,5 @@
-import { theme } from "../colors";
 import React, { useState, useRef } from "react";
 import {
-  StyleSheet,
   View,
   Text,
   Animated,
@@ -12,6 +10,7 @@ import {
 import styles from "../styles";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from '@expo/vector-icons/Ionicons';
+import * as TokenService from '../services/tokenService';
 
 export default function SignUpScreen() {
   const navigation = useNavigation();
@@ -69,10 +68,15 @@ export default function SignUpScreen() {
         const errorText = await response.text();
         throw new Error(errorText);
       }
+  
+      const data = await response.json(); // Parse response as JSON
+      const { accessToken, refreshToken } = data; // Extract tokens
 
-      const token = await response.text();
+      // Store the tokens in AsyncStorage
+      await TokenService.storeTokens(accessToken, refreshToken);
+      
 
-      navigation.navigate("Verification", { token });
+      navigation.navigate("Verification");
     } catch (error) {
       Alert.alert("Sign Up Error", error.message);
     }

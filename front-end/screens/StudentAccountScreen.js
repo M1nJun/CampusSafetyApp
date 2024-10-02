@@ -11,7 +11,7 @@ import MyRequestComponent from "../components/MyRequestComponent";
 
 export default function StudentAccountScreen({ navigation }) {
   const route = useRoute();
-  const { token, usertype } = route.params;
+  const { usertype } = route.params;
   const [isProfile, setIsProfile] = useState(true);
   return (
     <View style={styles.container}>
@@ -23,11 +23,11 @@ export default function StudentAccountScreen({ navigation }) {
         rightText="My Requests"
       />
       {isProfile ? (
-        <ProfileComponent token={token} />
+        <ProfileComponent />
       ) : (
-        <MyRequestComponent navigation={navigation} usertype={usertype} token={token} />
+        <MyRequestComponent navigation={navigation} usertype={usertype} />
       )}
-      <BottomNavigationBarComponent usertype={usertype} token={token} />
+      <BottomNavigationBarComponent usertype={usertype} />
     </View>
   );
 }

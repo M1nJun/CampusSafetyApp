@@ -1,8 +1,6 @@
 import {
-  StyleSheet,
   View,
   Text,
-  Image,
   TouchableOpacity,
   TextInput,
   ScrollView,
@@ -10,8 +8,12 @@ import {
   Alert,
 } from "react-native";
 import React, { useState, useEffect, memo } from "react";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
+import Feather from '@expo/vector-icons/Feather';
 import styles from "../styles";
+import * as TokenService from '../services/tokenService';
+import { StackActions, CommonActions } from '@react-navigation/native';
+
 
 
 // Memoized Input Fields: ProfileInput is memoized using React.memo. This prevents it from re-rendering unless its props change.
@@ -41,7 +43,7 @@ const ProfileInput = memo(({ label, value, onChangeText, editable }) => {
   );
 });
 
-const ProfileComponent = ({ token, profileToShow}) => {
+const ProfileComponent = ({ profileToShow}) => {
   const [profile, setProfile] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -51,35 +53,58 @@ const ProfileComponent = ({ token, profileToShow}) => {
   const [phone, setPhone] = useState("");
   const [studentID, setStudentID] = useState("");
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      const url = "http://localhost:8085/user/profile/self";
-      try {
-        const response = await fetch(url, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-        const data = await response.json();
-        setProfile(data);
-        setFirstname(data.firstname);
-        setLastname(data.lastname);
-        setPhone(data.phone);
-        setStudentID(data.studentID);
-      } catch (error) {
-        console.error("Error fetching profile", error);
-      } finally {
-        setLoading(false);
+  const navigation = useNavigation();
+
+  const fetchProfile = async () => {
+    const url = "http://localhost:8085/user/profile/self";
+    try {
+      const tokenRefreshed = await TokenService.refreshAccessToken();
+
+      if (!tokenRefreshed) {
+        console.log('Token refresh failed, not retrying fetch.');
+        
+        return;
       }
-    };
+
+      const token = await TokenService.getAccessToken();
+
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      setProfile(data);
+      setFirstname(data.firstname);
+      setLastname(data.lastname);
+      setPhone(data.phone);
+      setStudentID(data.studentID);
+    } catch (error) {
+      console.error("Error fetching profile", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchProfile();
-  }, [token]);
+  }, []);
 
   const handleSave = async () => {
     setLoading(true);
     try {
+      const tokenRefreshed = await TokenService.refreshAccessToken();
+
+      if (!tokenRefreshed) {
+        console.log('Token refresh failed, not retrying fetch.');
+        
+        return;
+      }
+
+      const token = await TokenService.getAccessToken();
+
       const response = await fetch(
         "http://localhost:8085/user/profile/update",
         {
@@ -111,6 +136,37 @@ const ProfileComponent = ({ token, profileToShow}) => {
     }
   };
 
+  const handleLogOut = () => {
+    Alert.alert(
+      "Confirm",
+      "Are you sure you want to log out?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Logout cancelled"),
+          style: "cancel",
+        },
+        {
+          text: "Log Out",
+          onPress: () => {
+            TokenService.removeTokens();
+            TokenService.removeUserType();
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [
+                  { name: 'Login' }, // The screen you want to navigate to
+                ],
+              })
+            );
+          },
+          style: "destructive",
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
   if (loading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
@@ -131,6 +187,18 @@ const ProfileComponent = ({ token, profileToShow}) => {
           <Text style={styles.blueBtnText}>{isEdit ? "Save" : "Edit"}</Text>
         </TouchableOpacity>
       </View>
+
+      <View style={{ ...styles.widthControll, justifyContent:"flex-end", marginTop:60}}>
+        <TouchableOpacity
+          onPress={handleLogOut}
+          style={{ ...styles.blueBtn, backgroundColor:"white", flex: 0.45, borderRadius: 16, alignItems: "center", flexDirection:"row", justifyContent:"center"}}
+        >
+          <Feather name="log-out" size={25} color="red" />
+          <Text style={{...styles.blueBtnText, color:"red", marginLeft: 5}}>Log Out</Text>
+        </TouchableOpacity>
+      </View>
+
+
     </ScrollView>
   );
 };

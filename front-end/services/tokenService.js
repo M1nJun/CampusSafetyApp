@@ -80,6 +80,14 @@ const removeTokens = async () => {
   }
 };
 
+const removeUserType = async () => {
+  try {
+    await AsyncStorage.removeItem('userType');
+  } catch (error) {
+    console.error("Error removing usertype", error);
+  }
+}
+
 const refreshAccessToken = async () => {
   try {
     const refreshToken = await getRefreshToken(); // Await the retrieval of the refresh token
@@ -144,4 +152,4 @@ const refreshAccessToken = async () => {
 };
 
   
-export { storeTokens, getAccessToken, getRefreshToken, removeTokens, refreshAccessToken, getUserType };
+export { storeTokens, getAccessToken, getRefreshToken, removeTokens, removeUserType, refreshAccessToken, getUserType };

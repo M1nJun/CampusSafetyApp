@@ -12,7 +12,7 @@ import * as TokenService from '../services/tokenService';
 
 const ReservedRequestReceiverComponent = ({ navigation }) => {
   const route = useRoute();
-  const { token, usertype } = route.params;
+  const { usertype } = route.params;
 
   const [loading, setLoading] = useState(true);
 
@@ -22,6 +22,16 @@ const ReservedRequestReceiverComponent = ({ navigation }) => {
 
   const fetchRequests = async (status, setStateFunction, url) => {
     try {
+      const tokenRefreshed = await TokenService.refreshAccessToken();
+
+      if (!tokenRefreshed) {
+        console.log('Token refresh failed, not retrying fetch.');
+        
+        return;
+      }
+
+      const token = await TokenService.getAccessToken();
+      
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -29,26 +39,6 @@ const ReservedRequestReceiverComponent = ({ navigation }) => {
           "Content-Type": "application/json",
         },
       });
-
-      // If the response is not OK, check for a 403 (forbidden) or 401 (unauthorized) error
-      if (response.status === 403) {
-        console.log(`Token expired (${response.status}), refreshing token...`);
-        
-        // Attempt to refresh the token
-        await TokenService.refreshAccessToken();
-        
-        // Get the new access token
-        token = await TokenService.getAccessToken();
-        
-        // Retry the original request with the new token
-        response = await fetch(url, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-      }
 
       if (response.ok) {
         const data = await response.json();
@@ -81,7 +71,7 @@ const ReservedRequestReceiverComponent = ({ navigation }) => {
       }, 2000);
 
       return () => clearInterval(intervalId);
-    }, [token])
+    }, [])
   );
 
   
@@ -94,7 +84,6 @@ const ReservedRequestReceiverComponent = ({ navigation }) => {
             requestID={request.requestID}
             requestData={request}
             usertype={usertype}
-            token={token}
             navigation={navigation}
           />
         ))}
@@ -106,7 +95,6 @@ const ReservedRequestReceiverComponent = ({ navigation }) => {
             requestID={request.requestID}
             requestData={request}
             usertype={usertype}
-            token={token}
             navigation={navigation}
           />
         ))}

@@ -1,12 +1,11 @@
 import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import React, { useState, useRef } from "react";
 import styles from "../styles";
-import { useRoute, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
+import * as TokenService from '../services/tokenService';
 
 export default function VerificationScreen() {
-  const route = useRoute();
   const navigation = useNavigation();
-  const { token } = route.params;
   const [verificationCode, setVerificationCode] = useState([
     "",
     "",
@@ -35,6 +34,16 @@ export default function VerificationScreen() {
     if (code.length === 6) {
       console.log("Verification Code:", code);
       try {
+        const tokenRefreshed = await TokenService.refreshAccessToken();
+
+        if (!tokenRefreshed) {
+          console.log('Token refresh failed, not retrying fetch.');
+          
+          return;
+        }
+
+        const token = await TokenService.getAccessToken();
+
         const response = await fetch("http://localhost:8085/user/verify", {
           method: "POST",
           headers: {

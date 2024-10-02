@@ -5,10 +5,11 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import React, { useEffect, useState } from "react";
 import RequestMatchProfileComponent from "./RequestMatchProfileComponent"
+import * as TokenService from '../services/tokenService';
 
 const UserRequestViewComponent = () => {
   const route = useRoute();
-  const { token, usertype, requestID } = route.params;
+  const { usertype, requestID } = route.params;
 
   const navigation = useNavigation();
 
@@ -17,6 +18,16 @@ const UserRequestViewComponent = () => {
 
   const cancelRequest = async () => {
     try {
+      const tokenRefreshed = await TokenService.refreshAccessToken();
+
+      if (!tokenRefreshed) {
+        console.log('Token refresh failed, not retrying fetch.');
+        
+        return;
+      }
+
+      const token = await TokenService.getAccessToken();
+
       const response = await fetch(
         `http://localhost:8085/request/cancel?requestID=${requestID}`,
         {
@@ -42,38 +53,48 @@ const UserRequestViewComponent = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchRequestData = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:8085/request/${requestID}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+  const fetchRequestData = async () => {
+    try {
+      const tokenRefreshed = await TokenService.refreshAccessToken();
 
-        if (response.ok) {
-          const data = await response.json();
-          setRequestData(data);
-        } else {
-          Alert.alert("Error", "Fail to fetch the request data.");
-        }
-      } catch (error) {
-        Alert.alert(
-          "Error",
-          "An error occurred while fetching the request data."
-        );
-      } finally {
-        setLoading(false);
+      if (!tokenRefreshed) {
+        console.log('Token refresh failed, not retrying fetch.');
+        
+        return;
       }
-    };
 
+      const token = await TokenService.getAccessToken();
+      
+      const response = await fetch(
+        `http://localhost:8085/request/${requestID}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setRequestData(data);
+      } else {
+        Alert.alert("Error", "Fail to fetch the request data.");
+      }
+    } catch (error) {
+      Alert.alert(
+        "Error",
+        "An error occurred while fetching the request data."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchRequestData();
-  }, [requestID, token]);
+  }, []);
 
   if (loading) {
     return (
@@ -137,7 +158,6 @@ const UserRequestViewComponent = () => {
       </View>
       {requestData.requestStatus === "pending"? null : (
         <RequestMatchProfileComponent 
-          token={token}
           usertype={usertype}
           nameToShow={requestData.receiverName}
           profileToShow={usertype === "Student" || usertype === "Faculty" 

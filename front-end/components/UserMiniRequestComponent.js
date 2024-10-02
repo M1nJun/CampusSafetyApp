@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { useEffect, useState } from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import styles from "../styles";
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -18,14 +17,12 @@ const UserMiniRequestComponent = ({
   requestType,
   date,
   reserved,
-  token,
 }) => {
   return (
     <TouchableOpacity
       style={{...styles.miniRequest, marginBottom: 10}}
       onPress={() =>
         navigation.navigate("RequestView", {
-          token,
           requestID,
           usertype,
           requestType

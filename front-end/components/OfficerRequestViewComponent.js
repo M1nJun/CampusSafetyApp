@@ -6,20 +6,24 @@ import {
   TextInput,
   ScrollView,
   Alert,
+  Animated,
+  Modal
 } from "react-native";
 import styles from "../styles";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import RequestMatchProfileComponent from "./RequestMatchProfileComponent"
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import * as TokenService from '../services/tokenService';
+import AnimatedMapRegion from "react-native-maps/lib/AnimatedRegion";
 
 const OfficerRequestViewComponent = () => {
   const route = useRoute();
-  const { token, requestID, usertype } = route.params;
+  const { requestID, usertype } = route.params;
 
   const navigation = useNavigation();
 
@@ -30,14 +34,65 @@ const OfficerRequestViewComponent = () => {
 
   const [nameList, setNameList] = useState([]);
   const [showNameDropdown, setShowNameDropdown] = useState(false);
+
+  // Shake animation value
+  const shakeAnimation = useRef(new Animated.Value(0)).current;
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [cancelReason, setCancelReason] = useState("");
+
   
 
+  const shakeButton = () => {
+    // Define the shake animation
+    Animated.sequence([
+      Animated.timing(shakeAnimation, { toValue: 10, duration: 50, useNativeDriver: true }),
+      Animated.timing(shakeAnimation, { toValue: -10, duration: 50, useNativeDriver: true }),
+      Animated.timing(shakeAnimation, { toValue: 10, duration: 50, useNativeDriver: true }),
+      Animated.timing(shakeAnimation, { toValue: 0, duration: 50, useNativeDriver: true }),
+    ]).start();
+  };
+
+  const handleCancelRequest = async () => {
+    if (!cancelReason.trim()) {
+      Alert.alert("Error", "Please provide a reason for cancellation.");
+      return;
+    }
+
+    try {
+      // need to do something with the reason of cancellation.
+      // await handleDecisionOnRequest("cancel", cancelReason);
+      await handleDecisionOnRequest("cancel");
+      Alert.alert("Success", "Request successfully canceled.");
+      setModalVisible(false);
+      navigation.goBack(); // Navigate back to the previous screen
+    } catch (error) {
+      Alert.alert("Error", "Failed to cancel the request.");
+    }
+  };
+
   const handleDecisionOnRequest = async (decision) => {
+    if (receiverName === "") {
+      shakeButton()
+      return;
+    }
+
+    decision === "accept"? setRequestStatus("accepted") : setRequestStatus("completed")
     const url = decision === "accept"
       ? `http://localhost:8085/request/${decision}?requestID=${requestID}&receiverName=${receiverName}`
       : `http://localhost:8085/request/${decision}?requestID=${requestID}`;
   
     try {
+      const tokenRefreshed = await TokenService.refreshAccessToken();
+
+      if (!tokenRefreshed) {
+        console.log('Token refresh failed, not retrying fetch.');
+        
+        return;
+      }
+
+      const token = await TokenService.getAccessToken();
+
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -58,6 +113,16 @@ const OfficerRequestViewComponent = () => {
 
   const fetchNameList = async () => {
     try {
+      const tokenRefreshed = await TokenService.refreshAccessToken();
+
+      if (!tokenRefreshed) {
+        console.log('Token refresh failed, not retrying fetch.');
+        
+        return;
+      }
+
+      const token = await TokenService.getAccessToken();
+
       const response = await fetch("http://localhost:8085/option/officer/driver/all", {
         method: "GET",
         headers: {
@@ -83,6 +148,16 @@ const OfficerRequestViewComponent = () => {
   useEffect(() => {
     const fetchRequestData = async () => {
       try {
+        const tokenRefreshed = await TokenService.refreshAccessToken();
+
+        if (!tokenRefreshed) {
+          console.log('Token refresh failed, not retrying fetch.');
+          
+          return;
+        }
+
+        const token = await TokenService.getAccessToken();
+        
         const response = await fetch(
           `http://localhost:8085/request/${requestID}`,
           {
@@ -113,7 +188,7 @@ const OfficerRequestViewComponent = () => {
 
     fetchRequestData();
     fetchNameList();
-  }, [requestID, token]);
+  }, [requestID]);
 
 
 
@@ -180,7 +255,6 @@ const OfficerRequestViewComponent = () => {
       </View>
 
       <RequestMatchProfileComponent
-        token={token}
         usertype={usertype}
         profileToShow={usertype === "Student" || usertype === "Faculty" 
           ? requestData.receiver 
@@ -289,10 +363,10 @@ const OfficerRequestViewComponent = () => {
       </View>
       
       {requestStatus === "pending"? (
-        <View style={{ ...styles.widthControll, marginTop: 10 }}>
+        <Animated.View style={{ ...styles.widthControll, marginTop: 10, transform: [{ translateX: shakeAnimation }] }}>
           <TextInput
             placeholder="Officer/Driver Name"
-            placeholderTextColor="black"
+            placeholderTextColor="gray"
             autoCapitalize="none"
             value={receiverName}
             onChangeText={(text) => {
@@ -306,12 +380,14 @@ const OfficerRequestViewComponent = () => {
               fontSize: 17,
               marginLeft: 20,
               flex: 0.65,
-              backgroundColor: "#D3D3D3",
+              backgroundColor: "white",
               fontWeight: "600",
               color: "black",
+              borderColor:"black",
+              borderWidth: 2
             }}
           ></TextInput>
-        </View>
+        </Animated.View>
       ): null}
 
       {showNameDropdown && (
@@ -346,9 +422,7 @@ const OfficerRequestViewComponent = () => {
           <TouchableOpacity
             onPress={async () => {
               try {
-                await handleDecisionOnRequest("cancel");
-                Alert.alert("Success", "Request successfully canceled.");
-                navigation.goBack(); // Navigate back to the previous screen
+                setModalVisible(true);
               } catch (error) {
                 Alert.alert("Error", "Failed to cancel the request.");
               }
@@ -365,38 +439,41 @@ const OfficerRequestViewComponent = () => {
               Cancel
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              if (requestStatus === "pending") {
-                handleDecisionOnRequest("accept");
-                setRequestStatus("accepted");
-              } else if (requestStatus === "accepted") {
-                handleDecisionOnRequest("complete");
-                setRequestStatus("completed");
-                navigation.goBack();
+          <Animated.View style={{flex:0.4, marginRight: 20, transform: [{ translateX: shakeAnimation }]}}>
+            <TouchableOpacity
+              onPress={() => {
+                if (requestStatus === "pending") {
+                  handleDecisionOnRequest("accept");
+                } else if (requestStatus === "accepted") {
+                  handleDecisionOnRequest("complete");
+                  navigation.goBack();
+                }
+                // navigation.push("OfficerRequestLock");
+              }}
+              style={{
+                ...styles.blueBtn,
+                flex: 1,
+                borderRadius: 17,
+                
+                opacity: requestStatus === "completed" ? 0.5 : 1, // Deactivate button when completed
+              }}
+              disabled={requestStatus === "completed"} // Disable button when completed
+            >
+              <Text style={{ ...styles.blueBtnText, paddingVertical: 6 }}>
+              {requestStatus === "pending"
+                ? "Accept"
+                : requestStatus === "accepted"
+                ? "Complete"
+                : requestStatus === "completed"
+                ? "Completed"
+                : "Canceled"
               }
-              // navigation.push("OfficerRequestLock");
-            }}
-            style={{
-              ...styles.blueBtn,
-              flex: 0.4,
-              borderRadius: 17,
-              marginRight: 20,
-              opacity: requestStatus === "completed" ? 0.5 : 1, // Deactivate button when completed
-            }}
-            disabled={requestStatus === "completed"} // Disable button when completed
-          >
-            <Text style={{ ...styles.blueBtnText, paddingVertical: 6 }}>
-            {requestStatus === "pending"
-              ? "Accept"
-              : requestStatus === "accepted"
-              ? "Complete"
-              : requestStatus === "completed"
-              ? "Completed"
-              : "Canceled"
-            }
-            </Text>
-          </TouchableOpacity>
+              </Text>
+            </TouchableOpacity>
+          </Animated.View>
+          
+          
+          
         </View>
       ) : (
       <View style={{paddingLeft:20}}>
@@ -417,9 +494,116 @@ const OfficerRequestViewComponent = () => {
             {requestData.requestStatus}
         </Text>
       </View>)}
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0,0,0,0.5)",
+          }}
+        >
+          <View
+            style={{
+              width: "80%",
+              backgroundColor: "white",
+              borderRadius: 20,
+              padding: 20,
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.25,
+              shadowRadius: 4,
+              elevation: 5,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 22,
+                fontWeight: "bold",
+                marginBottom: 10,
+              }}
+            >
+              Cancel Request
+            </Text>
+
+            <TextInput
+              placeholder="Enter reason for cancellation"
+              value={cancelReason}
+              onChangeText={setCancelReason}
+              style={{
+                height: 100,
+                borderColor: "gray",
+                borderWidth: 1,
+                borderRadius: 10,
+                padding: 10,
+                textAlignVertical: "top",
+                marginBottom: 20,
+                fontSize: 15,
+              }}
+              multiline
+            />
+
+            {/* Submit and Close Buttons */}
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => setModalVisible(false)}
+                style={{
+                  backgroundColor: "red",
+                  padding: 10,
+                  borderRadius: 10,
+                }}
+              >
+                <Text
+                  style={{
+                    color: "white",
+                    fontWeight: "600",
+                    fontSize: 15,
+                    textAlign: "center",
+                  }}
+                >
+                  Close
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={handleCancelRequest}
+                style={{
+                  backgroundColor: "black",
+                  padding: 10,
+                  borderRadius: 10,
+                }}
+              >
+                <Text
+                  style={{
+                    color: "white",
+                    fontWeight: "600",
+                    fontSize: 15,
+                    textAlign: "center",
+                  }}
+                >
+                  Submit
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
       
     </View>
   );
 };
+
+
 
 export default OfficerRequestViewComponent;

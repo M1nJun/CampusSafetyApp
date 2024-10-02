@@ -9,7 +9,7 @@ import {
 import React from "react";
 import styles from "../styles";
 import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import * as TokenService from '../services/tokenService';
 
 export default function LoginScreen() {
@@ -64,9 +64,9 @@ export default function LoginScreen() {
         console.log(usertype);
         // Use the userType to navigate
         if (usertype === "Student") {
-          navigation.navigate("StudentHome", { token, usertype });
+          navigation.navigate("StudentHome", { usertype });
         } else {
-          navigation.navigate("OfficerHome", { token, usertype });
+          navigation.navigate("OfficerHome", { usertype });
         }
       } else {
         // handle when user is not verified yet
@@ -93,7 +93,7 @@ export default function LoginScreen() {
           Alert.alert("Error", error.message);
         }
 
-        navigation.navigate("Verification", { token });
+        navigation.navigate("Verification");
       }
     } catch (error) {
       // Handle login failure, e.g., show an alert
@@ -137,7 +137,7 @@ export default function LoginScreen() {
           {loginError}
         </Animated.Text>
       ) : null}
-      <Animated.View style={{...styles.widthControll,  transform: [{ translateX: shakeAnimation }]}}>
+      <Animated.View style={{...styles.widthControll, transform: [{ translateX: shakeAnimation }]}}>
         <TouchableOpacity style={styles.blueBtn} onPress={handleLogin}>
           <Text style={styles.blueBtnText}>Login</Text>
         </TouchableOpacity>

@@ -8,10 +8,11 @@ import { useCallback } from "react";
 import { useRoute, useNavigation, useFocusEffect } from "@react-navigation/native";
 import styles from "../styles";
 import OfficerMiniRequestComponent from "./OfficerMiniRequestComponent";
+import * as TokenService from '../services/tokenService';
 
 const RequestReceiverComponent = ({ navigation }) => {
   const route = useRoute();
-  const { token, usertype } = route.params;
+  const { usertype } = route.params;
 
   const [loading, setLoading] = useState(true);
 
@@ -21,6 +22,16 @@ const RequestReceiverComponent = ({ navigation }) => {
 
   const fetchRequests = async (status, setStateFunction, url) => {
     try {
+      const tokenRefreshed = await TokenService.refreshAccessToken();
+
+      if (!tokenRefreshed) {
+        console.log('Token refresh failed, not retrying fetch.');
+        
+        return;
+      }
+
+      const token = await TokenService.getAccessToken();
+
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -60,7 +71,7 @@ const RequestReceiverComponent = ({ navigation }) => {
       }, 2000);
 
       return () => clearInterval(intervalId);
-    }, [token])
+    }, [])
   );
 
   
@@ -72,7 +83,6 @@ const RequestReceiverComponent = ({ navigation }) => {
             key={request.requestID}
             requestID={request.requestID}
             requestData={request}
-            token={token}
             usertype={usertype}
             navigation={navigation}
           />
@@ -84,7 +94,6 @@ const RequestReceiverComponent = ({ navigation }) => {
             key={request.requestID}
             requestID={request.requestID}
             requestData={request}
-            token={token}
             usertype={usertype}
             navigation={navigation}
           />

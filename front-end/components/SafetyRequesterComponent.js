@@ -20,11 +20,12 @@ import { useNavigation } from "@react-navigation/native";
 import debounce from "lodash.debounce"; 
 import MapView, {Marker} from 'react-native-maps';
 import * as Location from 'expo-location';
+import * as TokenService from '../services/tokenService';
 
 const SafetyRequesterComponent = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { token, usertype } = route.params;
+  const { usertype } = route.params;
 
   // this is for the dropdown list of locations, requests feature
   const [locationList, setLocationList] = useState([]); // Store location options
@@ -100,6 +101,16 @@ const SafetyRequesterComponent = () => {
   
     const fetchFilteredLocations = async (url, setList) => {
       try {
+        const tokenRefreshed = await TokenService.refreshAccessToken();
+
+        if (!tokenRefreshed) {
+          console.log('Token refresh failed, not retrying fetch.');
+          
+          return;
+        }
+
+        const token = await TokenService.getAccessToken();
+
         const response = await fetch(url, {
           method: "GET",
           headers: {
@@ -223,6 +234,16 @@ const SafetyRequesterComponent = () => {
 
   const fetchLocationList = async () => {
     try {
+      const tokenRefreshed = await TokenService.refreshAccessToken();
+
+      if (!tokenRefreshed) {
+        console.log('Token refresh failed, not retrying fetch.');
+        
+        return;
+      }
+
+      const token = await TokenService.getAccessToken();
+
       const response = await fetch("http://localhost:8085/option/location/all", {
         method: "GET",
         headers: {
@@ -240,29 +261,39 @@ const SafetyRequesterComponent = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchRequestList = async () => {
-      try {
-        const response = await fetch("http://localhost:8085/option/request/all", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setRequestList(data);
-        } else {
-          Alert.alert("Error", "Failed to fetch locations list");
-        }
-      } catch (error) {
-        Alert.alert("Error", "An error occurred while fetching locations list.");
-      }
-    };
+  const fetchRequestList = async () => {
+    try {
+      const tokenRefreshed = await TokenService.refreshAccessToken();
 
+      if (!tokenRefreshed) {
+        console.log('Token refresh failed, not retrying fetch.');
+        
+        return;
+      }
+
+      const token = await TokenService.getAccessToken();
+
+      const response = await fetch("http://localhost:8085/option/request/all", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setRequestList(data);
+      } else {
+        Alert.alert("Error", "Failed to fetch locations list");
+      }
+    } catch (error) {
+      Alert.alert("Error", "An error occurred while fetching locations list.");
+    }
+  };
+
+  useEffect(() => {
     fetchLocationList();
     fetchRequestList();
-  }, [token]);
+  }, []);
 
 
   const onChangeDate = (event, selectedDate) => {
@@ -294,6 +325,16 @@ const SafetyRequesterComponent = () => {
     };
 
     try {
+      const tokenRefreshed = await TokenService.refreshAccessToken();
+
+      if (!tokenRefreshed) {
+        console.log('Token refresh failed, not retrying fetch.');
+        
+        return;
+      }
+
+      const token = await TokenService.getAccessToken();
+
       const response = await fetch("http://localhost:8085/request", {
         method: "POST",
         headers: {

@@ -6,21 +6,19 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  TextInput,
-  ScrollView,
 } from "react-native";
 import Entypo from "@expo/vector-icons/Entypo";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
-const BottomNavigationBarComponent = ({ usertype, token }) => {
+const BottomNavigationBarComponent = ({ usertype }) => {
   const navigation = useNavigation();
   const route = useRoute(); // To get the current route name
 
   const handleNavigation = (screen) => {
     if (route.name !== screen) {
       // Check if we're already on the target screen
-      navigation.navigate(screen, { token, usertype });
+      navigation.navigate(screen, { usertype });
     }
   };
   return (

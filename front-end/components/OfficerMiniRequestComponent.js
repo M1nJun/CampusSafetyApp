@@ -1,25 +1,31 @@
 import React from "react";
 import { theme } from "../colors";
 import {
-  StyleSheet,
   View,
   Text,
-  Image,
   TouchableOpacity,
-  TextInput,
-  ScrollView,
 } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useEffect, useState } from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import styles from "../styles";
+import * as TokenService from '../services/tokenService';
 
-const OfficerMiniRequestComponent = ({ requestID, requestData, usertype, token, navigation }) => {
+const OfficerMiniRequestComponent = ({ requestID, requestData, usertype, navigation }) => {
   const [requestDetails, setRequestDetails] = useState(requestData);
 
   // Optional: If you need to refetch data by requestID
   const fetchRequestData = async () => {
     try {
+      const tokenRefreshed = await TokenService.refreshAccessToken();
+
+      if (!tokenRefreshed) {
+        console.log('Token refresh failed, not retrying fetch.');
+        
+        return;
+      }
+
+      const token = await TokenService.getAccessToken();
+
       const response = await fetch(
         `http://localhost:8085/request/${requestID}`,
         {
@@ -60,7 +66,7 @@ const OfficerMiniRequestComponent = ({ requestID, requestData, usertype, token, 
       style={{ backgroundColor: "white", borderRadius: 15, marginBottom: 17, paddingBottom: 7, borderWidth: 6, borderColor: borderColor,}}
       onPress={() =>
         //works the same for officer and driver. So we'll leave it like this for now.
-        navigation.navigate("RequestView", { usertype, token, requestID })
+        navigation.navigate("RequestView", { usertype, requestID })
       }
     >
       <View

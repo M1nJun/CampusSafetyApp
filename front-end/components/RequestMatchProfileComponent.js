@@ -12,14 +12,25 @@ import React, { useEffect, useState } from "react";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { openURL, canOpenURL } from 'expo-linking';
 import MiniProfileComponent from "./MiniProfileComponent";
+import * as TokenService from '../services/tokenService';
 
-const RequestMatchProfileComponent = ({ token, usertype, nameToShow, profileToShow }) => {
+const RequestMatchProfileComponent = ({ usertype, nameToShow, profileToShow }) => {
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false); // State to control the modal visibility
 
   const fetchProfileData = async () => {
     try {
+      const tokenRefreshed = await TokenService.refreshAccessToken();
+
+      if (!tokenRefreshed) {
+        console.log('Token refresh failed, not retrying fetch.');
+        
+        return;
+      }
+
+      const token = await TokenService.getAccessToken();
+
       const response = await fetch(
         `http://localhost:8085/user/profile/${profileToShow}`,
         {

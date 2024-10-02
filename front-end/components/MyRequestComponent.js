@@ -4,10 +4,11 @@ import { useFocusEffect, useRoute } from "@react-navigation/native";
 import { useCallback } from "react";
 import UserMiniRequestComponent from "./UserMiniRequestComponent";
 import LottieView from "lottie-react-native";
+import * as TokenService from '../services/tokenService';
 
 const MyRequestComponent = ({ navigation }) => {
   const route = useRoute();
-  const { token, usertype } = route.params;
+  const { usertype } = route.params;
 
   const [pendingRequests, setPendingRequests] = useState([]);
   const [acceptedRequests, setAcceptedRequests] = useState([]);
@@ -17,6 +18,16 @@ const MyRequestComponent = ({ navigation }) => {
   // Fetch request data by status
   const fetchRequests = async (status, setStateFunction, url) => {
     try {
+      const tokenRefreshed = await TokenService.refreshAccessToken();
+
+      if (!tokenRefreshed) {
+        console.log('Token refresh failed, not retrying fetch.');
+        
+        return;
+      }
+      
+      const token = await TokenService.getAccessToken();
+
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -76,7 +87,7 @@ const MyRequestComponent = ({ navigation }) => {
       }, 10000);
 
       return () => clearInterval(intervalId);
-    }, [token])
+    }, [])
   );
 
   if (loading) {
@@ -106,28 +117,25 @@ const MyRequestComponent = ({ navigation }) => {
         data={pendingRequests}
         navigation={navigation}
         usertype={usertype}
-        token={token}
       />
       <Section
         title="Accepted Requests"
         data={acceptedRequests}
         navigation={navigation}
         usertype={usertype}
-        token={token}
       />
       <Section
         title="Past Requests"
         data={completedRequests}
         navigation={navigation}
         usertype={usertype}
-        token={token}
       />
     </ScrollView>
   );
 };
 
 // Section component to handle rendering of each request type
-const Section = React.memo(({ title, data, navigation, usertype, token }) => {
+const Section = React.memo(({ title, data, navigation, usertype }) => {
   return (
     <>
       <Text
@@ -152,7 +160,6 @@ const Section = React.memo(({ title, data, navigation, usertype, token }) => {
             requestType={request.requestType}
             requestID={request.requestID}
             reserved={request.reserved}
-            token={token}
           />
         ))
       )}

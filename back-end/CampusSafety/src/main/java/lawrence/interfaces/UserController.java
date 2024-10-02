@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<String> save(@RequestBody UserDTO user) {
+    public ResponseEntity<Object> save(@RequestBody UserDTO user) {
         if (user.getUsername().isBlank() || user.getPassword().isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Empty user name or password");
         }
@@ -50,8 +50,15 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Can not generate key");
         }
         String token = jwtService.makeJwt(key);
+        String usertype = user.getUsertype();
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(UUID.fromString(key));
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(token);
+        JwtResponseDTO responseDTO = JwtResponseDTO.builder()
+                .accessToken(token)
+                .refreshToken(refreshToken.getToken())
+                .userType(usertype).build();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     @PostMapping("/newcode")

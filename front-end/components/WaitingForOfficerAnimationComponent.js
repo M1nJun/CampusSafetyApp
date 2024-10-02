@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 import styles from "../styles";
 import { useNavigation } from "@react-navigation/native";
 import { useRoute, useFocusEffect } from "@react-navigation/native";
-import UserRequestViewComponent from "../components/UserRequestViewComponent";
 import LottieView from "lottie-react-native";
+import * as TokenService from '../services/tokenService';
 
 const WaitingForOfficerAnimationComponent = () => {
-    const route = useRoute();
+  const route = useRoute();
   const navigation = useNavigation();
-  const { token, requestID, requestType } = route.params;
+  const { requestID, requestType } = route.params;
 
   const [status, setStatus] = useState("pending");
 
@@ -21,6 +21,16 @@ const WaitingForOfficerAnimationComponent = () => {
 
   const fetchStatus = async () => {
     try {
+      const tokenRefreshed = await TokenService.refreshAccessToken();
+
+      if (!tokenRefreshed) {
+        console.log('Token refresh failed, not retrying fetch.');
+        
+        return;
+      }
+
+      const token = await TokenService.getAccessToken();
+
       const response = await fetch(
         `http://localhost:8085/request/${requestID}/status`,
         {
@@ -54,7 +64,7 @@ const WaitingForOfficerAnimationComponent = () => {
       }, 5000);
 
       return () => clearInterval(intervalId);
-    }, [token])
+    }, [])
   );
 
   return (
