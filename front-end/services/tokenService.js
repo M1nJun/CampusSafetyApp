@@ -11,9 +11,9 @@ const storeTokens = async (accessToken, refreshToken) => {
     await AsyncStorage.setItem('accessToken', accessToken);
     await AsyncStorage.setItem('refreshToken', refreshToken);
 
-    console.log('Tokens stored successfully:');
-    console.log('Access Token:', accessToken);
-    console.log('Refresh Token:', refreshToken);
+    // console.log('Tokens stored successfully:');
+    // console.log('Access Token:', accessToken);
+    // console.log('Refresh Token:', refreshToken);
 
     // Start a timer to refresh the token after 14 minutes
     scheduleTokenRefresh();
@@ -27,7 +27,7 @@ const storeUserType = async (userType) => {
   try {
     await AsyncStorage.setItem('userType', userType);
 
-    console.log('User Type:', userType);
+    // console.log('User Type:', userType);
   } catch (error) {
     console.error('Error storing usertype', error);
   }
@@ -98,7 +98,7 @@ const refreshAccessToken = async () => {
       return false;
     }
 
-    console.log('Sending refresh token to the server...');
+    // console.log('Sending refresh token to the server...');
 
     const response = await fetch('http://localhost:8085/user/refreshToken', {
       method: 'POST',
@@ -123,25 +123,20 @@ const refreshAccessToken = async () => {
       return false;
     }
 
-    console.log('Access token refreshed successfully:', data);
+    // console.log('Access token refreshed successfully:', data);
     const { accessToken, refreshToken: newRefreshToken, userType } = data; // Rename to avoid shadowing
 
     // Log new tokens for debugging
-    console.log('Access Token:', accessToken);
-    console.log('Refresh Token:', newRefreshToken);
-    console.log('User Type:', userType);
+    // console.log('Access Token:', accessToken);
+    // console.log('Refresh Token:', newRefreshToken);
+    // console.log('User Type:', userType);
 
     // Store new access token and navigate to home
     await storeTokens(accessToken, newRefreshToken);
     await storeUserType(userType);
-    console.log('New tokens stored. UserType Stored.');
+    // console.log('New tokens stored. UserType Stored.');
     return true;
 
-    // if (userType === "Student") {
-    //   navigate('StudentHome', { token: accessToken, usertype: userType });
-    // } else {
-    //   navigate('OfficerHome', { token: accessToken, usertype: userType });
-    // }
 
   } catch (error) {
     console.error('Failed to refresh access token', error);

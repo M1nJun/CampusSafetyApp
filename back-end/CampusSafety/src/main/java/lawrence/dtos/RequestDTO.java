@@ -17,6 +17,7 @@ public class RequestDTO {
     private String destination;
     private String message;
     private String requestStatus;
+    private String cancellationDetails;
     private Boolean reserved;
     private LocalDateTime reservationDue;
 
@@ -35,6 +36,7 @@ public class RequestDTO {
         location = core.getLocation();
         destination = core.getDestination();
         requestStatus = core.getRequestStatus();
+        cancellationDetails = core.getCancellationDetails();
         reserved = core.getReserved();
         reservationDue = core.getReservationDue();
     }

@@ -29,6 +29,7 @@ public class Request {
     private String destination;
     private String message;
     private String requestStatus;
+    private String cancellationDetails;
     private Boolean reserved;
     private LocalDateTime reservationDue;
 
@@ -72,8 +73,9 @@ public class Request {
         this.lastModifiedDate = LocalDateTime.now();
     }
 
-    public void cancelRequest() {
+    public void cancelRequest(String reason) {
         this.requestStatus = "canceled";
+        this.cancellationDetails = reason;
         this.lastModifiedDate = LocalDateTime.now();
     }
 
@@ -187,5 +189,13 @@ public class Request {
 
     public void setDestination(String destination) {
         this.destination = destination;
+    }
+
+    public String getCancellationDetails() {
+        return cancellationDetails;
+    }
+
+    public void setCancellationDetails(String cancellationDetails) {
+        this.cancellationDetails = cancellationDetails;
     }
 }

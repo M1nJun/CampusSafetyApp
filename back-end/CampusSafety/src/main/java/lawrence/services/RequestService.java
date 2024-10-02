@@ -202,7 +202,7 @@ public class RequestService {
         return "Request completed and receiver marked as not busy";
     }
 
-    public String cancelRequest(UUID cancelerID, Integer requestID) {
+    public String cancelRequest(UUID cancelerID, Integer requestID, String reason) {
         Optional<User> maybeCanceler = userRepository.findById(cancelerID);
         if (!maybeCanceler.isPresent()) {
             return "Canceler not found";
@@ -220,7 +220,7 @@ public class RequestService {
             request.setReceiver(canceler);
         }
 
-        request.cancelRequest();
+        request.cancelRequest(reason);
         requestRepository.save(request);
 
         return "Request successfully canceled";

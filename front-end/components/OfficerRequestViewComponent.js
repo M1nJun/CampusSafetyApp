@@ -1,4 +1,3 @@
-import { theme } from "../colors";
 import {
   View,
   Text,
@@ -11,7 +10,6 @@ import {
 } from "react-native";
 import styles from "../styles";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import React, { useEffect, useState, useRef } from "react";
 import { useRoute, useNavigation } from "@react-navigation/native";
@@ -59,6 +57,8 @@ const OfficerRequestViewComponent = () => {
       return;
     }
 
+    console.log(cancelReason);
+
     try {
       // need to do something with the reason of cancellation.
       // await handleDecisionOnRequest("cancel", cancelReason);
@@ -72,7 +72,7 @@ const OfficerRequestViewComponent = () => {
   };
 
   const handleDecisionOnRequest = async (decision) => {
-    if (receiverName === "") {
+    if (decision === "accept" && receiverName === "") {
       shakeButton()
       return;
     }
@@ -80,7 +80,11 @@ const OfficerRequestViewComponent = () => {
     decision === "accept"? setRequestStatus("accepted") : setRequestStatus("completed")
     const url = decision === "accept"
       ? `http://localhost:8085/request/${decision}?requestID=${requestID}&receiverName=${receiverName}`
+      : decision === "cancel"
+      ? `http://localhost:8085/request/${decision}?requestID=${requestID}&reason=${cancelReason}`
       : `http://localhost:8085/request/${decision}?requestID=${requestID}`;
+
+    console.log(cancelReason);
   
     try {
       const tokenRefreshed = await TokenService.refreshAccessToken();
@@ -535,7 +539,7 @@ const OfficerRequestViewComponent = () => {
             <TextInput
               placeholder="Enter reason for cancellation"
               value={cancelReason}
-              onChangeText={setCancelReason}
+              onChangeText={(text) => setCancelReason(text)}
               style={{
                 height: 100,
                 borderColor: "gray",

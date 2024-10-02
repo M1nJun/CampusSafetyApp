@@ -44,7 +44,6 @@ public class RequestController  {
         return ResponseEntity.ok().body(result);
     }
 
-
     // should update this so that it only returns the list of ids.
     // need to make a method that searches all the request made by the user that is reserved and in pending status.
     @GetMapping("/self/pending/all")
@@ -192,12 +191,12 @@ public class RequestController  {
     }
 
     @PostMapping("/cancel")
-    public ResponseEntity<String> cancelRequest(Authentication authentication, @RequestParam Integer requestID) {
+    public ResponseEntity<String> cancelRequest(Authentication authentication, @RequestParam Integer requestID, @RequestParam String reason) {
         CampusSafetyUserDetails details = (CampusSafetyUserDetails) authentication.getPrincipal();
         UUID cancelerID = UUID.fromString(details.getUsername());
         // as of right now, I just set it up so that the person who canceled it is not important
         // working on the student cancellation tho.
-        String response = rs.cancelRequest(cancelerID, requestID);
+        String response = rs.cancelRequest(cancelerID, requestID, reason);
         if (response.equals("Request successfully canceled")) {
             return ResponseEntity.ok(response);
         } else {
