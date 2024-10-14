@@ -17,7 +17,6 @@ import RequestMatchProfileComponent from "./RequestMatchProfileComponent"
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import * as TokenService from '../services/tokenService';
-import AnimatedMapRegion from "react-native-maps/lib/AnimatedRegion";
 
 const OfficerRequestViewComponent = () => {
   const route = useRoute();
@@ -57,7 +56,6 @@ const OfficerRequestViewComponent = () => {
       return;
     }
 
-    console.log(cancelReason);
 
     try {
       // need to do something with the reason of cancellation.
@@ -83,8 +81,6 @@ const OfficerRequestViewComponent = () => {
       : decision === "cancel"
       ? `http://localhost:8085/request/${decision}?requestID=${requestID}&reason=${cancelReason}`
       : `http://localhost:8085/request/${decision}?requestID=${requestID}`;
-
-    console.log(cancelReason);
   
     try {
       const tokenRefreshed = await TokenService.refreshAccessToken();

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Alert } from "react-native";
+import { View, Text, TouchableOpacity, Alert, Modal, TextInput } from "react-native";
 import styles from "../styles";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -16,7 +16,16 @@ const UserRequestViewComponent = () => {
   const [requestData, setRequestData] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const [modalVisible, setModalVisible] = useState(false);
+  const [cancelReason, setCancelReason] = useState("");
+
   const cancelRequest = async () => {
+
+    if (!cancelReason.trim()) {
+      Alert.alert("Error", "Please provide a reason for cancellation.");
+      return;
+    }
+    
     try {
       const tokenRefreshed = await TokenService.refreshAccessToken();
 
@@ -29,7 +38,7 @@ const UserRequestViewComponent = () => {
       const token = await TokenService.getAccessToken();
 
       const response = await fetch(
-        `http://localhost:8085/request/cancel?requestID=${requestID}`,
+        `http://localhost:8085/request/cancel?requestID=${requestID}&reason=${cancelReason}`,
         {
           method: "POST",
           headers: {
@@ -308,7 +317,13 @@ const UserRequestViewComponent = () => {
             paddingBottom: 20,
           }}
         >
-          <TouchableOpacity style={styles.blueBtn} onPress={cancelRequest}>
+          <TouchableOpacity style={styles.blueBtn} onPress={async () => {
+              try {
+                setModalVisible(true);
+              } catch (error) {
+                Alert.alert("Error", "Failed to cancel the request.");
+              }
+            }}>
             <Text style={styles.blueBtnText}>Cancel this Request</Text>
           </TouchableOpacity>
         </View>
@@ -330,6 +345,113 @@ const UserRequestViewComponent = () => {
             {requestData.requestStatus}
         </Text>
       </View>)}
+
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0,0,0,0.5)",
+          }}
+        >
+          <View
+            style={{
+              width: "80%",
+              backgroundColor: "white",
+              borderRadius: 20,
+              padding: 20,
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.25,
+              shadowRadius: 4,
+              elevation: 5,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 23,
+                fontWeight: "bold",
+                marginBottom: 20,
+              }}
+            >
+              Cancel Request
+            </Text>
+
+            <TextInput
+              placeholder="Enter reason for cancellation"
+              value={cancelReason}
+              onChangeText={(text) => setCancelReason(text)}
+              style={{
+                height: 100,
+                borderColor: "gray",
+                borderWidth: 1,
+                borderRadius: 10,
+                padding: 10,
+                textAlignVertical: "top",
+                marginBottom: 20,
+                fontSize: 17,
+              }}
+              multiline
+            />
+
+            {/* Submit and Close Buttons */}
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => setModalVisible(false)}
+                style={{
+                  backgroundColor: "red",
+                  padding: 10,
+                  borderRadius: 10,
+                }}
+              >
+                <Text
+                  style={{
+                    color: "white",
+                    fontWeight: "600",
+                    fontSize: 17,
+                    textAlign: "center",
+                  }}
+                >
+                  Close
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={cancelRequest}
+                style={{
+                  backgroundColor: "black",
+                  padding: 10,
+                  borderRadius: 10,
+                }}
+              >
+                <Text
+                  style={{
+                    color: "white",
+                    fontWeight: "600",
+                    fontSize: 17,
+                    textAlign: "center",
+                  }}
+                >
+                  Submit
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
     </View>
   );
 };
