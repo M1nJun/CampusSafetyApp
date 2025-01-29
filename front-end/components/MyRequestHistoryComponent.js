@@ -52,7 +52,7 @@ const MyRequestHistoryComponent = ({ navigation }) => {
       fetchRequests(
         "completed",
         setCompletedRequests,
-        "http://localhost:8085/request/officer/self/completed/canceled/all"
+        "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/officer/self/completed/canceled/all"
       );
       setLoading(false);
 
@@ -60,7 +60,7 @@ const MyRequestHistoryComponent = ({ navigation }) => {
         fetchRequests(
           "completed",
           setCompletedRequests,
-          "http://localhost:8085/request/officer/self/completed/canceled/all"
+          "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/officer/self/completed/canceled/all"
         );
       }, 10000);
 

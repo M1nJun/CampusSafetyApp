@@ -4,7 +4,9 @@ import {
   TouchableOpacity,
   Alert,
   TextInput,
-  Animated
+  Animated,
+  KeyboardAvoidingView,
+  Platform
 } from "react-native";
 import React from "react";
 import styles from "../styles";
@@ -34,7 +36,7 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch("http://localhost:8085/user/login", {
+      const response = await fetch("http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/user/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -72,7 +74,7 @@ export default function LoginScreen() {
         // handle when user is not verified yet
         try {
           const newCodeResponse = await fetch(
-            "http://localhost:8085/user/newcode",
+            "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/user/newcode",
             {
               method: "POST",
               headers: {
@@ -101,60 +103,66 @@ export default function LoginScreen() {
     }
   };
   return (
-    <View style={{ ...styles.container, alignItems: "center" }}>
-      <Text style={styles.header}>Login Screen</Text>
-      <View style={styles.widthControll}>
-        <TextInput
-          placeholder="Email"
-          placeholderTextColor="gray"
-          autoCapitalize="none"
-          style={styles.input}
-          value={email}
-          onChangeText={setEmail}
-        ></TextInput>
-      </View>
-      <View style={styles.widthControll}>
-        <TextInput
-          placeholder="Password"
-          placeholderTextColor="gray"
-          autoCapitalize="none"
-          style={styles.input}
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        ></TextInput>
-      </View>
-      {loginError ? (
-        <Animated.Text
-          style={{
-            alignSelf: "left",
-            marginLeft: 22,
-            color: "white",
-            fontSize: 14,
-            transform: [{ translateX: shakeAnimation }],
-          }}
-        >
-          {loginError}
-        </Animated.Text>
-      ) : null}
-      <Animated.View style={{...styles.widthControll, transform: [{ translateX: shakeAnimation }]}}>
-        <TouchableOpacity style={styles.blueBtn} onPress={handleLogin}>
-          <Text style={styles.blueBtnText}>Login</Text>
-        </TouchableOpacity>
-      </Animated.View>
-      <View style={styles.signUp}>
-        <Text style={{ color: "white", fontWeight: "500" }}>
-          Don't have an account?{" "}
-        </Text>
-        <TouchableOpacity>
-          <Text
-            style={{ color: "#0284C7", fontWeight: "600" }}
-            onPress={() => navigation.push("SignUp")}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      <View style={{ ...styles.container, alignItems: "center" }}>
+        <Text style={styles.header}>Login Screen</Text>
+        <View style={styles.widthControll}>
+          <TextInput
+            placeholder="Email"
+            placeholderTextColor="gray"
+            autoCapitalize="none"
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+          ></TextInput>
+        </View>
+        <View style={styles.widthControll}>
+          <TextInput
+            placeholder="Password"
+            placeholderTextColor="gray"
+            autoCapitalize="none"
+            style={styles.input}
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          ></TextInput>
+        </View>
+        {loginError ? (
+          <Animated.Text
+            style={{
+              alignSelf: "left",
+              marginLeft: 22,
+              color: "white",
+              fontSize: 14,
+              transform: [{ translateX: shakeAnimation }],
+            }}
           >
-            SignUp
+            {loginError}
+          </Animated.Text>
+        ) : null}
+        <Animated.View style={{...styles.widthControll, transform: [{ translateX: shakeAnimation }]}}>
+          <TouchableOpacity style={styles.blueBtn} onPress={handleLogin}>
+            <Text style={styles.blueBtnText}>Login</Text>
+          </TouchableOpacity>
+        </Animated.View>
+        <View style={styles.signUp}>
+          <Text style={{ color: "white", fontWeight: "500" }}>
+            Don't have an account?{" "}
           </Text>
-        </TouchableOpacity>
+          <TouchableOpacity>
+            <Text
+              style={{ color: "#0284C7", fontWeight: "600" }}
+              onPress={() => navigation.push("SignUp")}
+            >
+              SignUp
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
+    
   );
 }

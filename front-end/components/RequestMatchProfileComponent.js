@@ -6,6 +6,7 @@ import {
   TextInput,
   Modal,
   Alert,
+  Linking
 } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import React, { useEffect, useState } from "react";
@@ -32,7 +33,7 @@ const RequestMatchProfileComponent = ({ usertype, nameToShow, profileToShow }) =
       const token = await TokenService.getAccessToken();
 
       const response = await fetch(
-        `http://localhost:8085/user/profile/${profileToShow}`,
+        `http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/user/profile/${profileToShow}`,
         {
           method: 'GET',
           headers: {
@@ -65,6 +66,17 @@ const RequestMatchProfileComponent = ({ usertype, nameToShow, profileToShow }) =
 
     if (supported) {
       openURL(phoneNumber);
+    } else {
+      Alert.alert("Error", "Your device doesn't support this feature.");
+    }
+  };
+
+  const handleMessageIconPress = async () => {
+    const phoneNumber = `sms:${profileData.phone}`;
+    const supported = await Linking.canOpenURL(phoneNumber);
+  
+    if (supported) {
+      Linking.openURL(phoneNumber);
     } else {
       Alert.alert("Error", "Your device doesn't support this feature.");
     }
@@ -123,7 +135,9 @@ const RequestMatchProfileComponent = ({ usertype, nameToShow, profileToShow }) =
           </View>
         </TouchableOpacity>
         <View style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center' }}>
-          <TouchableOpacity style={{ marginRight: 15, backgroundColor: '#e2eafc', borderRadius: 20, paddingHorizontal: 8, paddingVertical: 8 }}>
+          <TouchableOpacity
+            style={{ marginRight: 15, backgroundColor: '#e2eafc', borderRadius: 20, paddingHorizontal: 8, paddingVertical: 8 }}
+            onPress={handleMessageIconPress}>
             <MaterialIcons name="message" size={25} color="#00a6fb" />
           </TouchableOpacity>
           <TouchableOpacity

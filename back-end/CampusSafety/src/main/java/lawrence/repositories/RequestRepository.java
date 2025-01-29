@@ -3,10 +3,12 @@ package lawrence.repositories;
 import lawrence.entities.Request;
 import lawrence.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.UUID;
 
+@Repository
 public interface RequestRepository extends JpaRepository<Request, Integer> {
     List<Request> findByReservedAndRequestStatus(Boolean reserved, String requestStatus);
     List<Request> findByRequestTypeAndReservedAndRequestStatus(String requestType, Boolean reserved, String requestStatus);

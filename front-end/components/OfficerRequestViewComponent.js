@@ -6,7 +6,10 @@ import {
   ScrollView,
   Alert,
   Animated,
-  Modal
+  Modal,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard
 } from "react-native";
 import styles from "../styles";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -77,10 +80,10 @@ const OfficerRequestViewComponent = () => {
 
     decision === "accept"? setRequestStatus("accepted") : setRequestStatus("completed")
     const url = decision === "accept"
-      ? `http://localhost:8085/request/${decision}?requestID=${requestID}&receiverName=${receiverName}`
+      ? `http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/${decision}?requestID=${requestID}&receiverName=${receiverName}`
       : decision === "cancel"
-      ? `http://localhost:8085/request/${decision}?requestID=${requestID}&reason=${cancelReason}`
-      : `http://localhost:8085/request/${decision}?requestID=${requestID}`;
+      ? `http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/${decision}?requestID=${requestID}&reason=${cancelReason}`
+      : `http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/${decision}?requestID=${requestID}`;
   
     try {
       const tokenRefreshed = await TokenService.refreshAccessToken();
@@ -123,7 +126,7 @@ const OfficerRequestViewComponent = () => {
 
       const token = await TokenService.getAccessToken();
 
-      const response = await fetch("http://localhost:8085/option/officer/driver/all", {
+      const response = await fetch("http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/option/officer/driver/all", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -159,7 +162,7 @@ const OfficerRequestViewComponent = () => {
         const token = await TokenService.getAccessToken();
         
         const response = await fetch(
-          `http://localhost:8085/request/${requestID}`,
+          `http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/${requestID}`,
           {
             method: "GET",
             headers: {
@@ -221,386 +224,395 @@ const OfficerRequestViewComponent = () => {
   }
 
   return (
-    <View style={{ backgroundColor: "white", borderRadius: 15, paddingBottom:15, marginBottom: 40 }}>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          paddingTop: 20,
-          paddingBottom: 20,
-          paddingLeft: 20,
-        }}
-      >
-        <Text
-          style={{
-            fontSize: 25,
-            fontWeight: "700",
-          }}
-        >
-          {requestData.requestType === "ride"
-            ? "Ride Request"
-            : "Safety Request"}
-        </Text>
-        {requestData.requestType === "ride" ? (
-          // <FontAwesome6 name="bus" size={37} color="black" style={{ marginRight: 20 }} />
-          <FontAwesome5 name="car" size={37} color="black" style={{ marginRight: 20 }} />
-        ) : (
-          <MaterialCommunityIcons
-            name="shield-check"
-            size={37}
-            color="black"
-            style={{ paddingRight: 20 }}
-          />
-        )}
-      </View>
-
-      <RequestMatchProfileComponent
-        usertype={usertype}
-        profileToShow={usertype === "Student" || usertype === "Faculty" 
-          ? requestData.receiver 
-          : requestData.requester} 
-      />
-
-      {requestData.requestType === "ride" ? (
-        <View style={{paddingLeft:20}}>
-          <Text style={{
-            fontSize: 18,
-            fontWeight: "600",
-            marginVertical: 4,
-            }}>Destination:
-          </Text>
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: "400",
-              marginBottom: 12,
-            }}
-          >
-            {requestData.destination}
-          </Text>
-        </View>
-      ): null}
-
-      <View style={{paddingLeft:20}}>
-        <Text style={{
-            fontSize: 18,
-            fontWeight: "600",
-            marginVertical: 4,
-            }}>Location:
-        </Text>
-        <Text
-            style={{
-              fontSize: 16,
-              fontWeight: "400",
-              marginBottom: 12,
-            }}
-          >
-            {requestData.location}
-        </Text>
-      </View>
-      
-      <View style={{paddingLeft:20}}>
-        <Text style={{
-            fontSize: 18,
-            fontWeight: "600",
-            marginVertical: 4,
-            }}>{requestData.requestType === "ride"? "Message to driver" : "Message to officer"}:
-        </Text>
-        <Text
-            style={{
-              fontSize: 16,
-              fontWeight: "400",
-              marginBottom: 12,
-            }}
-          >
-            {requestData.message}
-        </Text>
-      </View>
-
-      {requestData.reserved? (
-      <View style={{paddingLeft:20}}>
-        <Text style={{
-            fontSize: 18,
-            fontWeight: "600",
-            marginVertical: 4,
-            }}>Reserved at:
-        </Text>
-        <Text
-            style={{
-              fontSize: 16,
-              fontWeight: "400",
-              marginBottom: 12,
-            }}
-          >
-            {new Date(requestData.reservationDue).toLocaleString()}
-        </Text>
-      </View>): null}
-
-      <View style={{paddingLeft:20}}>
-        <Text style={{
-            fontSize: 18,
-            fontWeight: "600",
-            marginVertical: 4,
-            }}>Request made on:
-        </Text>
-        <Text
-            style={{
-              fontSize: 16,
-              fontWeight: "400",
-              marginBottom: 12,
-            }}
-          >
-            {new Date(requestData.requestDate).toLocaleString("en-US", {
-              hour: "numeric",
-              minute: "numeric",
-              hour12: true,
-              weekday: "short",
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            })}
-        </Text>
-      </View>
-      
-      {requestStatus === "pending"? (
-        <Animated.View style={{ ...styles.widthControll, marginTop: 10, transform: [{ translateX: shakeAnimation }] }}>
-          <TextInput
-            placeholder="Officer/Driver Name"
-            placeholderTextColor="gray"
-            autoCapitalize="none"
-            value={receiverName}
-            onChangeText={(text) => {
-              setReceiverName(text)
-            }}
-            onFocus={() => setShowNameDropdown(true)}
-            style={{
-              paddingVertical: 11,
-              paddingLeft: 15,
-              borderRadius: 10,
-              fontSize: 17,
-              marginLeft: 20,
-              flex: 0.65,
-              backgroundColor: "white",
-              fontWeight: "600",
-              color: "black",
-              borderColor:"black",
-              borderWidth: 2
-            }}
-          ></TextInput>
-        </Animated.View>
-      ): null}
-
-      {showNameDropdown && (
-        <View style={{...styles.widthControll, justifyContent:"flex-start"}}>
-          <View style={{flex:0.9}}>
-            <ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
-              {nameList.map((nameData) => (
-                <TouchableOpacity style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} key={nameData.OfficerDriverOptionID} onPress={() => {
-                  setReceiverName(`${nameData.firstname} ${nameData.lastname}`);
-                  setShowNameDropdown(false);
-                }}>
-                  {nameData.type === "Officer" ? (<MaterialIcons name="local-police" size={24} color="black" style={{paddingRight:5}}/>) : (<FontAwesome6 name="bus" size={22} color="black" style={{paddingRight:5}}/>)}
-                  <Text style={{color:"black", fontSize: 16, fontWeight:"500"}}>{`${nameData.firstname} ${nameData.lastname}`}</Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          </View>
-        </View>
-      )}
-
-
-      
-      {/* we don't need the cancel, complete buttons if it is alreayd canceled and completed */}
-      {requestStatus === "pending" || requestStatus === "accepted" ? (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      <ScrollView style={{ backgroundColor: "white", borderRadius: 15, paddingBottom:15, marginBottom: 40, maxHeight: 600 }}>
         <View
           style={{
-            ...styles.widthControll,
+            flexDirection: "row",
             justifyContent: "space-between",
-            marginBottom:5
+            paddingTop: 20,
+            paddingBottom: 20,
+            paddingLeft: 20,
           }}
         >
-          <TouchableOpacity
-            onPress={async () => {
-              try {
-                setModalVisible(true);
-              } catch (error) {
-                Alert.alert("Error", "Failed to cancel the request.");
-              }
-            }}
+          <Text
             style={{
-              ...styles.blueBtn,
-              backgroundColor: "black",
-              flex: 0.4,
-              borderRadius: 17,
-              marginLeft: 20,
+              fontSize: 25,
+              fontWeight: "700",
             }}
           >
-            <Text style={{ ...styles.blueBtnText, paddingVertical: 6 }}>
-              Cancel
+            {requestData.requestType === "ride"
+              ? "Ride Request"
+              : "Safety Request"}
+          </Text>
+          {requestData.requestType === "ride" ? (
+            // <FontAwesome6 name="bus" size={37} color="black" style={{ marginRight: 20 }} />
+            <FontAwesome5 name="car" size={37} color="black" style={{ marginRight: 20 }} />
+          ) : (
+            <MaterialCommunityIcons
+              name="shield-check"
+              size={37}
+              color="black"
+              style={{ paddingRight: 20 }}
+            />
+          )}
+        </View>
+
+        <RequestMatchProfileComponent
+          usertype={usertype}
+          profileToShow={usertype === "Student" || usertype === "Faculty" 
+            ? requestData.receiver 
+            : requestData.requester} 
+        />
+
+        {requestData.requestType === "ride" ? (
+          <View style={{paddingLeft:20}}>
+            <Text style={{
+              fontSize: 18,
+              fontWeight: "600",
+              marginVertical: 4,
+              }}>Destination:
             </Text>
-          </TouchableOpacity>
-          <Animated.View style={{flex:0.4, marginRight: 20, transform: [{ translateX: shakeAnimation }]}}>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "400",
+                marginBottom: 12,
+              }}
+            >
+              {requestData.destination}
+            </Text>
+          </View>
+        ): null}
+
+        <View style={{paddingLeft:20}}>
+          <Text style={{
+              fontSize: 18,
+              fontWeight: "600",
+              marginVertical: 4,
+              }}>Location:
+          </Text>
+          <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "400",
+                marginBottom: 12,
+              }}
+            >
+              {requestData.location}
+          </Text>
+        </View>
+        
+        <View style={{paddingLeft:20}}>
+          <Text style={{
+              fontSize: 18,
+              fontWeight: "600",
+              marginVertical: 4,
+              }}>{requestData.requestType === "ride"? "Message to driver" : "Message to officer"}:
+          </Text>
+          <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "400",
+                marginBottom: 12,
+              }}
+            >
+              {requestData.message}
+          </Text>
+        </View>
+
+        {requestData.reserved? (
+        <View style={{paddingLeft:20}}>
+          <Text style={{
+              fontSize: 18,
+              fontWeight: "600",
+              marginVertical: 4,
+              }}>Reserved at:
+          </Text>
+          <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "400",
+                marginBottom: 12,
+              }}
+            >
+              {new Date(requestData.reservationDue).toLocaleString()}
+          </Text>
+        </View>): null}
+
+        <View style={{paddingLeft:20}}>
+          <Text style={{
+              fontSize: 18,
+              fontWeight: "600",
+              marginVertical: 4,
+              }}>Request made on:
+          </Text>
+          <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "400",
+                marginBottom: 12,
+              }}
+            >
+              {new Date(requestData.requestDate).toLocaleString("en-US", {
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+                weekday: "short",
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })}
+          </Text>
+        </View>
+        
+        {requestStatus === "pending"? (
+          <Animated.View style={{ ...styles.widthControll, marginTop: 10, transform: [{ translateX: shakeAnimation }] }}>
+            <TextInput
+              placeholder="Officer/Driver Name"
+              placeholderTextColor="gray"
+              autoCapitalize="none"
+              value={receiverName}
+              onChangeText={(text) => {
+                setReceiverName(text)
+              }}
+              onFocus={() => {
+                setShowNameDropdown(true);
+                Keyboard.dismiss(); // Immediately hide the keyboard if it opens
+              }}
+              style={{
+                paddingVertical: 11,
+                paddingLeft: 15,
+                borderRadius: 10,
+                fontSize: 17,
+                marginLeft: 20,
+                flex: 0.65,
+                backgroundColor: "white",
+                fontWeight: "600",
+                color: "black",
+                borderColor:"black",
+                borderWidth: 2
+              }}
+            ></TextInput>
+          </Animated.View>
+        ): null}
+
+        {showNameDropdown && (
+          <View style={{...styles.widthControll, justifyContent:"flex-start"}}>
+            <View style={{flex:0.9}}>
+              <ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
+                {nameList.map((nameData) => (
+                  <TouchableOpacity style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} key={nameData.OfficerDriverOptionID} onPress={() => {
+                    setReceiverName(`${nameData.firstname} ${nameData.lastname}`);
+                    setShowNameDropdown(false);
+                  }}>
+                    {nameData.type === "Officer" ? (<MaterialIcons name="local-police" size={24} color="black" style={{paddingRight:5}}/>) : (<FontAwesome6 name="bus" size={22} color="black" style={{paddingRight:5}}/>)}
+                    <Text style={{color:"black", fontSize: 16, fontWeight:"500"}}>{`${nameData.firstname} ${nameData.lastname}`}</Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+          </View>
+        )}
+
+
+        
+        {/* we don't need the cancel, complete buttons if it is alreayd canceled and completed */}
+        {requestStatus === "pending" || requestStatus === "accepted" ? (
+          <View
+            style={{
+              ...styles.widthControll,
+              justifyContent: "space-between",
+              marginBottom:5
+            }}
+          >
             <TouchableOpacity
-              onPress={() => {
-                if (requestStatus === "pending") {
-                  handleDecisionOnRequest("accept");
-                } else if (requestStatus === "accepted") {
-                  handleDecisionOnRequest("complete");
-                  navigation.goBack();
+              onPress={async () => {
+                try {
+                  setModalVisible(true);
+                } catch (error) {
+                  Alert.alert("Error", "Failed to cancel the request.");
                 }
-                // navigation.push("OfficerRequestLock");
               }}
               style={{
                 ...styles.blueBtn,
-                flex: 1,
+                backgroundColor: "black",
+                flex: 0.4,
                 borderRadius: 17,
-                
-                opacity: requestStatus === "completed" ? 0.5 : 1, // Deactivate button when completed
+                marginLeft: 20,
               }}
-              disabled={requestStatus === "completed"} // Disable button when completed
             >
               <Text style={{ ...styles.blueBtnText, paddingVertical: 6 }}>
-              {requestStatus === "pending"
-                ? "Accept"
-                : requestStatus === "accepted"
-                ? "Complete"
-                : requestStatus === "completed"
-                ? "Completed"
-                : "Canceled"
-              }
+                Cancel
               </Text>
             </TouchableOpacity>
-          </Animated.View>
-          
-          
-          
-        </View>
-      ) : (
-      <View style={{paddingLeft:20}}>
-        <Text style={{
-            fontSize: 18,
-            fontWeight: "600",
-            marginVertical: 4,
-            }}>Request Status:
-        </Text>
-        <Text
-            style={{
-              color:requestData.requestStatus === "completed" ? "blue":"red",
-              fontSize: 16,
-              fontWeight: "400",
-              marginBottom: 12,
-            }}
-          >
-            {requestData.requestStatus}
-        </Text>
-      </View>)}
+            <Animated.View style={{flex:0.4, marginRight: 20, transform: [{ translateX: shakeAnimation }]}}>
+              <TouchableOpacity
+                onPress={() => {
+                  if (requestStatus === "pending") {
+                    handleDecisionOnRequest("accept");
+                  } else if (requestStatus === "accepted") {
+                    handleDecisionOnRequest("complete");
+                    navigation.goBack();
+                  }
+                  // navigation.push("OfficerRequestLock");
+                }}
+                style={{
+                  ...styles.blueBtn,
+                  flex: 1,
+                  borderRadius: 17,
+                  
+                  opacity: requestStatus === "completed" ? 0.5 : 1, // Deactivate button when completed
+                }}
+                disabled={requestStatus === "completed"} // Disable button when completed
+              >
+                <Text style={{ ...styles.blueBtnText, paddingVertical: 6 }}>
+                {requestStatus === "pending"
+                  ? "Accept"
+                  : requestStatus === "accepted"
+                  ? "Complete"
+                  : requestStatus === "completed"
+                  ? "Completed"
+                  : "Canceled"
+                }
+                </Text>
+              </TouchableOpacity>
+            </Animated.View>
+            
+            
+            
+          </View>
+        ) : (
+        <View style={{paddingLeft:20}}>
+          <Text style={{
+              fontSize: 18,
+              fontWeight: "600",
+              marginVertical: 4,
+              }}>Request Status:
+          </Text>
+          <Text
+              style={{
+                color:requestData.requestStatus === "completed" ? "blue":"red",
+                fontSize: 16,
+                fontWeight: "400",
+                marginBottom: 12,
+              }}
+            >
+              {requestData.requestStatus}
+          </Text>
+        </View>)}
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "rgba(0,0,0,0.5)",
-          }}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
         >
           <View
             style={{
-              width: "80%",
-              backgroundColor: "white",
-              borderRadius: 20,
-              padding: 20,
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.25,
-              shadowRadius: 4,
-              elevation: 5,
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "rgba(0,0,0,0.5)",
             }}
           >
-            <Text
-              style={{
-                fontSize: 22,
-                fontWeight: "bold",
-                marginBottom: 10,
-              }}
-            >
-              Cancel Request
-            </Text>
-
-            <TextInput
-              placeholder="Enter reason for cancellation"
-              value={cancelReason}
-              onChangeText={(text) => setCancelReason(text)}
-              style={{
-                height: 100,
-                borderColor: "gray",
-                borderWidth: 1,
-                borderRadius: 10,
-                padding: 10,
-                textAlignVertical: "top",
-                marginBottom: 20,
-                fontSize: 15,
-              }}
-              multiline
-            />
-
-            {/* Submit and Close Buttons */}
             <View
               style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
+                width: "80%",
+                backgroundColor: "white",
+                borderRadius: 20,
+                padding: 20,
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.25,
+                shadowRadius: 4,
+                elevation: 5,
               }}
             >
-              <TouchableOpacity
-                onPress={() => setModalVisible(false)}
+              <Text
                 style={{
-                  backgroundColor: "red",
-                  padding: 10,
-                  borderRadius: 10,
+                  fontSize: 22,
+                  fontWeight: "bold",
+                  marginBottom: 10,
                 }}
               >
-                <Text
-                  style={{
-                    color: "white",
-                    fontWeight: "600",
-                    fontSize: 15,
-                    textAlign: "center",
-                  }}
-                >
-                  Close
-                </Text>
-              </TouchableOpacity>
+                Cancel Request
+              </Text>
 
-              <TouchableOpacity
-                onPress={handleCancelRequest}
+              <TextInput
+                placeholder="Enter reason for cancellation"
+                value={cancelReason}
+                onChangeText={(text) => setCancelReason(text)}
                 style={{
-                  backgroundColor: "black",
-                  padding: 10,
+                  height: 100,
+                  borderColor: "gray",
+                  borderWidth: 1,
                   borderRadius: 10,
+                  padding: 10,
+                  textAlignVertical: "top",
+                  marginBottom: 20,
+                  fontSize: 15,
+                }}
+                multiline
+              />
+
+              {/* Submit and Close Buttons */}
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
                 }}
               >
-                <Text
+                <TouchableOpacity
+                  onPress={() => setModalVisible(false)}
                   style={{
-                    color: "white",
-                    fontWeight: "600",
-                    fontSize: 15,
-                    textAlign: "center",
+                    backgroundColor: "red",
+                    padding: 10,
+                    borderRadius: 10,
                   }}
                 >
-                  Submit
-                </Text>
-              </TouchableOpacity>
+                  <Text
+                    style={{
+                      color: "white",
+                      fontWeight: "600",
+                      fontSize: 15,
+                      textAlign: "center",
+                    }}
+                  >
+                    Close
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={handleCancelRequest}
+                  style={{
+                    backgroundColor: "black",
+                    padding: 10,
+                    borderRadius: 10,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "white",
+                      fontWeight: "600",
+                      fontSize: 15,
+                      textAlign: "center",
+                    }}
+                  >
+                    Submit
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
-      </Modal>
-      
-    </View>
+        </Modal>
+        
+      </ScrollView>
+    </KeyboardAvoidingView>
+    
   );
 };
 

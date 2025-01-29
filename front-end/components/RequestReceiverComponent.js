@@ -55,19 +55,19 @@ const RequestReceiverComponent = ({ navigation }) => {
     useCallback(() => {
       setLoading(true);
       fetchRequests("accepted", setAcceptedRequests, usertype === "Officer"?
-      "http://localhost:8085/request/instant/accepted/all":"http://localhost:8085/request/instant/accepted/ride");
+      "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/instant/accepted/all":"http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/instant/accepted/ride");
       
 
       fetchRequests("pending", setPendingRequests, usertype === "Officer"?
-      "http://localhost:8085/request/instant/pending/all":"http://localhost:8085/request/instant/pending/ride");
+      "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/instant/pending/all":"http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/instant/pending/ride");
       setLoading(false);
       const intervalId = setInterval(() => {
         fetchRequests("accepted", setAcceptedRequests, usertype === "Officer"?
-        "http://localhost:8085/request/instant/accepted/all":"http://localhost:8085/request/instant/accepted/ride");
+        "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/instant/accepted/all":"http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/instant/accepted/ride");
       
 
         fetchRequests("pending", setPendingRequests, usertype === "Officer"?
-        "http://localhost:8085/request/instant/pending/all":"http://localhost:8085/request/instant/pending/ride");
+        "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/instant/pending/all":"http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/instant/pending/ride");
       }, 2000);
 
       return () => clearInterval(intervalId);

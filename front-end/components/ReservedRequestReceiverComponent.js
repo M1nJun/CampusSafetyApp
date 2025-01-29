@@ -55,19 +55,19 @@ const ReservedRequestReceiverComponent = ({ navigation }) => {
     useCallback(() => {
       setLoading(true);
       fetchRequests("accepted", setAcceptedRequests, usertype === "officer"?
-      "http://localhost:8085/request/reserved/accepted/all":"http://localhost:8085/request/reserved/accepted/ride");
+      "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/reserved/accepted/all":"http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/reserved/accepted/ride");
       
 
       fetchRequests("pending", setPendingRequests, usertype === "officer"?
-      "http://localhost:8085/request/reserved/pending/all":"http://localhost:8085/request/reserved/pending/ride");
+      "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/reserved/pending/all":"http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/reserved/pending/ride");
       setLoading(false);
       const intervalId = setInterval(() => {
         fetchRequests("accepted", setAcceptedRequests, usertype === "officer"?
-        "http://localhost:8085/request/reserved/accepted/all":"http://localhost:8085/request/reserved/accepted/ride");
+        "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/reserved/accepted/all":"http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/reserved/accepted/ride");
       
 
         fetchRequests("pending", setPendingRequests, usertype === "officer"?
-        "http://localhost:8085/request/reserved/pending/all":"http://localhost:8085/request/reserved/pending/ride");
+        "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/reserved/pending/all":"http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/reserved/pending/ride");
       }, 2000);
 
       return () => clearInterval(intervalId);

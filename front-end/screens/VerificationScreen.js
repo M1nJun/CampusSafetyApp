@@ -44,7 +44,7 @@ export default function VerificationScreen() {
 
         const token = await TokenService.getAccessToken();
 
-        const response = await fetch("http://localhost:8085/user/verify", {
+        const response = await fetch("http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/user/verify", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -95,6 +95,7 @@ export default function VerificationScreen() {
             maxLength={1}
             value={value}
             onChangeText={(text) => handleChange(text, index)}
+            keyboardType="number-pad"
           />
         ))}
       </View>

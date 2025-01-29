@@ -54,17 +54,17 @@ const MyRequestComponent = ({ navigation }) => {
       fetchRequests(
         "pending",
         setPendingRequests,
-        "http://localhost:8085/request/self/pending/all"
+        "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/self/pending/all"
       );
       fetchRequests(
         "accepted",
         setAcceptedRequests,
-        "http://localhost:8085/request/self/accepted/all"
+        "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/self/accepted/all"
       );
       fetchRequests(
         "completed",
         setCompletedRequests,
-        "http://localhost:8085/request/self/completed/all"
+        "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/self/completed/all"
       );
       setLoading(false);
 
@@ -72,17 +72,17 @@ const MyRequestComponent = ({ navigation }) => {
         fetchRequests(
           "pending",
           setPendingRequests,
-          "http://localhost:8085/request/self/pending/all"
+          "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/self/pending/all"
         );
         fetchRequests(
           "accepted",
           setAcceptedRequests,
-          "http://localhost:8085/request/self/accepted/all"
+          "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/self/accepted/all"
         );
         fetchRequests(
           "completed",
           setCompletedRequests,
-          "http://localhost:8085/request/self/completed/all"
+          "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/self/completed/all"
         );
       }, 10000);
 

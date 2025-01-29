@@ -2,12 +2,14 @@
 import React from "react";
 import { theme } from "../colors";
 import {
+  KeyboardAvoidingView,
   View,
   Text,
   TouchableOpacity,
   TextInput,
   ScrollView,
   Alert,
+  Platform
 } from "react-native";
 import { useEffect, useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -133,7 +135,7 @@ const RideRequesterComponent = () => {
 
       const token = await TokenService.getAccessToken();
 
-      const response = await fetch("http://localhost:8085/option/location/all", {
+      const response = await fetch("http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/option/location/all", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -164,7 +166,7 @@ const RideRequesterComponent = () => {
 
       const token = await TokenService.getAccessToken();
 
-      const response = await fetch("http://localhost:8085/option/location/all", {
+      const response = await fetch("http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/option/location/all", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -298,7 +300,7 @@ const RideRequesterComponent = () => {
       }
     };
   
-    const baseUrl = 'http://localhost:8085/option/location';
+    const baseUrl = 'http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/option/location';
     const autocompleteUrl = (input) => `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${API_KEY}`;
   
     if (isDestination) {
@@ -419,7 +421,7 @@ const RideRequesterComponent = () => {
 
       const token = await TokenService.getAccessToken();
 
-      const response = await fetch("http://localhost:8085/request", {
+      const response = await fetch("http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -448,391 +450,403 @@ const RideRequesterComponent = () => {
   };
 
   return (
-    <ScrollView>
-      <View
-        style={{
-          ...styles.widthControll,
-          marginTop: 10,
-          justifyContent: "center",
-        }}
-      >
-
-        <TextInput
-          placeholder="Where to?"
-          placeholderTextColor="gray"
-          autoCapitalize="none"
-          style={{...styles.input, marginBottom:5, fontSize: 17}}
-          value={destination}
-          //maybe should set up a conditional statement saying if !showDestinationAutoCompleteList
-          onFocus={() => setShowDestinationDropdown(true)}
-          onChangeText={(text) => {
-            // Replace problematic characters with an empty string
-            const sanitizedText = text.replace(/[\/\\;\.]/g, '');
-            setDestination(sanitizedText);
-            handleKeywordChange(sanitizedText, true);
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      <ScrollView>
+        <View
+          style={{
+            ...styles.widthControll,
+            marginTop: 10,
+            justifyContent: "center",
           }}
-        ></TextInput>
+        >
+
+          <TextInput
+            placeholder="Where to?"
+            placeholderTextColor="gray"
+            autoCapitalize="none"
+            style={{...styles.input, marginBottom:5, fontSize: 17}}
+            value={destination}
+            //maybe should set up a conditional statement saying if !showDestinationAutoCompleteList
+            onFocus={() => {
+              if (!showDestAutoCompleteList) {
+                setShowDestinationDropdown(true);
+              }
+            }}
+            onChangeText={(text) => {
+              // Replace problematic characters with an empty string
+              const sanitizedText = text.replace(/[\/\\;\.]/g, '');
+              setDestination(sanitizedText);
+              handleKeywordChange(sanitizedText, true);
+            }}
+          ></TextInput>
+          
+        </View>
         
-      </View>
-      
-      {showDestinationDropdown && (<View style={{...styles.widthControll, justifyContent:'center'}}><View style={{flex:0.9}}><ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
-        <TouchableOpacity 
-          style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
-          onPress={() => {
-            setShowDestinationDropdown(false);
-            setShowDestMap(true);
-            userCurrentLocation(true); //sending that isDestination is true
-            console.log("Dest Map region updated:", destMapRegion);
-            handleRegionChangeComplete(destMapRegion, true); //sending that isDestination is true
-          }}
-        >
-          <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
-          <Text style={{color:theme.lightBlue, fontSize: 16, fontWeight:"500"}}>Current Location</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
-          onPress={() => {
-            setShowDestinationDropdown(false);
-            setShowDestAutoCompleteList(true);
-            //for situations where the list is not showing but the search is still happening.
-            setDestSearchAddress(true);
-            //clear out content of input when chosen
-            setDestination("");
-          }}
-        >
-          <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
-          <Text style={{color:theme.lightBlue, fontSize: 16, fontWeight:"500"}}>Search Address</Text>
-        </TouchableOpacity>
-          {destinationList.map((dest) => (
-            
-            <TouchableOpacity style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} key={dest.locationOptionID} onPress={() => {
-              setDestination(dest.locationName);
+        {showDestinationDropdown && (<View style={{...styles.widthControll, justifyContent:'center'}}><View style={{flex:0.9}}><ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
+          <TouchableOpacity 
+            style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
+            onPress={() => {
               setShowDestinationDropdown(false);
-            }}>
-              <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
-              <Text style={{color:"black", fontSize: 16, fontWeight:"500"}}>{dest.locationName}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView></View></View>)}
+              setShowDestMap(true);
+              userCurrentLocation(true); //sending that isDestination is true
+              console.log("Dest Map region updated:", destMapRegion);
+              handleRegionChangeComplete(destMapRegion, true); //sending that isDestination is true
+            }}
+          >
+            <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
+            <Text style={{color:theme.lightBlue, fontSize: 16, fontWeight:"500"}}>Current Location</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
+            onPress={() => {
+              setShowDestinationDropdown(false);
+              setShowDestAutoCompleteList(true);
+              //for situations where the list is not showing but the search is still happening.
+              setDestSearchAddress(true);
+              //clear out content of input when chosen
+              setDestination("");
+            }}
+          >
+            <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
+            <Text style={{color:theme.lightBlue, fontSize: 16, fontWeight:"500"}}>Search Address</Text>
+          </TouchableOpacity>
+            {destinationList.map((dest) => (
+              
+              <TouchableOpacity style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} key={dest.locationOptionID} onPress={() => {
+                setDestination(dest.locationName);
+                setShowDestinationDropdown(false);
+              }}>
+                <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
+                <Text style={{color:"black", fontSize: 16, fontWeight:"500"}}>{dest.locationName}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView></View></View>)}
 
 
 
-        {showDestAutoCompleteList && (
-          <View style={{...styles.widthControll, justifyContent: 'center', marginBottom: 15}}>
-            <View style={{flex: 0.9}}>
-              <ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
-                <TouchableOpacity 
-                  style={{flexDirection: "row", borderColor: "lightgray", borderBottomWidth: 0.8, marginVertical: 7}} 
-                  onPress={() => {
-                    setShowDestAutoCompleteList(false);
-                    setShowDestMap(false);
-                    setShowDestinationDropdown(true);
-                    fetchDestinationList();
-                    setDestination("");
-                  }}
-                >
-                  <Entypo name="location-pin" size={24} color="black" style={{paddingRight: 5}} />
-                  <Text style={{color: theme.lightBlue, fontSize: 16, fontWeight: "500"}}>Go back to Lawrence Building List</Text>
-                </TouchableOpacity>
-                {destAutoCompleteList.map((item, index) => (
+          {showDestAutoCompleteList && (
+            <View style={{...styles.widthControll, justifyContent: 'center', marginBottom: 15}}>
+              <View style={{flex: 0.9}}>
+                <ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
                   <TouchableOpacity 
-                    key={index} 
                     style={{flexDirection: "row", borderColor: "lightgray", borderBottomWidth: 0.8, marginVertical: 7}} 
                     onPress={() => {
-                      setDestination(item.description);
                       setShowDestAutoCompleteList(false);
-                      // Geocode this address then, update it to be the destMapRegion.
-                      handleGeocode(item.address, true);
-                      setShowDestMap(true);
+                      setShowDestMap(false);
+                      setShowDestinationDropdown(true);
+                      fetchDestinationList();
+                      setDestination("");
                     }}
                   >
                     <Entypo name="location-pin" size={24} color="black" style={{paddingRight: 5}} />
-                    <View>
-                      <Text style={{color: "black", fontSize: 16, fontWeight: "500"}}>{item.description}</Text>
-                      <Text style={{color: "gray", fontSize: 14}}>{item.address}</Text>
-                    </View>
+                    <Text style={{color: theme.lightBlue, fontSize: 16, fontWeight: "500"}}>Go back to Lawrence Building List</Text>
                   </TouchableOpacity>
-                ))}
-              </ScrollView>
+                  {destAutoCompleteList.map((item, index) => (
+                    <TouchableOpacity 
+                      key={index} 
+                      style={{flexDirection: "row", borderColor: "lightgray", borderBottomWidth: 0.8, marginVertical: 7}} 
+                      onPress={() => {
+                        setDestination(item.description);
+                        setShowDestAutoCompleteList(false);
+                        // Geocode this address then, update it to be the destMapRegion.
+                        handleGeocode(item.address, true);
+                        setShowDestMap(true);
+                      }}
+                    >
+                      <Entypo name="location-pin" size={24} color="black" style={{paddingRight: 5}} />
+                      <View>
+                        <Text style={{color: "black", fontSize: 16, fontWeight: "500"}}>{item.description}</Text>
+                        <Text style={{color: "gray", fontSize: 14}}>{item.address}</Text>
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
             </View>
+          )}
+
+
+
+          {showDestMap && (
+          <View style={{marginBottom: 25}}>
+            <MapView
+              region={destMapRegion}
+              style={{ width: "100%", height: 400, borderRadius: 10 }}
+              // I'm commenting this so that when the day comes for me to update the location when the user moves the map.
+              onRegionChangeComplete={(region) => handleRegionChangeComplete(region, true)}
+            />
+            <View style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              marginLeft: -24, // Half of the icon width
+              marginTop: -48, // Half of the icon height
+            }}>
+              <Entypo name="location-pin" size={48} color="black" />
+            </View>
+            <TouchableOpacity style={{backgroundColor:"black", borderRadius: 13, width: "40%", alignSelf:"center", marginTop: -50}} onPress={()=>{
+              setShowDestMap(false);
+              setShowDestAutoCompleteList(false);
+              setDestSearchAddress(false);
+            }}><Text style={{color: "white", fontSize:20, fontWeight: "600", textAlign:"center", paddingVertical: 5}}>Confirm</Text></TouchableOpacity>
           </View>
         )}
 
-
-
-        {showDestMap && (
-        <View style={{marginBottom: 25}}>
-          <MapView
-            region={destMapRegion}
-            style={{ width: "100%", height: 400, borderRadius: 10 }}
-            // I'm commenting this so that when the day comes for me to update the location when the user moves the map.
-            onRegionChangeComplete={(region) => handleRegionChangeComplete(region, true)}
-          />
-          <View style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            marginLeft: -24, // Half of the icon width
-            marginTop: -48, // Half of the icon height
-          }}>
-            <Entypo name="location-pin" size={48} color="black" />
-          </View>
-          <TouchableOpacity style={{backgroundColor:"black", borderRadius: 13, width: "40%", alignSelf:"center", marginTop: -50}} onPress={()=>{
-            setShowDestMap(false);
-            setShowDestAutoCompleteList(false);
-            setDestSearchAddress(false);
-          }}><Text style={{color: "white", fontSize:20, fontWeight: "600", textAlign:"center", paddingVertical: 5}}>Confirm</Text></TouchableOpacity>
-        </View>
-      )}
-
-{/* location handling */}
-      
-      <View style={{ ...styles.widthControll, justifyContent: "center" }}>
-        <TextInput
-          placeholder="Where are you?"
-          placeholderTextColor="gray"
-          autoCapitalize="none"
-          style={{...styles.input, marginBottom:5}}
-          value={location} // Show address if using map, otherwise show location
-          onChangeText={(text) => {
-            const sanitizedText = text.replace(/[\/\\;\.]/g, '');
-            setLocation(sanitizedText);
-            handleKeywordChange(sanitizedText, false);
-          }}
-          onFocus={() => {setShowLocationDropdown(true);
+  {/* location handling */}
+        
+        <View style={{ ...styles.widthControll, justifyContent: "center" }}>
+          <TextInput
+            placeholder="Where are you?"
+            placeholderTextColor="gray"
+            autoCapitalize="none"
+            style={{...styles.input, marginBottom:5}}
+            value={location} // Show address if using map, otherwise show location
+            onChangeText={(text) => {
+              const sanitizedText = text.replace(/[\/\\;\.]/g, '');
+              setLocation(sanitizedText);
+              handleKeywordChange(sanitizedText, false);
             }}
-        ></TextInput>
-      </View>
+            onFocus={() => {
+              if (!showLocAutoCompleteList) {
+                setShowLocationDropdown(true);
+              }
+            }}
+          ></TextInput>
+        </View>
 
 
-      {showLocationDropdown && (<View style={{...styles.widthControll, justifyContent:'center'}}><View style={{flex:0.9}}><ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
-        <TouchableOpacity 
-          style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
-          onPress={() => {
-            setShowLocationDropdown(false);
-            setShowLocMap(true);
-            userCurrentLocation(false); //sending that isDestination is false
-            console.log("Loc Map region updated:", locMapRegion);
-            handleRegionChangeComplete(locMapRegion, false); //sending that isDestination is false
-          }}
-        >
-          <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
-          <Text style={{color:theme.lightBlue, fontSize: 16, fontWeight:"500"}}>Current Location</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
-          onPress={() => {
-            setShowLocationDropdown(false);
-            setShowLocAutoCompleteList(true);
-            setLocSearchAddress(true);
-            //clear out content when chosen.
-            setLocation("");
-          }}
-        >
-          <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
-          <Text style={{color:theme.lightBlue, fontSize: 16, fontWeight:"500"}}>Search Address</Text>
-        </TouchableOpacity>
-          {locationList.map((loc) => (
-            
-            <TouchableOpacity style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} key={loc.locationOptionID} onPress={() => {
-              setLocation(loc.locationName);
+        {showLocationDropdown && (<View style={{...styles.widthControll, justifyContent:'center'}}><View style={{flex:0.9}}><ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
+          <TouchableOpacity 
+            style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
+            onPress={() => {
               setShowLocationDropdown(false);
-              // setUsingMap(false); // If the user chose one of the options, that means the user is not going to use the map address.
-            }}>
-              <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
-              <Text style={{color:"black", fontSize: 16, fontWeight:"500"}}>{loc.locationName}</Text>
+              setShowLocMap(true);
+              userCurrentLocation(false); //sending that isDestination is false
+              console.log("Loc Map region updated:", locMapRegion);
+              handleRegionChangeComplete(locMapRegion, false); //sending that isDestination is false
+            }}
+          >
+            <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
+            <Text style={{color:theme.lightBlue, fontSize: 16, fontWeight:"500"}}>Current Location</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
+            onPress={() => {
+              setShowLocationDropdown(false);
+              setShowLocAutoCompleteList(true);
+              setLocSearchAddress(true);
+              //clear out content when chosen.
+              setLocation("");
+            }}
+          >
+            <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
+            <Text style={{color:theme.lightBlue, fontSize: 16, fontWeight:"500"}}>Search Address</Text>
+          </TouchableOpacity>
+            {locationList.map((loc) => (
+              
+              <TouchableOpacity style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} key={loc.locationOptionID} onPress={() => {
+                setLocation(loc.locationName);
+                setShowLocationDropdown(false);
+                // setUsingMap(false); // If the user chose one of the options, that means the user is not going to use the map address.
+              }}>
+                <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
+                <Text style={{color:"black", fontSize: 16, fontWeight:"500"}}>{loc.locationName}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView></View></View>)}
+
+
+
+          {showLocAutoCompleteList && (<View style={{...styles.widthControll, justifyContent:'center', marginBottom: 15}}><View style={{flex:0.9}}><ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
+          <TouchableOpacity 
+            style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
+            onPress={() => {
+              setShowLocAutoCompleteList(false);
+              setShowLocMap(false);
+              setShowLocationDropdown(true);
+              fetchLocationList();
+              setLocation("");
+            }}
+          >
+            <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
+            <Text style={{color:theme.lightBlue, fontSize: 16, fontWeight:"500"}}>Go back to Lawrence Building List</Text>
+          </TouchableOpacity>
+          {locAutoCompleteList.map((item, index) => (
+            <TouchableOpacity 
+              key={index} 
+              style={{flexDirection: "row", borderColor: "lightgray", borderBottomWidth: 0.8, marginVertical: 7}} 
+              onPress={() => {
+                setLocation(item.description);
+                setShowLocAutoCompleteList(false);
+                // Geocode this address then, update it to be the locMapRegion.
+                handleGeocode(item.address, false);
+                setShowLocMap(true);
+              }}
+            >
+              <Entypo name="location-pin" size={24} color="black" style={{paddingRight: 5}} />
+              <View>
+                <Text style={{color: "black", fontSize: 16, fontWeight: "500"}}>{item.description}</Text>
+                <Text style={{color: "gray", fontSize: 14}}>{item.address}</Text>
+              </View>
             </TouchableOpacity>
           ))}
-        </ScrollView></View></View>)}
+          </ScrollView></View></View>)}
 
 
-
-        {showLocAutoCompleteList && (<View style={{...styles.widthControll, justifyContent:'center', marginBottom: 15}}><View style={{flex:0.9}}><ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
-        <TouchableOpacity 
-          style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} 
-          onPress={() => {
-            setShowLocAutoCompleteList(false);
-            setShowLocMap(false);
-            setShowLocationDropdown(true);
-            fetchLocationList();
-            setLocation("");
-          }}
-        >
-          <Entypo name="location-pin" size={24} color="black" style={{paddingRight:5}} />
-          <Text style={{color:theme.lightBlue, fontSize: 16, fontWeight:"500"}}>Go back to Lawrence Building List</Text>
-        </TouchableOpacity>
-        {locAutoCompleteList.map((item, index) => (
-          <TouchableOpacity 
-            key={index} 
-            style={{flexDirection: "row", borderColor: "lightgray", borderBottomWidth: 0.8, marginVertical: 7}} 
-            onPress={() => {
-              setLocation(item.description);
-              setShowLocAutoCompleteList(false);
-              // Geocode this address then, update it to be the locMapRegion.
-              handleGeocode(item.address, false);
-              setShowLocMap(true);
-            }}
-          >
-            <Entypo name="location-pin" size={24} color="black" style={{paddingRight: 5}} />
-            <View>
-              <Text style={{color: "black", fontSize: 16, fontWeight: "500"}}>{item.description}</Text>
-              <Text style={{color: "gray", fontSize: 14}}>{item.address}</Text>
+          {showLocMap && (
+          <View style={{marginBottom: 25}}>
+            <MapView
+              region={locMapRegion}
+              style={{ width: "100%", height: 400, borderRadius: 10 }}
+              // learned that onRegionChangeComplete is not a function. I'm was not using this.props but instead directly passing a function reference to onRegionChangeComplete.
+              onRegionChangeComplete={(region) => handleRegionChangeComplete(region, false)}
+            />
+            {/* Fixed location pin icon at the center of the map */}
+            <View style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              marginLeft: -24, // Half of the icon width
+              marginTop: -48, // Half of the icon height
+            }}>
+              <Entypo name="location-pin" size={48} color="black" />
             </View>
-          </TouchableOpacity>
-        ))}
-        </ScrollView></View></View>)}
-
-
-        {showLocMap && (
-        <View style={{marginBottom: 25}}>
-          <MapView
-            region={locMapRegion}
-            style={{ width: "100%", height: 400, borderRadius: 10 }}
-            // learned that onRegionChangeComplete is not a function. I'm was not using this.props but instead directly passing a function reference to onRegionChangeComplete.
-            onRegionChangeComplete={(region) => handleRegionChangeComplete(region, false)}
-          />
-          {/* Fixed location pin icon at the center of the map */}
-          <View style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            marginLeft: -24, // Half of the icon width
-            marginTop: -48, // Half of the icon height
-          }}>
-            <Entypo name="location-pin" size={48} color="black" />
+            <TouchableOpacity style={{backgroundColor:"black", borderRadius: 13, width: "40%", alignSelf:"center", marginTop: -50}} onPress={()=>{
+              setShowLocMap(false);
+              setLocAutoCompleteList(false);
+              setLocSearchAddress(false);
+            }}><Text style={{color: "white", fontSize:20, fontWeight: "600", textAlign:"center", paddingVertical: 5}}>Confirm</Text></TouchableOpacity>
           </View>
-          <TouchableOpacity style={{backgroundColor:"black", borderRadius: 13, width: "40%", alignSelf:"center", marginTop: -50}} onPress={()=>{
-            setShowLocMap(false);
-            setLocAutoCompleteList(false);
-            setLocSearchAddress(false);
-          }}><Text style={{color: "white", fontSize:20, fontWeight: "600", textAlign:"center", paddingVertical: 5}}>Confirm</Text></TouchableOpacity>
+        )}
+
+        
+
+
+        <View style={styles.questionContainer}>
+          <Text style={styles.question}>
+            When do you want this ride to happen?
+          </Text>
         </View>
-      )}
-
-      
-
-
-      <View style={styles.questionContainer}>
-        <Text style={styles.question}>
-          When do you want this ride to happen?
-        </Text>
-      </View>
-      <View
-        style={{
-          ...styles.widthControll,
-          justifyContent: "center",
-          marginTop: 10,
-        }}
-      >
-        <TouchableOpacity
+        <View
           style={{
-            ...styles.reserveBtn,
-            backgroundColor: !isReserve ? "white" : theme.lightGrey,
-          }}
-          onPress={() => {
-            instant();
-            setShow(false);
+            ...styles.widthControll,
+            justifyContent: "center",
+            marginTop: 10,
           }}
         >
-          {!isReserve && (
-            <FontAwesome6
-              name="check-circle"
-              size={24}
-              color="black"
-              style={{ paddingLeft: 7, paddingTop: 6 }}
-            />
-          )}
-          <Text
+          <TouchableOpacity
             style={{
-              ...styles.reserveBtnText,
-              color: !isReserve ? "black" : theme.grey,
+              ...styles.reserveBtn,
+              backgroundColor: !isReserve ? "white" : theme.lightGrey,
+            }}
+            onPress={() => {
+              instant();
+              setShow(false);
             }}
           >
-            Right now
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+            {!isReserve && (
+              <FontAwesome6
+                name="check-circle"
+                size={24}
+                color="black"
+                style={{ paddingLeft: 7, paddingTop: 6 }}
+              />
+            )}
+            <Text
+              style={{
+                ...styles.reserveBtnText,
+                color: !isReserve ? "black" : theme.grey,
+              }}
+            >
+              Right now
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              ...styles.reserveBtn,
+              backgroundColor: isReserve ? "white" : theme.lightGrey,
+            }}
+            onPress={() => {
+              reserve();
+              showDatepicker();
+            }}
+          >
+            {isReserve && (
+              <FontAwesome6
+                name="check-circle"
+                size={24}
+                color="black"
+                style={{ paddingLeft: 7, paddingTop: 6 }}
+              />
+            )}
+            <Text
+              style={{
+                ...styles.reserveBtnText,
+                color: isReserve ? "black" : theme.grey,
+              }}
+            >
+              By this date
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View
           style={{
-            ...styles.reserveBtn,
-            backgroundColor: isReserve ? "white" : theme.lightGrey,
-          }}
-          onPress={() => {
-            reserve();
-            showDatepicker();
+            ...styles.widthControll,
+            marginVertical: 20,
+            justifyContent: "center",
           }}
         >
-          {isReserve && (
-            <FontAwesome6
-              name="check-circle"
-              size={24}
-              color="black"
-              style={{ paddingLeft: 7, paddingTop: 6 }}
+          {show && (
+            <DateTimePicker
+              value={date}
+              mode="date"
+              is24Hour={true}
+              onChange={onChange}
+              themeVariant="dark"
             />
           )}
-          <Text
-            style={{
-              ...styles.reserveBtnText,
-              color: isReserve ? "black" : theme.grey,
-            }}
-          >
-            By this date
+          {show && (
+            <DateTimePicker
+              value={date}
+              mode="time"
+              is24Hour={true}
+              onChange={onChange}
+              themeVariant="dark"
+              style={{ marginLeft: 0 }}
+            />
+          )}
+        </View>
+
+
+        <View style={styles.questionContainer}>
+          <Text style={styles.question}>
+            Do you have any message for the driver?
           </Text>
-        </TouchableOpacity>
-      </View>
-
-      <View
-        style={{
-          ...styles.widthControll,
-          marginVertical: 20,
-          justifyContent: "center",
-        }}
-      >
-        {show && (
-          <DateTimePicker
-            value={date}
-            mode="date"
-            is24Hour={true}
-            onChange={onChange}
-            themeVariant="dark"
-          />
-        )}
-        {show && (
-          <DateTimePicker
-            value={date}
-            mode="time"
-            is24Hour={true}
-            onChange={onChange}
-            themeVariant="dark"
-            style={{ marginLeft: 0 }}
-          />
-        )}
-      </View>
-
-
-      <View style={styles.questionContainer}>
-        <Text style={styles.question}>
-          Do you have any message for the driver?
-        </Text>
-      </View>
-      <View style={{ ...styles.widthControll, justifyContent: "center" }}>
-        <TextInput
-          placeholder="Write here..."
-          placeholderTextColor="gray"
-          autoCapitalize="none"
-          style={{
-            ...styles.input,
-            paddingBottom: 60,
-          }}
-          value={message}
-          onChangeText={setMessage}
-        ></TextInput>
-      </View>
-      <View style={{ ...styles.widthControll, justifyContent: "center" }}>
-        <TouchableOpacity style={styles.blueBtn} onPress={handleSubmit}>
-          <Text style={styles.blueBtnText}>Submit</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+        </View>
+        <View style={{ ...styles.widthControll, justifyContent: "center" }}>
+          <TextInput
+            placeholder="Write here..."
+            placeholderTextColor="gray"
+            autoCapitalize="none"
+            style={{
+              ...styles.input,
+              paddingBottom: 60,
+            }}
+            value={message}
+            onChangeText={setMessage}
+          ></TextInput>
+        </View>
+        <View style={{ ...styles.widthControll, justifyContent: "center" }}>
+          <TouchableOpacity style={styles.blueBtn} onPress={handleSubmit}>
+            <Text style={styles.blueBtnText}>Submit</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

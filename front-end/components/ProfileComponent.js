@@ -56,7 +56,7 @@ const ProfileComponent = ({ profileToShow}) => {
   const navigation = useNavigation();
 
   const fetchProfile = async () => {
-    const url = "http://localhost:8085/user/profile/self";
+    const url = "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/user/profile/self";
     try {
       const tokenRefreshed = await TokenService.refreshAccessToken();
 
@@ -106,7 +106,7 @@ const ProfileComponent = ({ profileToShow}) => {
       const token = await TokenService.getAccessToken();
 
       const response = await fetch(
-        "http://localhost:8085/user/profile/update",
+        "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/user/profile/update",
         {
           method: "POST",
           headers: {

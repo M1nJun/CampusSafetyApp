@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  Platform,
+  KeyboardAvoidingView
 } from "react-native";
 import styles from "../styles";
 import { useNavigation } from "@react-navigation/native";
@@ -48,7 +50,7 @@ export default function SignUpScreen() {
     }
 
     try {
-      const response = await fetch("http://localhost:8085/user", {
+      const response = await fetch("http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -82,102 +84,108 @@ export default function SignUpScreen() {
     }
   };
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>SignUp Screen</Text>
-      <View style={styles.widthControll}>
-        <TextInput
-          placeholder="Email"
-          placeholderTextColor="gray"
-          autoCapitalize="none"
-          style={styles.input}
-          value={email}
-          onChangeText={(text) => {setEmail(text)}}
-        ></TextInput>
-      </View>
-      {usernameError ? <Animated.Text style={{marginLeft: 10, color: 'white', fontSize: 14, transform: [{ translateX: shakeAnimation }]}}>{"Email must end with @lawrence.edu"}</Animated.Text> : null}
-      <View style={{ ...styles.widthControll, alignItems: "center", position: "relative" }}>
-        <TextInput
-          placeholder="Password"
-          placeholderTextColor="gray"
-          autoCapitalize="none"
-          style={styles.input}
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry={!showPassword} // Hides the input content
-        />
-        {showPassword? <TouchableOpacity style={{ position: "absolute", right: 50, top: "50%", transform: [{ translateY: -12 }] }} onPress={() => setShowPassword(false)} >
-        <Ionicons name="eye-off" size={24} color="black" />
-        </TouchableOpacity> :  <TouchableOpacity style={{ position: "absolute", right: 50, top: "50%", transform: [{ translateY: -12 }] }} onPress={() => setShowPassword(true)} >
-          <Ionicons 
-            name="eye" 
-            size={24} 
-            color="black" 
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      <View style={styles.container}>
+        <Text style={styles.header}>SignUp Screen</Text>
+        <View style={styles.widthControll}>
+          <TextInput
+            placeholder="Email"
+            placeholderTextColor="gray"
+            autoCapitalize="none"
+            style={styles.input}
+            value={email}
+            onChangeText={(text) => {setEmail(text)}}
+          ></TextInput>
+        </View>
+        {usernameError ? <Animated.Text style={{marginLeft: 10, color: 'white', fontSize: 14, transform: [{ translateX: shakeAnimation }]}}>{"Email must end with @lawrence.edu"}</Animated.Text> : null}
+        <View style={{ ...styles.widthControll, alignItems: "center", position: "relative" }}>
+          <TextInput
+            placeholder="Password"
+            placeholderTextColor="gray"
+            autoCapitalize="none"
+            style={styles.input}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={!showPassword} // Hides the input content
           />
-        </TouchableOpacity>}
-        
-      </View>
+          {showPassword? <TouchableOpacity style={{ position: "absolute", right: 50, top: "50%", transform: [{ translateY: -12 }] }} onPress={() => setShowPassword(false)} >
+          <Ionicons name="eye-off" size={24} color="black" />
+          </TouchableOpacity> :  <TouchableOpacity style={{ position: "absolute", right: 50, top: "50%", transform: [{ translateY: -12 }] }} onPress={() => setShowPassword(true)} >
+            <Ionicons 
+              name="eye" 
+              size={24} 
+              color="black" 
+            />
+          </TouchableOpacity>}
+          
+        </View>
 
-      <View style={styles.widthControll}>
-        <TextInput
-          placeholder="First Name"
-          placeholderTextColor="gray"
-          autoCapitalize="none"
-          style={styles.input}
-          value={firstName}
-          onChangeText={setFirstName}
-        ></TextInput>
-      </View>
-      <View style={styles.widthControll}>
-        <TextInput
-          placeholder="Last Name"
-          placeholderTextColor="gray"
-          autoCapitalize="none"
-          style={styles.input}
-          value={lastName}
-          onChangeText={setLastName}
-        ></TextInput>
-      </View>
-      <View style={styles.widthControll}>
-        <TextInput
-          placeholder="Phone Number"
-          placeholderTextColor="gray"
-          autoCapitalize="none"
-          style={styles.input}
-          value={phone}
-          onChangeText={setPhone}
-        ></TextInput>
-      </View>
-      <View style={styles.widthControll}>
-        <TextInput
-          placeholder="Student ID"
-          placeholderTextColor="gray"
-          autoCapitalize="none"
-          style={styles.input}
-          value={studentID}
-          onChangeText={setStudentID}
-        ></TextInput>
-      </View>
-      <Animated.View style={{ flexDirection:"row", transform: [{ translateX: shakeAnimation }] }}>
-        <TouchableOpacity
-          style={styles.blueBtn}
-          onPress={handleSignUp}
-        >
-          <Text style={styles.blueBtnText}>SignUp</Text>
-        </TouchableOpacity>
-      </Animated.View>
-      <View style={styles.signUp}>
-        <Text style={{ color: "white", fontWeight: "500" }}>
-          Already have an account?{" "}
-        </Text>
-        <TouchableOpacity>
-          <Text
-            style={{ color: "#0284C7", fontWeight: "600" }}
-            onPress={() => navigation.push("Login")}
+        <View style={styles.widthControll}>
+          <TextInput
+            placeholder="First Name"
+            placeholderTextColor="gray"
+            autoCapitalize="none"
+            style={styles.input}
+            value={firstName}
+            onChangeText={setFirstName}
+          ></TextInput>
+        </View>
+        <View style={styles.widthControll}>
+          <TextInput
+            placeholder="Last Name"
+            placeholderTextColor="gray"
+            autoCapitalize="none"
+            style={styles.input}
+            value={lastName}
+            onChangeText={setLastName}
+          ></TextInput>
+        </View>
+        <View style={styles.widthControll}>
+          <TextInput
+            placeholder="Phone Number"
+            placeholderTextColor="gray"
+            autoCapitalize="none"
+            style={styles.input}
+            value={phone}
+            onChangeText={setPhone}
+          ></TextInput>
+        </View>
+        <View style={styles.widthControll}>
+          <TextInput
+            placeholder="Student ID"
+            placeholderTextColor="gray"
+            autoCapitalize="none"
+            style={styles.input}
+            value={studentID}
+            onChangeText={setStudentID}
+          ></TextInput>
+        </View>
+        <Animated.View style={{ flexDirection:"row", transform: [{ translateX: shakeAnimation }] }}>
+          <TouchableOpacity
+            style={styles.blueBtn}
+            onPress={handleSignUp}
           >
-            Login
+            <Text style={styles.blueBtnText}>SignUp</Text>
+          </TouchableOpacity>
+        </Animated.View>
+        <View style={styles.signUp}>
+          <Text style={{ color: "white", fontWeight: "500" }}>
+            Already have an account?{" "}
           </Text>
-        </TouchableOpacity>
+          <TouchableOpacity>
+            <Text
+              style={{ color: "#0284C7", fontWeight: "600" }}
+              onPress={() => navigation.push("Login")}
+            >
+              Login
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
+    
   );
 }

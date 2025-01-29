@@ -27,7 +27,7 @@ const OfficerMiniRequestComponent = ({ requestID, requestData, usertype, navigat
       const token = await TokenService.getAccessToken();
 
       const response = await fetch(
-        `http://localhost:8085/request/${requestID}`,
+        `http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/${requestID}`,
         {
           method: "GET",
           headers: {

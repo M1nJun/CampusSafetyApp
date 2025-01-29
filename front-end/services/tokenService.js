@@ -100,7 +100,7 @@ const refreshAccessToken = async () => {
 
     // console.log('Sending refresh token to the server...');
 
-    const response = await fetch('http://localhost:8085/user/refreshToken', {
+    const response = await fetch('http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/user/refreshToken', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
