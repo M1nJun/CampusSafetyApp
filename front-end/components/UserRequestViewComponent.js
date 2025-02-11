@@ -6,6 +6,7 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import React, { useEffect, useState } from "react";
 import RequestMatchProfileComponent from "./RequestMatchProfileComponent"
 import * as TokenService from '../services/tokenService';
+import API_BASE_URL from "../config";
 
 const UserRequestViewComponent = () => {
   const route = useRoute();
@@ -38,7 +39,7 @@ const UserRequestViewComponent = () => {
       const token = await TokenService.getAccessToken();
 
       const response = await fetch(
-        `http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/cancel?requestID=${requestID}&reason=${cancelReason}`,
+        `${API_BASE_URL}/request/cancel?requestID=${requestID}&reason=${cancelReason}`,
         {
           method: "POST",
           headers: {
@@ -75,7 +76,7 @@ const UserRequestViewComponent = () => {
       const token = await TokenService.getAccessToken();
       
       const response = await fetch(
-        `http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/${requestID}`,
+        `${API_BASE_URL}/request/${requestID}`,
         {
           method: "GET",
           headers: {

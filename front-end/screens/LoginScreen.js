@@ -13,6 +13,7 @@ import styles from "../styles";
 import { useNavigation } from "@react-navigation/native";
 import { useState, useRef } from "react";
 import * as TokenService from '../services/tokenService';
+import API_BASE_URL from "../config";
 
 export default function LoginScreen() {
   const navigation = useNavigation();
@@ -36,7 +37,7 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch("http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/user/login", {
+      const response = await fetch(`${API_BASE_URL}/user/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -74,7 +75,7 @@ export default function LoginScreen() {
         // handle when user is not verified yet
         try {
           const newCodeResponse = await fetch(
-            "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/user/newcode",
+            `${API_BASE_URL}/user/newcode`,
             {
               method: "POST",
               headers: {

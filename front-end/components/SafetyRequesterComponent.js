@@ -23,6 +23,7 @@ import debounce from "lodash.debounce";
 import MapView, {Marker} from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as TokenService from '../services/tokenService';
+import API_BASE_URL from "../config";
 
 const SafetyRequesterComponent = () => {
   const navigation = useNavigation();
@@ -42,7 +43,7 @@ const SafetyRequesterComponent = () => {
   const [showLocAutoCompleteList, setShowLocAutoCompleteList] = useState(false);
   const [locAutoCompleteList, setLocAutoCompleteList] = useState([]);
 
-  const API_KEY = "Get your own API Key!";
+  const API_KEY = "AIzaSyBP26jrlVQ062A5TJsu1rD3TQ49n7cto54";
   // This function has 2 cases
   // case 1: user chose to searchAddress on their own. In that case, we fetch autocompleted suggestions of the keyword on a list and show it to the user.
   // case 2: user chose to select a location from the static lawrence building list. Then as the user types, the user will be given a list that consists of locations that contain that keyword.
@@ -130,7 +131,7 @@ const SafetyRequesterComponent = () => {
       }
     };
   
-    const baseUrl = 'http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/option/location';
+    const baseUrl = `${API_BASE_URL}/option/location`;
     const autocompleteUrl = (input) => `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${API_KEY}`;
   
       if (locSearchAddress) {
@@ -246,7 +247,7 @@ const SafetyRequesterComponent = () => {
 
       const token = await TokenService.getAccessToken();
 
-      const response = await fetch("http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/option/location/all", {
+      const response = await fetch(`${API_BASE_URL}/option/location/all`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -275,7 +276,7 @@ const SafetyRequesterComponent = () => {
 
       const token = await TokenService.getAccessToken();
 
-      const response = await fetch("http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/option/request/all", {
+      const response = await fetch(`${API_BASE_URL}/option/request/all`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -337,7 +338,7 @@ const SafetyRequesterComponent = () => {
 
       const token = await TokenService.getAccessToken();
 
-      const response = await fetch("http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request", {
+      const response = await fetch(`${API_BASE_URL}/request`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

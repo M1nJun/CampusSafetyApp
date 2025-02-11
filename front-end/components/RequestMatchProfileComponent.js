@@ -14,6 +14,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { openURL, canOpenURL } from 'expo-linking';
 import MiniProfileComponent from "./MiniProfileComponent";
 import * as TokenService from '../services/tokenService';
+import API_BASE_URL from "../config";
 
 const RequestMatchProfileComponent = ({ usertype, nameToShow, profileToShow }) => {
   const [profileData, setProfileData] = useState(null);
@@ -33,7 +34,7 @@ const RequestMatchProfileComponent = ({ usertype, nameToShow, profileToShow }) =
       const token = await TokenService.getAccessToken();
 
       const response = await fetch(
-        `http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/user/profile/${profileToShow}`,
+        `${API_BASE_URL}/user/profile/${profileToShow}`,
         {
           method: 'GET',
           headers: {

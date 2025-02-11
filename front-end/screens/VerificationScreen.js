@@ -3,6 +3,7 @@ import React, { useState, useRef } from "react";
 import styles from "../styles";
 import { useNavigation } from "@react-navigation/native";
 import * as TokenService from '../services/tokenService';
+import API_BASE_URL from "../config";
 
 export default function VerificationScreen() {
   const navigation = useNavigation();
@@ -44,7 +45,7 @@ export default function VerificationScreen() {
 
         const token = await TokenService.getAccessToken();
 
-        const response = await fetch("http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/user/verify", {
+        const response = await fetch(`${API_BASE_URL}/user/verify`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

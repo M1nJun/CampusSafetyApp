@@ -20,6 +20,7 @@ import RequestMatchProfileComponent from "./RequestMatchProfileComponent"
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import * as TokenService from '../services/tokenService';
+import API_BASE_URL from "../config";
 
 const OfficerRequestViewComponent = () => {
   const route = useRoute();
@@ -80,10 +81,10 @@ const OfficerRequestViewComponent = () => {
 
     decision === "accept"? setRequestStatus("accepted") : setRequestStatus("completed")
     const url = decision === "accept"
-      ? `http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/${decision}?requestID=${requestID}&receiverName=${receiverName}`
+      ? `${API_BASE_URL}/request/${decision}?requestID=${requestID}&receiverName=${receiverName}`
       : decision === "cancel"
-      ? `http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/${decision}?requestID=${requestID}&reason=${cancelReason}`
-      : `http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/${decision}?requestID=${requestID}`;
+      ? `${API_BASE_URL}/request/${decision}?requestID=${requestID}&reason=${cancelReason}`
+      : `${API_BASE_URL}/request/${decision}?requestID=${requestID}`;
   
     try {
       const tokenRefreshed = await TokenService.refreshAccessToken();
@@ -126,7 +127,7 @@ const OfficerRequestViewComponent = () => {
 
       const token = await TokenService.getAccessToken();
 
-      const response = await fetch("http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/option/officer/driver/all", {
+      const response = await fetch(`${API_BASE_URL}/option/officer/driver/all`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -162,7 +163,7 @@ const OfficerRequestViewComponent = () => {
         const token = await TokenService.getAccessToken();
         
         const response = await fetch(
-          `http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/${requestID}`,
+          `${API_BASE_URL}/request/${requestID}`,
           {
             method: "GET",
             headers: {

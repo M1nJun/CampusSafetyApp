@@ -13,6 +13,7 @@ import styles from "../styles";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as TokenService from '../services/tokenService';
+import API_BASE_URL from "../config";
 
 export default function SignUpScreen() {
   const navigation = useNavigation();
@@ -50,7 +51,7 @@ export default function SignUpScreen() {
     }
 
     try {
-      const response = await fetch("http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/user", {
+      const response = await fetch(`${API_BASE_URL}/user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

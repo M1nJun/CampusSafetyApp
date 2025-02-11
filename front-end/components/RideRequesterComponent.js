@@ -22,6 +22,7 @@ import debounce from "lodash.debounce";
 import MapView, {Marker} from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as TokenService from '../services/tokenService';
+import API_BASE_URL from "../config";
 
 const RideRequesterComponent = () => {
   const navigation = useNavigation();
@@ -135,7 +136,7 @@ const RideRequesterComponent = () => {
 
       const token = await TokenService.getAccessToken();
 
-      const response = await fetch("http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/option/location/all", {
+      const response = await fetch(`${API_BASE_URL}/option/location/all`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -166,7 +167,7 @@ const RideRequesterComponent = () => {
 
       const token = await TokenService.getAccessToken();
 
-      const response = await fetch("http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/option/location/all", {
+      const response = await fetch(`${API_BASE_URL}/option/location/all`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -193,7 +194,7 @@ const RideRequesterComponent = () => {
 
 
 
-  const API_KEY = "Get your own Google API_KEY";
+  const API_KEY = "AIzaSyBP26jrlVQ062A5TJsu1rD3TQ49n7cto54";
   // Added fetchPlaceDetails Function: This function fetches detailed address information for a given place ID.
 
   // Modified fetchAutocomplete Function: Now it maps over predictions to get both placeId and description.
@@ -300,7 +301,7 @@ const RideRequesterComponent = () => {
       }
     };
   
-    const baseUrl = 'http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/option/location';
+    const baseUrl = `${API_BASE_URL}/option/location`;
     const autocompleteUrl = (input) => `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${API_KEY}`;
   
     if (isDestination) {
@@ -421,7 +422,7 @@ const RideRequesterComponent = () => {
 
       const token = await TokenService.getAccessToken();
 
-      const response = await fetch("http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request", {
+      const response = await fetch(`${API_BASE_URL}/request`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

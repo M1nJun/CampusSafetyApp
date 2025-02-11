@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useRoute, useFocusEffect } from "@react-navigation/native";
 import LottieView from "lottie-react-native";
 import * as TokenService from '../services/tokenService';
+import API_BASE_URL from "../config";
 
 const WaitingForOfficerAnimationComponent = () => {
   const route = useRoute();
@@ -32,7 +33,7 @@ const WaitingForOfficerAnimationComponent = () => {
       const token = await TokenService.getAccessToken();
 
       const response = await fetch(
-        `http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/${requestID}/status`,
+        `${API_BASE_URL}/request/${requestID}/status`,
         {
           method: "GET",
           headers: {

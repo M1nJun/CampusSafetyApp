@@ -5,6 +5,7 @@ import { useCallback } from "react";
 import UserMiniRequestComponent from "./UserMiniRequestComponent";
 import LottieView from "lottie-react-native";
 import * as TokenService from '../services/tokenService';
+import API_BASE_URL from "../config";
 
 const MyRequestHistoryComponent = ({ navigation }) => {
   const route = useRoute();
@@ -52,7 +53,7 @@ const MyRequestHistoryComponent = ({ navigation }) => {
       fetchRequests(
         "completed",
         setCompletedRequests,
-        "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/officer/self/completed/canceled/all"
+        `${API_BASE_URL}/request/officer/self/completed/canceled/all`
       );
       setLoading(false);
 
@@ -60,7 +61,7 @@ const MyRequestHistoryComponent = ({ navigation }) => {
         fetchRequests(
           "completed",
           setCompletedRequests,
-          "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/officer/self/completed/canceled/all"
+          `${API_BASE_URL}/request/officer/self/completed/canceled/all`
         );
       }, 10000);
 

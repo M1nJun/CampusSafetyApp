@@ -5,6 +5,7 @@ import { useCallback } from "react";
 import UserMiniRequestComponent from "./UserMiniRequestComponent";
 import LottieView from "lottie-react-native";
 import * as TokenService from '../services/tokenService';
+import API_BASE_URL from "../config";
 
 const MyRequestComponent = ({ navigation }) => {
   const route = useRoute();
@@ -51,39 +52,15 @@ const MyRequestComponent = ({ navigation }) => {
   useFocusEffect(
     useCallback(() => {
       setLoading(true);
-      fetchRequests(
-        "pending",
-        setPendingRequests,
-        "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/self/pending/all"
-      );
-      fetchRequests(
-        "accepted",
-        setAcceptedRequests,
-        "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/self/accepted/all"
-      );
-      fetchRequests(
-        "completed",
-        setCompletedRequests,
-        "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/self/completed/all"
-      );
+      fetchRequests("pending", setPendingRequests, `${API_BASE_URL}/request/self/pending/all`);
+      fetchRequests("accepted", setAcceptedRequests, `${API_BASE_URL}/request/self/accepted/all`);
+      fetchRequests("completed", setCompletedRequests, `${API_BASE_URL}/request/self/completed/all`);
       setLoading(false);
 
       const intervalId = setInterval(() => {
-        fetchRequests(
-          "pending",
-          setPendingRequests,
-          "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/self/pending/all"
-        );
-        fetchRequests(
-          "accepted",
-          setAcceptedRequests,
-          "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/self/accepted/all"
-        );
-        fetchRequests(
-          "completed",
-          setCompletedRequests,
-          "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/self/completed/all"
-        );
+        fetchRequests("pending", setPendingRequests, `${API_BASE_URL}/request/self/pending/all`);
+        fetchRequests("accepted", setAcceptedRequests, `${API_BASE_URL}/request/self/accepted/all`);
+        fetchRequests("completed", setCompletedRequests, `${API_BASE_URL}/request/self/completed/all`);
       }, 10000);
 
       return () => clearInterval(intervalId);

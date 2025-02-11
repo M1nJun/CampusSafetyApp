@@ -13,6 +13,7 @@ import Feather from '@expo/vector-icons/Feather';
 import styles from "../styles";
 import * as TokenService from '../services/tokenService';
 import { StackActions, CommonActions } from '@react-navigation/native';
+import API_BASE_URL from "../config";
 
 
 
@@ -56,7 +57,7 @@ const ProfileComponent = ({ profileToShow}) => {
   const navigation = useNavigation();
 
   const fetchProfile = async () => {
-    const url = "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/user/profile/self";
+    const url = `${API_BASE_URL}/user/profile/self`;
     try {
       const tokenRefreshed = await TokenService.refreshAccessToken();
 
@@ -106,7 +107,7 @@ const ProfileComponent = ({ profileToShow}) => {
       const token = await TokenService.getAccessToken();
 
       const response = await fetch(
-        "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/user/profile/update",
+        `${API_BASE_URL}/user/profile/update`,
         {
           method: "POST",
           headers: {

@@ -9,6 +9,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useEffect, useState } from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import * as TokenService from '../services/tokenService';
+import API_BASE_URL from "../config";
 
 const OfficerMiniRequestComponent = ({ requestID, requestData, usertype, navigation }) => {
   const [requestDetails, setRequestDetails] = useState(requestData);
@@ -27,7 +28,7 @@ const OfficerMiniRequestComponent = ({ requestID, requestData, usertype, navigat
       const token = await TokenService.getAccessToken();
 
       const response = await fetch(
-        `http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/${requestID}`,
+        `${API_BASE_URL}/request/${requestID}`,
         {
           method: "GET",
           headers: {

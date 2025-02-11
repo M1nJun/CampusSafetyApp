@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { navigate } from './navigationService';
+import API_BASE_URL from "../config";
 
 const REFRESH_INTERVAL = 10 * 60 * 1000; 
 // Set an initial variable for the timer to hold the reference
@@ -100,7 +101,7 @@ const refreshAccessToken = async () => {
 
     // console.log('Sending refresh token to the server...');
 
-    const response = await fetch('http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/user/refreshToken', {
+    const response = await fetch(`${API_BASE_URL}/user/refreshToken`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

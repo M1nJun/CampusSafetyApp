@@ -8,6 +8,7 @@ import { useCallback } from "react";
 import { useRoute, useNavigation, useFocusEffect } from "@react-navigation/native";
 import OfficerMiniRequestComponent from "./OfficerMiniRequestComponent";
 import * as TokenService from '../services/tokenService';
+import API_BASE_URL from "../config";
 
 
 const ReservedRequestReceiverComponent = ({ navigation }) => {
@@ -55,19 +56,19 @@ const ReservedRequestReceiverComponent = ({ navigation }) => {
     useCallback(() => {
       setLoading(true);
       fetchRequests("accepted", setAcceptedRequests, usertype === "officer"?
-      "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/reserved/accepted/all":"http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/reserved/accepted/ride");
+      `${API_BASE_URL}/request/reserved/accepted/all`:`${API_BASE_URL}/request/reserved/accepted/ride`);
       
 
       fetchRequests("pending", setPendingRequests, usertype === "officer"?
-      "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/reserved/pending/all":"http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/reserved/pending/ride");
+      `${API_BASE_URL}/request/reserved/pending/all`:`${API_BASE_URL}/request/reserved/pending/ride`);
       setLoading(false);
       const intervalId = setInterval(() => {
         fetchRequests("accepted", setAcceptedRequests, usertype === "officer"?
-        "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/reserved/accepted/all":"http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/reserved/accepted/ride");
+        `${API_BASE_URL}/request/reserved/accepted/all`:`${API_BASE_URL}/request/reserved/accepted/ride`);
       
 
         fetchRequests("pending", setPendingRequests, usertype === "officer"?
-        "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/reserved/pending/all":"http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/reserved/pending/ride");
+        `${API_BASE_URL}/request/reserved/pending/all`:`${API_BASE_URL}/request/reserved/pending/ride`);
       }, 2000);
 
       return () => clearInterval(intervalId);

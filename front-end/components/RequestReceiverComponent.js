@@ -9,6 +9,7 @@ import { useRoute, useNavigation, useFocusEffect } from "@react-navigation/nativ
 import styles from "../styles";
 import OfficerMiniRequestComponent from "./OfficerMiniRequestComponent";
 import * as TokenService from '../services/tokenService';
+import API_BASE_URL from "../config";
 
 const RequestReceiverComponent = ({ navigation }) => {
   const route = useRoute();
@@ -55,19 +56,19 @@ const RequestReceiverComponent = ({ navigation }) => {
     useCallback(() => {
       setLoading(true);
       fetchRequests("accepted", setAcceptedRequests, usertype === "Officer"?
-      "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/instant/accepted/all":"http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/instant/accepted/ride");
+      `${API_BASE_URL}/request/instant/accepted/all`:`${API_BASE_URL}/request/instant/accepted/ride`);
       
 
       fetchRequests("pending", setPendingRequests, usertype === "Officer"?
-      "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/instant/pending/all":"http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/instant/pending/ride");
+      `${API_BASE_URL}/request/instant/pending/all`:`${API_BASE_URL}/request/instant/pending/ride`);
       setLoading(false);
       const intervalId = setInterval(() => {
         fetchRequests("accepted", setAcceptedRequests, usertype === "Officer"?
-        "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/instant/accepted/all":"http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/instant/accepted/ride");
+        `${API_BASE_URL}/request/instant/accepted/all`:`${API_BASE_URL}/request/instant/accepted/ride`);
       
 
         fetchRequests("pending", setPendingRequests, usertype === "Officer"?
-        "http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/instant/pending/all":"http://ec2-3-16-22-238.us-east-2.compute.amazonaws.com:8085/request/instant/pending/ride");
+        `${API_BASE_URL}/request/instant/pending/all`:`${API_BASE_URL}/request/instant/pending/ride`);
       }, 2000);
 
       return () => clearInterval(intervalId);
