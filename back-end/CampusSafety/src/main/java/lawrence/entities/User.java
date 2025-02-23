@@ -2,12 +2,10 @@ package lawrence.entities;
 
 import jakarta.persistence.*;
 import lawrence.dtos.UserDTO;
-import lawrence.services.PasswordService;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -19,6 +17,7 @@ public class User {
     @Column(columnDefinition = "VARCHAR(45)")
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID userID;
+    
     private String username;
     private String password;
     private String usertype;
@@ -30,6 +29,12 @@ public class User {
     private Boolean verified;
     private String verificationCode;
     private LocalDateTime verificationCodeExpiry;
+
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ChatMessage> sentMessages;
+
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ChatMessage> receivedMessages;
 
     public User() {}
 
@@ -43,99 +48,46 @@ public class User {
         verified = false;
     }
 
-    public UUID getUserID() {
-        return userID;
-    }
+    // Getters and Setters
+    public UUID getUserID() { return userID; }
+    public void setUserID(UUID userID) { this.userID = userID; }
 
-    public void setUserID(UUID userID) {
-        this.userID = userID;
-    }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
-    public String getUsername() {
-        return username;
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    public String getUsertype() { return usertype; }
+    public void setUsertype(String usertype) { this.usertype = usertype; }
 
-    public String getPassword() {
-        return password;
-    }
+    public String getFirstname() { return firstname; }
+    public void setFirstname(String firstname) { this.firstname = firstname; }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public String getLastname() { return lastname; }
+    public void setLastname(String lastname) { this.lastname = lastname; }
 
-    public String getUsertype() {
-        return usertype;
-    }
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 
-    public void setUsertype(String usertype) {
-        this.usertype = usertype;
-    }
+    public String getStudentID() { return studentID; }
+    public void setStudentID(String studentID) { this.studentID = studentID; }
 
-    public String getFirstname() {
-        return firstname;
-    }
+    public Boolean getBusy() { return busy; }
+    public void setBusy(Boolean busy) { this.busy = busy; }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
+    public Boolean getVerified() { return verified; }
+    public void setVerified(Boolean verified) { this.verified = verified; }
 
-    public String getLastname() {
-        return lastname;
-    }
+    public LocalDateTime getVerificationCodeExpiry() { return verificationCodeExpiry; }
+    public void setVerificationCodeExpiry(LocalDateTime verificationCodeExpiry) { this.verificationCodeExpiry = verificationCodeExpiry; }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
+    public String getVerificationCode() { return verificationCode; }
+    public void setVerificationCode(String verificationCode) { this.verificationCode = verificationCode; }
 
-    public String getPhone() {
-        return phone;
-    }
+    public List<ChatMessage> getSentMessages() { return sentMessages; }
+    public void setSentMessages(List<ChatMessage> sentMessages) { this.sentMessages = sentMessages; }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getStudentID() {
-        return studentID;
-    }
-
-    public void setStudentID(String studentID) {
-        this.studentID = studentID;
-    }
-
-    public Boolean getBusy() {
-        return busy;
-    }
-
-    public void setBusy(Boolean busy) {
-        this.busy = busy;
-    }
-
-    public Boolean getVerified() {
-        return verified;
-    }
-
-    public void setVerified(Boolean verified) {
-        this.verified = verified;
-    }
-
-    public LocalDateTime getVerificationCodeExpiry() {
-        return verificationCodeExpiry;
-    }
-
-    public void setVerificationCodeExpiry(LocalDateTime verificationCodeExpiry) {
-        this.verificationCodeExpiry = verificationCodeExpiry;
-    }
-
-    public String getVerificationCode() {
-        return verificationCode;
-    }
-
-    public void setVerificationCode(String verificationCode) {
-        this.verificationCode = verificationCode;
-    }
+    public List<ChatMessage> getReceivedMessages() { return receivedMessages; }
+    public void setReceivedMessages(List<ChatMessage> receivedMessages) { this.receivedMessages = receivedMessages; }
 }
