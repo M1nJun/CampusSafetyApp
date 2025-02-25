@@ -11,6 +11,8 @@ import OfficerHomeScreen from "./screens/OfficerHomeScreen";
 import OfficerRequestLockScreen from "./screens/OfficerRequestLockScreen";
 import StudentRequestLockScreen from "./screens/StudentRequestLockScreen";
 import ProfileViewScreen from "./screens/ProfileViewScreen";
+import { ChatListScreen } from "./screens/ChatListScreen";
+import { ChatScreen } from "./screens/ChatScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +26,8 @@ const StackNavigatorSetup = () => (
     <Stack.Screen name="StudentHome" component={StudentHomeScreen} />
     <Stack.Screen name="OfficerHome" component={OfficerHomeScreen} />
     <Stack.Screen name="Verification" component={VerificationScreen} />
+    <Stack.Screen name="ChatList" component={ChatListScreen} />
+    <Stack.Screen name="ChatScreen" component={ChatScreen} />
     <Stack.Screen name="StudentAccount" component={StudentAccountScreen} />
     <Stack.Screen name="OfficerAccount" component={OfficerAccountScreen} />
     <Stack.Screen

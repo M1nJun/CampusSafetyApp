@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import Entypo from "@expo/vector-icons/Entypo";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 const BottomNavigationBarComponent = ({ usertype }) => {
@@ -40,6 +41,17 @@ const BottomNavigationBarComponent = ({ usertype }) => {
           Home
         </Text>
       </TouchableOpacity>
+
+      <TouchableOpacity
+        style={{ alignItems: "center", marginHorizontal: 40 }}
+        onPress={() => handleNavigation("ChatList")}
+      >
+        <Ionicons name="chatbubbles" size={30} color="white" />
+        <Text style={{ color: "white", fontWeight: "600", marginTop: 4 }}>
+          Message
+        </Text>
+      </TouchableOpacity>
+
       <TouchableOpacity
         style={{ alignItems: "center", marginHorizontal: 50 }}
         onPress={() => handleNavigation(usertype === "Driver"? "OfficerAccount" : usertype + "Account")}

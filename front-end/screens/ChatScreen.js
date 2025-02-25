@@ -1,95 +1,115 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TextInput, Button, StyleSheet } from 'react-native';
-import SockJS from 'sockjs-client';
-import Stomp from 'stompjs';
-import moment from 'moment';
-
-const API_BASE_URL = 'http://localhost:8085';
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList, TextInput, Button, SafeAreaView } from 'react-native';
+import API_BASE_URL from '../config';
+import { useNavigation } from '@react-navigation/native';
+import * as TokenService from '../services/tokenService';
+import BottomNavigationBarComponent from '../components/BottomNavigationBarComponent';
+import styles from '../styles'; // Ensure styles are properly imported
 
 const ChatScreen = ({ route }) => {
-    const { userID, username } = route.params;
-    const [messages, setMessages] = useState([]);
-    const [message, setMessage] = useState('');
-    const [stompClient, setStompClient] = useState(null);
+  const { receiverID, usertype } = route.params; // receiverID is now passed, but we'll update it from API response
+  const [chatWith, setChatWith] = useState('');
+  const [chatWithID, setChatWithID] = useState('');
+  const [myID, setMyID] = useState('');
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
 
-    useEffect(() => {
-        fetchChatHistory();
-        setupWebSocket();
-
-        return () => {
-            if (stompClient) stompClient.disconnect();
-        };
-    }, []);
-
-    const fetchChatHistory = async () => {
-        try {
-            const response = await fetch(`${API_BASE_URL}/chat/history?receiverID=${userID}`, {
-                headers: { Authorization: `Bearer YOUR_JWT_TOKEN` },
-            });
-            const data = await response.json();
-            setMessages(data);
-        } catch (error) {
-            console.error('Error fetching chat history:', error);
-        }
-    };
-
-    const setupWebSocket = () => {
-        const socket = new SockJS(`${API_BASE_URL}/ws`);
-        const stomp = Stomp.over(socket);
-        stomp.connect({}, () => {
-            stomp.subscribe(`/user/${userID}/queue/messages`, (msg) => {
-                const newMessage = JSON.parse(msg.body);
-                setMessages((prevMessages) => [...prevMessages, newMessage]);
-            });
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        const token = await TokenService.getAccessToken();
+        const response = await fetch(`${API_BASE_URL}/chat/history?receiverID=${receiverID}`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
-        setStompClient(stomp);
-    };
 
-    const sendMessage = () => {
-        if (stompClient && message.trim()) {
-            const chatMessageDTO = {
-                receiverID: userID,
-                messageContent: message,
-            };
-            stompClient.send('/app/sendMessage', {}, JSON.stringify(chatMessageDTO));
-            setMessage('');
+        if (!response.ok) {
+          throw new Error(`HTTP Error! Status: ${response.status}`);
         }
+
+        const data = await response.json();
+        console.log("Chat History Fetched:", data); // Debugging log
+        
+        // Set new state values from API response
+        setChatWith(data.chatWith); // Name of the person we're chatting with
+        setChatWithID(data.chatWithID); // Their ID
+        setMyID(data.myID); // Our own ID from the API
+        setMessages(data.messages); // The list of messages
+
+      } catch (error) {
+        console.error("Error fetching chat history:", error);
+      }
     };
 
-    return (
-        <View style={styles.container}>
-            <FlatList
-                data={messages}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => (
-                    <View style={[styles.messageContainer, item.senderID === userID ? styles.receiver : styles.sender]}>
-                        <Text style={styles.messageText}>{item.messageContent}</Text>
-                        <Text style={styles.timestamp}>{moment(item.messageTimestamp).format('hh:mm A')}</Text>
-                    </View>
-                )}
-            />
-            <View style={styles.inputContainer}>
-                <TextInput
-                    style={styles.input}
-                    value={message}
-                    onChangeText={setMessage}
-                    placeholder="Type a message..."
-                />
-                <Button title="Send" onPress={sendMessage} />
-            </View>
-        </View>
-    );
+    fetchMessages();
+  }, [receiverID]);
+
+  const sendMessage = async () => {
+    if (!newMessage.trim()) return;
+    
+    try {
+      const token = await TokenService.getAccessToken();
+      await fetch(`${API_BASE_URL}/chat/sendMessage`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ receiverID: chatWithID, messageContent: newMessage }),
+      });
+
+      const newChatMessage = {
+        senderID: myID, 
+        receiverID: chatWithID,
+        messageContent: newMessage,
+        messageTimestamp: new Date().toISOString(), // Simulating timestamp
+      };
+
+      // Add new message to chat history
+      setMessages((prevMessages) => [...prevMessages, newChatMessage]);
+      setNewMessage('');
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      {/* Display Chat Partner's Name */}
+      <View style={styles.chatHeader}>
+        <Text style={styles.chatHeaderText}>{chatWith}</Text>
+      </View>
+
+      {/* Display Messages */}
+      <FlatList
+        data={messages}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <View style={[
+            styles.messageContainer,
+            item.senderID === myID ? styles.senderMessage : styles.receiverMessage
+          ]}>
+            <Text style={item.senderID === myID ? styles.senderText : styles.receiverText}>
+              {item.messageContent}
+            </Text>
+          </View>
+        )}
+      />
+
+      {/* Message Input and Send Button */}
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.messageInput}
+          value={newMessage}
+          onChangeText={setNewMessage}
+          placeholder="Type a message"
+        />
+        <Button title="Send" onPress={sendMessage} />
+      </View>
+
+      {/* Bottom Navigation Bar */}
+      <BottomNavigationBarComponent usertype={usertype} />
+    </SafeAreaView>
+  );
 };
 
-const styles = StyleSheet.create({
-    container: { flex: 1, padding: 10, backgroundColor: '#fff' },
-    messageContainer: { padding: 10, marginVertical: 5, borderRadius: 10, maxWidth: '75%' },
-    sender: { alignSelf: 'flex-end', backgroundColor: '#007AFF' },
-    receiver: { alignSelf: 'flex-start', backgroundColor: '#E5E5EA' },
-    messageText: { fontSize: 16, color: '#fff' },
-    timestamp: { fontSize: 12, color: '#ccc', marginTop: 5, textAlign: 'right' },
-    inputContainer: { flexDirection: 'row', padding: 10, borderTopWidth: 1, borderTopColor: '#ddd' },
-    input: { flex: 1, borderWidth: 1, borderRadius: 5, padding: 10, marginRight: 10 },
-});
-
-export default ChatScreen;
+export { ChatScreen };

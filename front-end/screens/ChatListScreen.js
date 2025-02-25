@@ -1,51 +1,66 @@
-import React, { useEffect, useState } from 'react';
-import { View, FlatList, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { View, FlatList, TouchableOpacity, Text, SafeAreaView } from "react-native";
+import API_BASE_URL from "../config";
+import { useNavigation } from "@react-navigation/native";
+import styles from "../styles";
+import * as TokenService from "../services/tokenService";
+import BottomNavigationBarComponent from "../components/BottomNavigationBarComponent";
 
-const API_BASE_URL = 'http://localhost:8085';  // Update with your backend URL
+const ChatListScreen = ({ route }) => {
+  const { usertype } = route.params;
+  const [conversations, setConversations] = useState([]);
+  const navigation = useNavigation();
 
-const ChatListScreen = ({ navigation }) => {
-    const [chatList, setChatList] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        fetchChatList();
-    }, []);
-
-    const fetchChatList = async () => {
-        try {
-            const response = await fetch(`${API_BASE_URL}/chat/conversations`, {
-                headers: {
-                    Authorization: `Bearer YOUR_JWT_TOKEN`,  // Replace dynamically in production
-                },
-            });
-            const data = await response.json();
-            setChatList(data);
-        } catch (error) {
-            console.error('Error fetching chats:', error);
-        } finally {
-            setLoading(false);
+  useEffect(() => {
+    const fetchConversations = async () => {
+      const token = await TokenService.getAccessToken();
+      try {
+        const response = await fetch(`${API_BASE_URL}/chat/conversations`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setConversations(data);
+        } else {
+          console.error("Failed to fetch conversations");
         }
+      } catch (error) {
+        console.error("Error fetching conversations:", error);
+      }
     };
+    fetchConversations();
+  }, []);
 
-    if (loading) {
-        return <ActivityIndicator size="large" color="#0000ff" />;
-    }
+  // Component for rendering each chat item
+  const renderChatItem = ({ item }) => (
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate("ChatScreen", {
+          receiverID: item.userID,
+          receiverName: item.username,
+          usertype,
+        })
+      }
+      style={styles.chatItem}
+    >
+      <View style={styles.chatInfo}>
+        <Text style={styles.chatName}>{item.username}</Text>
+        <Text style={styles.lastMessage}>Tap to open chat</Text>
+      </View>
+    </TouchableOpacity>
+  );
 
-    return (
-        <View>
-            <FlatList
-                data={chatList}
-                keyExtractor={(item) => item.userID}
-                renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => navigation.navigate('ChatScreen', { userID: item.userID, username: item.username })}>
-                        <View style={{ padding: 15, borderBottomWidth: 1, borderBottomColor: '#ddd' }}>
-                            <Text style={{ fontSize: 18 }}>{item.username}</Text>
-                        </View>
-                    </TouchableOpacity>
-                )}
-            />
-        </View>
-    );
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={{height: 20}}></View>
+      <FlatList
+        data={conversations}
+        keyExtractor={(item) => item.userID}
+        renderItem={renderChatItem}
+      />
+      <BottomNavigationBarComponent usertype={usertype} />
+    </SafeAreaView>
+  );
 };
 
-export default ChatListScreen;
+export { ChatListScreen };

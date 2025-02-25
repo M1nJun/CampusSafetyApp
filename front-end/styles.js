@@ -138,6 +138,87 @@ const styles = StyleSheet.create({
     backgroundColor: '#A4A4A4',
     marginBottom: 15,
   },
+  //chatlistscreen
+  chatItem: {
+    backgroundColor: "white",
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 15,
+    marginVertical: 8,
+    marginHorizontal: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+  chatInfo: {
+    flex: 1,
+  },
+  chatName: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  lastMessage: {
+    fontSize: 14,
+    color: "#666",
+    marginTop: 4,
+  },
+
+  //chatscreen
+  messageContainer: {
+    marginVertical: 4,
+    marginHorizontal: 22,
+    padding: 10,
+    borderRadius: 10,
+    maxWidth: '75%',
+  },
+  chatHeader: {
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  chatHeaderText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },  
+  senderMessage: {
+    alignSelf: 'flex-end',
+    backgroundColor: '#007AFF', // Blue for sender
+  },
+  receiverMessage: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#2A2836', // Light gray for receiver
+  },
+  senderText: {
+    color: '#fff', // White text for sender
+  },
+  receiverText: {
+    color: '#fff', // White text for receiver
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: '#fff', // White input background
+    borderTopWidth: 1,
+    borderColor: '#ddd',
+  },
+  inputField: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: '#fff',
+    color: '#000',
+  },
+  sendButton: {
+    marginLeft: 10,
+  },
 });
 
 export default styles;
