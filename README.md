@@ -127,8 +127,9 @@ The app is built with **React Native** for cross-platform support.
 
 ---
 
-## AWS Infrastructure  
-![Campus Safety App - AWS Architecture (1)](https://github.com/user-attachments/assets/260d4866-4a8a-4a20-b8a4-e842af11232d)
+## AWS Infrastructure
+![Campus Safety App - AWS Architecture](https://github.com/user-attachments/assets/d3f12c3f-b1db-4dd1-9362-8a0017a82bfd)
+
 
 
 ### **System Architecture**  
