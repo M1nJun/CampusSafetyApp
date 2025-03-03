@@ -1,0 +1,171 @@
+# Hi, my name is Minjun Lee  
+
+I am a passionate software engineer and a senior at **Lawrence University**, majoring in Computer Science and minoring in Data Science.  
+I have a strong foundation in full-stack development, algorithms, and systems. I am fascinated by technology’s potential to address real-world problems.  
+My ambition is to create software that fits naturally into people’s lives, supporting them while preserving what makes life fulfilling.  
+
+---
+
+## Technical Skills  
+
+- **Programming Languages:** Java, Python, C/C++, React/React Native, JavaScript, HTML, Swift, TensorFlow  
+- **Development Environment:** SQL, Android Studio, Xcode, R, Excel, Linux, AWS (Certified Solutions Architect)  
+- **Languages:** English, Korean, Japanese, Spanish  
+
+---
+
+## Academic & Work Experience  
+
+- **B.A. in Computer Science** - Lawrence University, Class of 2025 (GPA: 3.8/4.0)  
+- **Computer Science/Math Research** - Developed an algorithm for generating mathematical objects known as stable surfaces using graph theory and combinatorics (C++ & Python).  
+- **HackHarvard 2023** - Built GymBro AI, a personalized AI fitness coach, using Ionic React for UI and Flask with LangChain for AI integration.  
+- **LU Datathon (1st Place)** - Analyzed environmental and economic impacts of the Russo-Ukrainian War using R Studio.  
+- **Software Engineer Intern, Campus Safety LU** - Developed a mobile application for students, faculty, and officers to streamline requests.  
+- **Computer Science Course Tutor** - Assisted students with coursework and exam preparation.  
+
+---
+
+# Campus Safety App - Project Overview  
+
+## Introduction  
+
+I have been employed as a student officer at the  
+[Campus Safety Office](https://www.lawrence.edu/offices/campus-services/campus-safety-services) at Lawrence University for a year.  
+Campus Safety's mission is to provide students, faculty, and staff with a secure environment.  
+
+## Recognizing the Problem  
+
+- Requests were made via phone calls, leading to unstructured communication and potential miscommunication.  
+- Officers had to manually record request details, leading to inefficiencies.  
+- Updating students on request status required manual effort, causing delays.  
+
+Recognizing these inefficiencies, I partnered with the university to develop the **Campus Safety App**, modernizing request handling with a digital solution.  
+
+## The Solution  
+
+I created a **full-stack mobile application** with two versions:  
+- **Student Version** - Students submit requests through structured forms.  
+- **Officer Version** - Officers view and manage requests in real-time.  
+- **Database** - Automatically saves request history, removing manual report writing.  
+
+## What is a Full-Stack Application?  
+
+A **full-stack app** consists of:  
+- **Frontend (Waiter & Menu):** Collects user input and interacts with users.  
+- **Backend (Chef & Kitchen):** Processes requests and performs logic.  
+- **Database (Storage & Ingredients):** Stores user data and request history.  
+
+## Full-Stack Architecture  
+
+- **Frontend:** React Native (supports both iOS & Android)  
+- **Backend:** Spring Boot  
+- **Database:** MySQL  
+- **Hosting:** AWS  
+
+---
+
+## Database Structure  
+
+The backend uses Spring Boot JPA with a MySQL database.  
+
+### **Users Table**  
+- `userID` (UUID, Primary Key)  
+- `username`, `password`, `usertype`  
+- `firstname`, `lastname`, `phone`, `studentID`  
+- `verified`, `verificationCode`, `verificationCodeExpiry`  
+
+### **Requests Table**  
+- `requestID` (Integer, Primary Key)  
+- `requesterID` (FK → users), `receiverID` (FK → users)  
+- `requestType`, `location`, `message`  
+- `requestStatus` (pending, accepted, completed, canceled)  
+- `reserved`, `reservationDue`  
+
+### **ChatMessages Table**  
+- `chatMessageID` (Integer, Primary Key)  
+- `senderID` (FK → users), `receiverID` (FK → users)  
+- `messageContent`, `messageTimestamp`  
+
+This schema supports authentication, request handling, and messaging.  
+
+---
+
+## Backend Implementation  
+
+Built with **Spring Boot** and follows a **REST API architecture** for scalability.  
+
+- **Spring Boot Framework** - Handles API requests and logic.  
+- **JPA (Java Persistence API)** - Manages database operations.  
+- **MySQL Database** - Stores user data and requests.  
+- **Spring Security & JWT** - Manages authentication and user sessions.  
+- **AWS Hosting** - Backend is deployed on AWS EC2 with Auto Scaling.  
+
+---
+
+## Security Implementation  
+
+### **JWT Authentication**  
+- Uses **JSON Web Tokens (JWT)** for user authentication.  
+- Tokens are **signed with HMAC SHA-256** for security.  
+- **Security Flow:**  
+  1. User logs in → Gets an Access Token.  
+  2. Access Token expires → Refresh Token is used.  
+  3. Refresh Token expires → User must re-login.  
+
+### **Automated Email Verification**  
+- A **6-digit verification code** is generated at sign-up.  
+- The code is **valid for 15 minutes** and sent via **JavaMailSender**.  
+- Users enter the code to activate their account.  
+
+### **Secure API Endpoints**  
+- **Public:** `/user/register`, `/user/login`, `/user/refreshToken`  
+- **Protected:** All other endpoints require JWT authentication.  
+
+---
+
+## Frontend Features  
+
+The app is built with **React Native** for cross-platform support.  
+
+### **Student/Faculty App Features**  
+- **User Authentication** (JWT-based login, email verification).  
+- **Request Management** (Submit ride & safety requests).  
+- **Messaging System** (Real-time chat with officers).  
+- **Google Maps Integration** (Location selection & tracking).  
+
+### **Officer App Features**  
+- **Manage Requests** (View, accept, cancel, or complete requests).  
+- **Messaging System** (Direct communication with students).  
+- **Location & Routing** (Google Maps integration for navigation).  
+
+### **Google API Services Used**  
+- **Google Maps SDK** - Displays interactive maps.  
+- **Google Places API** - Enables location autocomplete.  
+- **Google Directions API** - Provides navigation routes.  
+
+---
+
+## AWS Infrastructure  
+
+### **Why AWS?**  
+AWS provides **scalability, security, and reliability** for real-time request handling.  
+
+### **System Architecture**  
+1. **Mobile App** sends requests to an **Application Load Balancer (ALB)**.  
+2. **ALB** routes traffic to **EC2 instances**.  
+3. **EC2 instances** interact with an **RDS (MySQL) database**.  
+4. **Auto Scaling Group (ASG)** dynamically adjusts EC2 instances.  
+5. **EventBridge Rule & Lambda** ensure seamless instance scaling.  
+
+---
+
+## Campus Safety App - GitHub Repository  
+
+[**View on GitHub**](https://github.com/M1nJun/CampusSafetyApp.git)  
+
+---
+
+## Conclusion & Project Impact  
+
+This project **streamlined Campus Safety operations**, reducing response times and improving efficiency.  
+Developing this full-stack system strengthened my skills in **scalable architecture, security, and user-centric software development**.  
