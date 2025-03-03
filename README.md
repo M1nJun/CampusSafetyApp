@@ -10,18 +10,7 @@ My ambition is to create software that fits naturally into people’s lives, sup
 
 - **Programming Languages:** Java, Python, C/C++, React/React Native, JavaScript, HTML, Swift, TensorFlow  
 - **Development Environment:** SQL, Android Studio, Xcode, R, Excel, Linux, AWS (Certified Solutions Architect)  
-- **Languages:** English, Korean, Japanese, Spanish  
-
----
-
-## Academic & Work Experience  
-
-- **B.A. in Computer Science** - Lawrence University, Class of 2025 (GPA: 3.8/4.0)  
-- **Computer Science/Math Research** - Developed an algorithm for generating mathematical objects known as stable surfaces using graph theory and combinatorics (C++ & Python).  
-- **HackHarvard 2023** - Built GymBro AI, a personalized AI fitness coach, using Ionic React for UI and Flask with LangChain for AI integration.  
-- **LU Datathon (1st Place)** - Analyzed environmental and economic impacts of the Russo-Ukrainian War using R Studio.  
-- **Software Engineer Intern, Campus Safety LU** - Developed a mobile application for students, faculty, and officers to streamline requests.  
-- **Computer Science Course Tutor** - Assisted students with coursework and exam preparation.  
+- **Languages:** English, Korean, Japanese, Spanish
 
 ---
 
@@ -47,13 +36,6 @@ I created a **full-stack mobile application** with two versions:
 - **Student Version** - Students submit requests through structured forms.  
 - **Officer Version** - Officers view and manage requests in real-time.  
 - **Database** - Automatically saves request history, removing manual report writing.  
-
-## What is a Full-Stack Application?  
-
-A **full-stack app** consists of:  
-- **Frontend (Waiter & Menu):** Collects user input and interacts with users.  
-- **Backend (Chef & Kitchen):** Processes requests and performs logic.  
-- **Database (Storage & Ingredients):** Stores user data and request history.  
 
 ## Full-Stack Architecture  
 
@@ -146,9 +128,8 @@ The app is built with **React Native** for cross-platform support.
 ---
 
 ## AWS Infrastructure  
+![Campus Safety App - AWS Architecture](https://github.com/user-attachments/assets/22665d3e-da92-4506-90ea-7e360663da66)
 
-### **Why AWS?**  
-AWS provides **scalability, security, and reliability** for real-time request handling.  
 
 ### **System Architecture**  
 1. **Mobile App** sends requests to an **Application Load Balancer (ALB)**.  
