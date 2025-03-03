@@ -140,12 +140,6 @@ The app is built with **React Native** for cross-platform support.
 
 ---
 
-## Campus Safety App - GitHub Repository  
-
-[**View on GitHub**](https://github.com/M1nJun/CampusSafetyApp.git)  
-
----
-
 ## Conclusion & Project Impact  
 
 This project **streamlined Campus Safety operations**, reducing response times and improving efficiency.  
