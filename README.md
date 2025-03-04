@@ -1,9 +1,13 @@
 # Campus Safety App 
 
-Hello world, my name is Jun.
-I am a passionate software engineer and a senior at **Lawrence University**, majoring in Computer Science and minoring in Data Science.  
+## Hello, World! 👋
+
+My name is [Jun](www.linkedin.com/in/minjunleesd).
+I am a senior at **Lawrence University**, majoring in Computer Science and minoring in Data Science.
 I have a strong foundation in full-stack development, algorithms, and systems. I am fascinated by technology’s potential to address real-world problems.  
-My ambition is to create software that fits naturally into people’s lives, supporting them while preserving what makes life fulfilling.  
+My ambition is to create software that fits naturally into people’s lives, supporting them while preserving what makes life fulfilling.
+
+I have been employed as a student officer at the [Campus Safety Office](https://www.lawrence.edu/offices/campus-services/campus-safety-services) at Lawrence University for a year. Campus Safety's mission is to provide students, faculty, and staff with a secure environment. I was lucky enough to partner with the school and use my skills to bring back to the community.  
 
 ---
 
@@ -14,12 +18,6 @@ My ambition is to create software that fits naturally into people’s lives, sup
 - **Languages:** English, Korean, Japanese, Spanish
 
 ---
-
-## Introduction  
-
-I have been employed as a student officer at the  
-[Campus Safety Office](https://www.lawrence.edu/offices/campus-services/campus-safety-services) at Lawrence University for a year.  
-Campus Safety's mission is to provide students, faculty, and staff with a secure environment.  
 
 ## Recognizing the Problem  
 
