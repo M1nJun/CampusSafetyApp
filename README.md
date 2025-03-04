@@ -47,28 +47,8 @@ I created a **full-stack mobile application** with two versions:
 ---
 
 ## Database Structure  
+![Entity Relationship Diagram](https://github.com/user-attachments/assets/b80bad16-7854-4503-af45-bc7320aed2e4)
 
-The backend uses Spring Boot JPA with a MySQL database.  
-
-### **Users Table**  
-- `userID` (UUID, Primary Key)  
-- `username`, `password`, `usertype`  
-- `firstname`, `lastname`, `phone`, `studentID`  
-- `verified`, `verificationCode`, `verificationCodeExpiry`  
-
-### **Requests Table**  
-- `requestID` (Integer, Primary Key)  
-- `requesterID` (FK → users), `receiverID` (FK → users)  
-- `requestType`, `location`, `message`  
-- `requestStatus` (pending, accepted, completed, canceled)  
-- `reserved`, `reservationDue`  
-
-### **ChatMessages Table**  
-- `chatMessageID` (Integer, Primary Key)  
-- `senderID` (FK → users), `receiverID` (FK → users)  
-- `messageContent`, `messageTimestamp`  
-
-This schema supports authentication, request handling, and messaging.  
 
 ---
 
