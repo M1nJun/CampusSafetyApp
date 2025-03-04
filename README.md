@@ -1,5 +1,6 @@
-# Hi, my name is Minjun Lee  
+# Campus Safety App 
 
+Hello world, my name is Jun.
 I am a passionate software engineer and a senior at **Lawrence University**, majoring in Computer Science and minoring in Data Science.  
 I have a strong foundation in full-stack development, algorithms, and systems. I am fascinated by technology’s potential to address real-world problems.  
 My ambition is to create software that fits naturally into people’s lives, supporting them while preserving what makes life fulfilling.  
@@ -13,8 +14,6 @@ My ambition is to create software that fits naturally into people’s lives, sup
 - **Languages:** English, Korean, Japanese, Spanish
 
 ---
-
-# Campus Safety App - Project Overview  
 
 ## Introduction  
 
