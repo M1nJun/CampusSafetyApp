@@ -51,14 +51,6 @@ I created a **full-stack mobile application** with two versions:
 | **Manual paper-based request logging** | Requests are automatically recorded in a database, making them easy to access and review at any time. |
 | **Unreliable request status updates** | Users receive instant updates on their request status. With a simple tap on the message icon in a user’s profile, direct messaging between users is available. |
 
-
-## Full-Stack Architecture  
-
-- **Frontend:** React Native (supports both iOS & Android)  
-- **Backend:** Spring Boot  
-- **Database:** MySQL  
-- **Hosting:** AWS  
-
 ---
 
 ## Database Structure  
@@ -124,17 +116,6 @@ The app is built with **React Native** for cross-platform support.
 
 ## AWS Infrastructure
 ![Campus Safety App - AWS Architecture](https://github.com/user-attachments/assets/966dfb6e-0d12-4462-90b1-6782b4ec599c)
-
-
-
-
-
-### **System Architecture**  
-1. **Mobile App** sends requests to an **Application Load Balancer (ALB)**.  
-2. **ALB** routes traffic to **EC2 instances**.  
-3. **EC2 instances** interact with an **RDS (MySQL) database**.  
-4. **Auto Scaling Group (ASG)** dynamically adjusts EC2 instances.  
-5. **EventBridge Rule & Lambda** ensure seamless instance scaling.  
 
 ---
 
