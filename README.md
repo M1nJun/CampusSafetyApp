@@ -16,21 +16,23 @@ Without further ado, let me walk you through the project!
 
 ---
 
-## Technical Skills  
-
-- **Programming Languages:** Java, Python, C/C++, React/React Native, JavaScript, HTML, Swift, TensorFlow  
-- **Development Environment:** SQL, Android Studio, Xcode, R, Excel, Linux, AWS (Certified Solutions Architect)  
-- **Languages:** English, Korean, Japanese, Spanish
-
----
-
 ## Recognizing the Problem  
 
-- Requests were made via phone calls, leading to unstructured communication and potential miscommunication.  
-- Officers had to manually record request details, leading to inefficiencies.  
-- Updating students on request status required manual effort, causing delays.  
+Here are some of the main responsibilities of the Campus Safety Office:
+- Facility and key card access
+- Lockouts
+- Student transportation
+- Parking, vehicle and bike registration
+- Fire safety
 
-Recognizing these inefficiencies, I partnered with the university to develop the **Campus Safety App**, modernizing request handling with a digital solution.  
+In the existing system, students, faculty, and staff had to call the office phone number to make requests. However, relying solely on phone calls introduced several challenges:
+
+- Unstructured communication often led to miscommunication and inconsistencies.
+- Officers could easily forget or mix up different phone numbers, making it harder to track requests accurately.
+- Request details had to be recorded manually on paper, increasing the risk of errors and inefficiencies.
+- Updating students on their request status required officers to call or text them, with no guarantee that they would see or receive the update in a timely manner.
+
+Recognizing these inefficiencies, I came up with a digital solution.  
 
 ## The Solution  
 
