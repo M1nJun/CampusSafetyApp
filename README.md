@@ -1,7 +1,6 @@
-# Campus Safety App 
+#Campus Safety App
 
-
-## Hello, World! 👋
+**Hello, World! 👋** 
 
 My name is [Jun](www.linkedin.com/in/minjunleesd).
 I am a senior at **Lawrence University**, majoring in Computer Science and minoring in Data Science.
@@ -13,7 +12,7 @@ During my time there, our director, Jeff, and I recognized inefficiencies in the
 
 I was grateful for the opportunity to apply the skills I had learned to give back to the community. Along the way, I gained valuable experiences that helped me grow into a better software engineer. A huge thank you to Jeff, Lawrence University, my friends, and family for their support.
 
-Without further ado, let me walk you through the project. 🚀
+Without further ado, let me walk you through the project!
 
 ---
 
