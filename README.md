@@ -46,10 +46,10 @@ I created a **full-stack mobile application** with two versions:
 
 | 🚨 **Problem** | ✅ **Solution** |
 |--------------|--------------|
-| **Unstructured communication** → _Structured digital requests_ | Users submit requests through a standardized form, ensuring clarity and reducing miscommunication. |
-| **Lost or mixed-up phone numbers** → _Centralized request management_ | All requests are securely stored in the app, eliminating the need for officers to manually track calls. Requests are automatically linked to the involved users, making it easy to view details and contact the right person. |
-| **Manual paper-based request logging** → _Automated request history_ | Requests are automatically recorded in a database, making them easy to access and review at any time. |
-| **Unreliable request status updates** → _Real-time notifications & messaging_ | Users receive instant updates on their request status. With a simple tap on the message icon in a user’s profile, direct messaging between users is available. |
+| **Unstructured communication** | Users submit requests through a standardized form, ensuring clarity and reducing miscommunication. |
+| **Lost or mixed-up phone numbers** | All requests are securely stored in the app, eliminating the need for officers to manually track calls. Requests are automatically linked to the involved users, making it easy to view details and contact the right person. |
+| **Manual paper-based request logging** | Requests are automatically recorded in a database, making them easy to access and review at any time. |
+| **Unreliable request status updates** | Users receive instant updates on their request status. With a simple tap on the message icon in a user’s profile, direct messaging between users is available. |
 
 
 ## Full-Stack Architecture  
