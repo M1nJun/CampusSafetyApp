@@ -28,8 +28,11 @@ Here are some of the main responsibilities of the Campus Safety Office:
 In the existing system, students, faculty, and staff had to call the office phone number to make requests. However, relying solely on phone calls introduced several challenges:
 
 - Unstructured communication often led to miscommunication and inconsistencies.
+
 - Officers could easily forget or mix up different phone numbers, making it harder to track requests accurately.
+
 - Request details had to be recorded manually on paper, increasing the risk of errors and inefficiencies.
+
 - Updating students on their request status required officers to call or text them, with no guarantee that they would see or receive the update in a timely manner.
 
 Recognizing these inefficiencies, I came up with a digital solution.  
@@ -40,16 +43,16 @@ I created a **full-stack mobile application** with two versions:
 - **Student/Faculty/Staff Version** - Users submit requests(safety request, ride request) through structured forms.
 - **Officer/Driver Version** - Users view and manage requests(accept, complete, cancel) in real-time.
 
-- Unstructured communication → Structured digital requests
+Unstructured communication → Structured digital requests
 Users submit requests through a standardized form, ensuring clarity and reducing miscommunication.
 
-- Officers forgetting/mixing up phone numbers → Centralized request management
+Officers forgetting/mixing up phone numbers → Centralized request management
 All requests are securely stored within the app, eliminating the need for officers to manually track calls. Requests are automatically linked to the involved users, making it easy to view details and contact the right person.
 
-- Manual paper-based request logging → Automated request history
+Manual paper-based request logging → Automated request history
 Requests are automatically recorded in a database, making them easy to access and review at any time.
 
-- Unreliable request status updates → Real-time notifications
+Unreliable request status updates → Real-time notifications
 The app updates users on their request status instantly. With a simple tap on the message icon in a user’s profile, direct messaging between users is available. 
 
 
