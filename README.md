@@ -7,12 +7,12 @@ I am a senior at [**Lawrence University**](https://www.lawrence.edu/), majoring 
 I have a strong foundation in full-stack development, algorithms, and systems. I am fascinated by technology’s potential to address real-world problems.  
 My ambition is to create software that fits naturally into people’s lives, supporting them while preserving what makes life fulfilling.
 
-I have been employed as a student officer at the [**Campus Safety Office**](https://www.lawrence.edu/offices/campus-services/campus-safety-services) at Lawrence University for a year. The mission of Campus Safety is to provide a secure environment for students, faculty, and staff.
+I have been employed as a student officer at the [**Campus Safety Office**](https://www.lawrence.edu/offices/campus-services/campus-safety-services) at Lawrence University for a year now. The mission of Campus Safety is to provide a secure environment for students, faculty, and staff.
 During my time there, our director, Jeff, and I recognized inefficiencies in the existing campus safety system. Seeing an opportunity for improvement, Jeff helped me to leverage my Computer Science background to collaborate with the university on creating a solution.
 
 I was grateful for the opportunity to apply the skills I had learned to give back to the community. Along the way, I gained valuable experiences that helped me grow into a better software engineer. A huge thank you to Jeff, Lawrence University, my friends, and family for their support.
 
-Without further ado, let me walk you through the project!
+Without further ado, I will walk you through the project!
 
 ---
 
@@ -37,8 +37,8 @@ Recognizing these inefficiencies, I came up with a digital solution.
 ## The Solution  
 
 I created a **full-stack mobile application** with two versions:  
-- **Student Version** - Students submit requests through structured forms.  
-- **Officer Version** - Officers view and manage requests in real-time.  
+- **Student/Faculty/Staff Version** - Users submit requests(safety request, ride request) through structured forms.
+- **Officer/Driver Version** - Users view and manage requests(accept, complete, cancel) in real-time.  
 - **Database** - Automatically saves request history, removing manual report writing.  
 
 ## Full-Stack Architecture  
