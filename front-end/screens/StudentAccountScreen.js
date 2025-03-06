@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, SafeAreaView } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import React from "react";
@@ -14,7 +14,8 @@ export default function StudentAccountScreen({ navigation }) {
   const { usertype } = route.params;
   const [isProfile, setIsProfile] = useState(true);
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
       <StatusBar style="auto" />
       <TopToggleComponent
         isLeft={isProfile}
@@ -29,5 +30,6 @@ export default function StudentAccountScreen({ navigation }) {
       )}
       <BottomNavigationBarComponent usertype={usertype} />
     </View>
+    </SafeAreaView>
   );
 }

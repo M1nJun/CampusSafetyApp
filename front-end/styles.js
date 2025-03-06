@@ -14,7 +14,13 @@ const styles = StyleSheet.create({
   header: {
     justifyContent: "space-between",
     flexDirection: "row",
-    marginTop: 100,
+    color: "white",
+    fontSize: 42,
+    fontWeight: 'bold',
+  },
+  subHeader: {
+    color: "white",
+    fontSize: 22,
   },
   btnText: {
     fontSize: 25,
@@ -182,7 +188,7 @@ const styles = StyleSheet.create({
   },
   chatHeaderText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: 'bold',
   },  
   senderMessage: {
@@ -195,17 +201,18 @@ const styles = StyleSheet.create({
   },
   senderText: {
     color: '#fff', // White text for sender
+    fontSize: 15,
   },
   receiverText: {
     color: '#fff', // White text for receiver
+    fontSize: 15,
   },
   inputContainer: {
+    marginTop: 20,
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
-    backgroundColor: '#fff', // White input background
-    borderTopWidth: 1,
-    borderColor: '#ddd',
+    backgroundColor: '#000',
   },
   inputField: {
     flex: 1,
@@ -213,11 +220,14 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     padding: 10,
     borderRadius: 10,
-    backgroundColor: '#fff',
-    color: '#000',
+    backgroundColor: '#000',
+    color: '#fff',
   },
-  sendButton: {
+  sendBtn: {
+    borderRadius: 25,
     marginLeft: 10,
+    padding: 10,
+    backgroundColor: '#007AFF'
   },
 });
 

@@ -29,6 +29,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/user", "/user/login", "/user/refreshToken").permitAll()
+//                        .requestMatchers("/ws", "/ws/**").permitAll() // Allow WebSocket handshake requests
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore( jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

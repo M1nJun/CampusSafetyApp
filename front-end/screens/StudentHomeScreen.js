@@ -1,6 +1,6 @@
 //rnf
 import { StatusBar } from "expo-status-bar";
-import { View } from "react-native";
+import { View, SafeAreaView } from "react-native";
 import React from "react";
 import { useEffect, useState } from "react";
 import { useRoute, useNavigation } from "@react-navigation/native";
@@ -15,22 +15,22 @@ export default function StudentHomeScreen() {
   const { usertype } = route.params;
   const [isRide, setIsRide] = useState(true);
   return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <TopToggleComponent
-        isLeft={isRide}
-        setIsLeft={setIsRide}
-        leftText="Ride Request"
-        rightText="Safety Request"
-      />
-      {/* conditional scrollview rendering */}
-      {isRide ? (
-        <RideRequesterComponent usertype={usertype} />
-      ) : (
-        <SafetyRequesterComponent usertype={usertype} />
-      )}
-
-      <BottomNavigationBarComponent usertype={usertype} />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" />
+      <View style={styles.container}>
+        <TopToggleComponent
+          isLeft={isRide}
+          setIsLeft={setIsRide}
+          leftText="Ride Request"
+          rightText="Safety Request"
+        />
+        {isRide ? (
+          <RideRequesterComponent usertype={usertype} />
+        ) : (
+          <SafetyRequesterComponent usertype={usertype} />
+        )}
+        <BottomNavigationBarComponent usertype={usertype} />
+      </View>
+    </SafeAreaView>
   );
 }

@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 import React from "react";
 import { useEffect, useState } from "react";
@@ -23,21 +24,24 @@ export default function OfficerHomeScreen({ navigation }) {
   const { token, usertype } = route.params;
   const [isLeft, setIsLeft] = useState(true);
   return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <TopToggleComponent
-        isLeft={isLeft}
-        setIsLeft={setIsLeft}
-        leftText="Requests"
-        rightText="Reserved Requests"
-      />
-      {/* conditional scrollview rendering */}
-      {isLeft ? (
-        <RequestReceiverComponent navigation={navigation} usertype={usertype}/>
-      ) : (
-        <ReservedRequestReceiverComponent navigation={navigation} usertype={usertype}/>
-      )}
-      <BottomNavigationBarComponent usertype={usertype} />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
+        <StatusBar style="auto" />
+        <TopToggleComponent
+          isLeft={isLeft}
+          setIsLeft={setIsLeft}
+          leftText="Requests"
+          rightText="Reserved Requests"
+        />
+        {/* conditional scrollview rendering */}
+        {isLeft ? (
+          <RequestReceiverComponent navigation={navigation} usertype={usertype}/>
+        ) : (
+          <ReservedRequestReceiverComponent navigation={navigation} usertype={usertype}/>
+        )}
+        <BottomNavigationBarComponent usertype={usertype} />
+      </View>
+    </SafeAreaView>
+    
   );
 }

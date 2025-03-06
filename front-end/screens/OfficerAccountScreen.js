@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, SafeAreaView } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import React from "react";
@@ -14,20 +14,24 @@ export default function OfficerAccountScreen({ navigation }) {
   const { usertype } = route.params;
   const [isProfile, setIsProfile] = useState(true);
   return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <TopToggleComponent
-        isLeft={isProfile}
-        setIsLeft={setIsProfile}
-        leftText="My Profile"
-        rightText="My Requests"
-      />
-      {isProfile ? (
-        <ProfileComponent />
-      ) : (
-        <MyRequestHistoryComponent navigation={navigation} usertype={usertype} />
-      )}
-      <BottomNavigationBarComponent usertype={usertype} />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
+        <StatusBar style="auto" />
+        <TopToggleComponent
+          isLeft={isProfile}
+          setIsLeft={setIsProfile}
+          leftText="My Profile"
+          rightText="My Requests"
+        />
+        {isProfile ? (
+          <ProfileComponent />
+        ) : (
+          <MyRequestHistoryComponent navigation={navigation} usertype={usertype} />
+        )}
+        <BottomNavigationBarComponent usertype={usertype} />
+      </View>
+    </SafeAreaView>
+    
+    
   );
 }

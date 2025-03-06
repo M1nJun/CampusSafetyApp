@@ -84,7 +84,7 @@ const MyRequestHistoryComponent = ({ navigation }) => {
           autoPlay
           loop
         />
-        <Text>Loading...</Text>
+        <Text style={{color: "gray"}}>Loading...</Text>
       </View>
     );
   }
@@ -113,7 +113,7 @@ const Section = React.memo(({ title, data, navigation, usertype }) => {
     <>
       <Text
         style={{
-          color: "white",
+          color: "gray",
           fontSize: 20,
           fontWeight: "600",
           marginTop: 10,
@@ -122,7 +122,7 @@ const Section = React.memo(({ title, data, navigation, usertype }) => {
         {title}
       </Text>
       {data.length === 0 ? (
-        <Text style={{ color: "white", marginTop: 5, marginBottom: 20 }}>No {title.toLowerCase()}</Text>
+        <Text style={{ color: "gray", marginTop: 5, marginBottom: 20 }}>No {title.toLowerCase()}</Text>
       ) : (
         data.map((request) => (
           <UserMiniRequestComponent

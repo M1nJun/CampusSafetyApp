@@ -15,11 +15,16 @@ import { openURL, canOpenURL } from 'expo-linking';
 import MiniProfileComponent from "./MiniProfileComponent";
 import * as TokenService from '../services/tokenService';
 import API_BASE_URL from "../config";
+import { useNavigation } from '@react-navigation/native';
+
 
 const RequestMatchProfileComponent = ({ usertype, nameToShow, profileToShow }) => {
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false); // State to control the modal visibility
+
+  const navigation = useNavigation();
+
 
   const fetchProfileData = async () => {
     try {
@@ -72,16 +77,26 @@ const RequestMatchProfileComponent = ({ usertype, nameToShow, profileToShow }) =
     }
   };
 
-  const handleMessageIconPress = async () => {
-    const phoneNumber = `sms:${profileData.phone}`;
-    const supported = await Linking.canOpenURL(phoneNumber);
+  // const handleMessageIconPress = async () => {
+  //   const phoneNumber = `sms:${profileData.phone}`;
+  //   const supported = await Linking.canOpenURL(phoneNumber);
   
-    if (supported) {
-      Linking.openURL(phoneNumber);
-    } else {
-      Alert.alert("Error", "Your device doesn't support this feature.");
-    }
+  //   if (supported) {
+  //     Linking.openURL(phoneNumber);
+  //   } else {
+  //     Alert.alert("Error", "Your device doesn't support this feature.");
+  //   }
+  // };
+
+  const handleMessageIconPress = () => {
+    // Assuming profileData has the necessary information (e.g., id, name, etc.)
+    navigation.navigate("ChatScreen", {
+      receiverID: profileToShow, //userID of the profile we meant to look at
+      receiverName: `${profileData.firstname} ${profileData.lastname}`, // Full name
+      usertype,
+    })
   };
+  
 
   const handleProfilePress = () => {
     setModalVisible(true); // Show the modal when the profile is pressed

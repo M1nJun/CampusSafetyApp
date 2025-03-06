@@ -109,7 +109,8 @@ export default function LoginScreen() {
       style={{ flex: 1 }}
     >
       <View style={{ ...styles.container, alignItems: "center" }}>
-        <Text style={styles.header}>Login Screen</Text>
+        <Text style={{...styles.header, marginTop: 20}}>Campus Safety</Text>
+        <Text style={{...styles.subHeader, marginBottom: 50}}>Lawrence University</Text>
         <View style={styles.widthControll}>
           <TextInput
             placeholder="Email"
@@ -150,12 +151,12 @@ export default function LoginScreen() {
           </TouchableOpacity>
         </Animated.View>
         <View style={styles.signUp}>
-          <Text style={{ color: "white", fontWeight: "500" }}>
+          <Text style={{fontSize: 16, color: "white", fontWeight: "500" }}>
             Don't have an account?{" "}
           </Text>
           <TouchableOpacity>
             <Text
-              style={{ color: "#0284C7", fontWeight: "600" }}
+              style={{fontSize: 16, color: "#0284C7", fontWeight: "600" }}
               onPress={() => navigation.push("SignUp")}
             >
               SignUp

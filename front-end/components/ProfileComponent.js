@@ -37,7 +37,7 @@ const ProfileInput = memo(({ label, value, onChangeText, editable }) => {
           editable={editable}
         />
       ) : (
-        <Text style={{ ...styles.profileValue, color:"white" }}>{value}</Text>
+        <Text style={{ ...styles.profileValue, color:"gray" }}>{value}</Text>
       )}
       <View style={styles.profileDivider} />
     </View>

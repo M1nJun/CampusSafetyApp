@@ -27,7 +27,19 @@ const StackNavigatorSetup = () => (
     <Stack.Screen name="OfficerHome" component={OfficerHomeScreen} />
     <Stack.Screen name="Verification" component={VerificationScreen} />
     <Stack.Screen name="ChatList" component={ChatListScreen} />
-    <Stack.Screen name="ChatScreen" component={ChatScreen} />
+    <Stack.Screen
+      name="ChatScreen"
+      component={ChatScreen}
+      options={{
+        headerShown: true,
+        headerTitle: "",
+        headerBackTitleVisible: false,
+        headerStyle: {
+          backgroundColor: "black",
+        },
+        headerTintColor: "white",
+      }}
+    />
     <Stack.Screen name="StudentAccount" component={StudentAccountScreen} />
     <Stack.Screen name="OfficerAccount" component={OfficerAccountScreen} />
     <Stack.Screen

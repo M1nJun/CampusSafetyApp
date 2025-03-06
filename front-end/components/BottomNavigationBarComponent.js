@@ -28,7 +28,7 @@ const BottomNavigationBarComponent = ({ usertype }) => {
         flexDirection: "row",
         justifyContent: "center",
         marginTop: 15,
-        marginBottom: 35,
+        marginBottom: 15,
       }}
     >
       <TouchableOpacity
@@ -43,7 +43,7 @@ const BottomNavigationBarComponent = ({ usertype }) => {
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={{ alignItems: "center", marginHorizontal: 40 }}
+        style={{ alignItems: "center", marginHorizontal: 35 }}
         onPress={() => handleNavigation("ChatList")}
       >
         <Ionicons name="chatbubbles" size={30} color="white" />

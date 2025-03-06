@@ -406,7 +406,7 @@ const OfficerRequestViewComponent = () => {
             <View style={{flex:0.9}}>
               <ScrollView style={{backgroundColor: "white", borderRadius: 12, paddingHorizontal: 20, paddingVertical: 5}}>
                 {nameList.map((nameData) => (
-                  <TouchableOpacity style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} key={nameData.OfficerDriverOptionID} onPress={() => {
+                  <TouchableOpacity style={{flexDirection:"row",borderColor:"lightgray", borderBottomWidth: 0.8, marginVertical:7}} key={nameData.officerDriverOptionID} onPress={() => {
                     setReceiverName(`${nameData.firstname} ${nameData.lastname}`);
                     setShowNameDropdown(false);
                   }}>
