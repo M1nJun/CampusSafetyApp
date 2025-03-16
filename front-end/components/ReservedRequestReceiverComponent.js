@@ -2,6 +2,8 @@ import React from "react";
 import { theme } from "../colors";
 import {
   ScrollView,
+  Text,
+  View
 } from "react-native";
 import { useEffect, useState } from "react";
 import { useCallback } from "react";
@@ -16,8 +18,6 @@ const ReservedRequestReceiverComponent = ({ navigation }) => {
   const { usertype } = route.params;
 
   const [loading, setLoading] = useState(true);
-
-  // could be just one state for officer or driver, just need to fetch ride requests, or both.
   const [pendingRequests, setPendingRequests] = useState([]);
   const [acceptedRequests, setAcceptedRequests] = useState([]);
 
@@ -27,12 +27,10 @@ const ReservedRequestReceiverComponent = ({ navigation }) => {
 
       if (!tokenRefreshed) {
         console.log('Token refresh failed, not retrying fetch.');
-        
         return;
       }
 
       const token = await TokenService.getAccessToken();
-      
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -55,50 +53,56 @@ const ReservedRequestReceiverComponent = ({ navigation }) => {
   useFocusEffect(
     useCallback(() => {
       setLoading(true);
-      fetchRequests("accepted", setAcceptedRequests, usertype === "officer"?
-      `${API_BASE_URL}/request/reserved/accepted/all`:`${API_BASE_URL}/request/reserved/accepted/ride`);
+      fetchRequests("accepted", setAcceptedRequests, usertype === "Officer" ?
+        `${API_BASE_URL}/request/reserved/accepted/all` : `${API_BASE_URL}/request/reserved/accepted/ride`);
       
-
-      fetchRequests("pending", setPendingRequests, usertype === "officer"?
-      `${API_BASE_URL}/request/reserved/pending/all`:`${API_BASE_URL}/request/reserved/pending/ride`);
+      fetchRequests("pending", setPendingRequests, usertype === "Officer" ?
+        `${API_BASE_URL}/request/reserved/pending/all` : `${API_BASE_URL}/request/reserved/pending/ride`);
       setLoading(false);
-      const intervalId = setInterval(() => {
-        fetchRequests("accepted", setAcceptedRequests, usertype === "officer"?
-        `${API_BASE_URL}/request/reserved/accepted/all`:`${API_BASE_URL}/request/reserved/accepted/ride`);
-      
 
-        fetchRequests("pending", setPendingRequests, usertype === "officer"?
-        `${API_BASE_URL}/request/reserved/pending/all`:`${API_BASE_URL}/request/reserved/pending/ride`);
+      const intervalId = setInterval(() => {
+        fetchRequests("accepted", setAcceptedRequests, usertype === "Officer" ?
+          `${API_BASE_URL}/request/reserved/accepted/all` : `${API_BASE_URL}/request/reserved/accepted/ride`);
+
+        fetchRequests("pending", setPendingRequests, usertype === "Officer" ?
+          `${API_BASE_URL}/request/reserved/pending/all` : `${API_BASE_URL}/request/reserved/pending/ride`);
       }, 2000);
 
       return () => clearInterval(intervalId);
     }, [])
   );
 
-  
   return (
-    <ScrollView>
-      {/* <Text style={styles.titleText}>Request Accepted by me:</Text> */}
-        {acceptedRequests.map((request) => (
-          <OfficerMiniRequestComponent
-            key={request.requestID}
-            requestID={request.requestID}
-            requestData={request}
-            usertype={usertype}
-            navigation={navigation}
-          />
-        ))}
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      {acceptedRequests.length === 0 && pendingRequests.length === 0 ? (
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 20 }}>
+          <Text style={{ fontSize: 21, color: "gray", textAlign: "center" }}>
+            No requests available
+          </Text>
+        </View>
+      ) : (
+        <>
+          {acceptedRequests.map((request) => (
+            <OfficerMiniRequestComponent
+              key={request.requestID}
+              requestID={request.requestID}
+              requestData={request}
+              usertype={usertype}
+              navigation={navigation}
+            />
+          ))}
 
-      {/* <Text style={styles.titleText}>Pending Requests:</Text> */}
-        {pendingRequests.map((request) => (
-          <OfficerMiniRequestComponent
-            key={request.requestID}
-            requestID={request.requestID}
-            requestData={request}
-            usertype={usertype}
-            navigation={navigation}
-          />
-        ))}
+          {pendingRequests.map((request) => (
+            <OfficerMiniRequestComponent
+              key={request.requestID}
+              requestID={request.requestID}
+              requestData={request}
+              usertype={usertype}
+              navigation={navigation}
+            />
+          ))}
+        </>
+      )}
     </ScrollView>
   );
 };
