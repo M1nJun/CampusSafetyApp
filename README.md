@@ -2,7 +2,7 @@
 
 **Hello, World! 👋** 
 
-My name is [**Jun**](www.linkedin.com/in/minjunleesd).
+My name is [**Jun**](https://www.linkedin.com/in/minjunleesd).
 I am a senior at [**Lawrence University**](https://www.lawrence.edu/), majoring in Computer Science and minoring in Data Science.
 I have a strong foundation in full-stack development, algorithms, and systems. I am fascinated by technology’s potential to address real-world problems.  
 My ambition is to create software that fits naturally into people’s lives, supporting them while preserving what makes life fulfilling.
