@@ -194,16 +194,28 @@ Users can filter through Lawrence Buildings by typing keywords.
 - An **interactive map** with a pin appears, allowing users to adjust their exact location.
 
 ### **Searching for an Address**
-<img src="https://github.com/user-attachments/assets/ff079d52-9b7e-4b7c-8097-f5b13676e83f" width="300">
 
-- Users can search for a **specific address** by selecting the **"Search Address"** option.
-- The system provides **autocomplete suggestions** for locations nearest to the user.
-
-<img src="https://github.com/user-attachments/assets/6a98bbf9-93b1-4326-a40a-d3a9c7d80631" width="300">
-
-- Once a location is selected, an **interactive map** appears.
-- The pin can be moved to adjust the location.
-- The address updates dynamically as the pin moves.
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/ff079d52-9b7e-4b7c-8097-f5b13676e83f" width="300">
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/6a98bbf9-93b1-4326-a40a-d3a9c7d80631" width="300">
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <b>Users can search for a <em>specific address</em> by selecting the <em>"Search Address"</em> option.</b><br>
+      - The system provides <b>autocomplete suggestions</b> for locations nearest to the user.
+    </td>
+    <td align="center">
+      <b>Once a location is selected, an <em>interactive map</em> appears.</b><br>
+      - The pin can be moved to adjust the location.<br>
+      - The address updates dynamically as the pin moves.
+    </td>
+  </tr>
+</table>
 
 ### **Choosing an Instant or Reserved Request**
 
