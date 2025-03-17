@@ -84,11 +84,16 @@ Only active members of Lawrence University have an active lawrence.edu email acc
 To verify affiliation with the university, users must sign up using their <PersonalAddress>@lawrence.edu email.
 - A **6-digit verification code** is generated at sign-up.  
 - The code is **valid for 15 minutes** and sent via **JavaMailSender**.  
-- Users enter the code to activate their account.  
+- Users enter the code to activate their account.
+
+### **Password Security**  
+The user's password is securely hashed using the **Bcrypt** cryptographic algorithm. **Password hashing** is a **one-way process** that converts a plain-text password into a unique, fixed-length string, making it impossible to reverse-engineer the original password. This ensures that even if someone gains access to the database, they would only see an unintelligible string of characters rather than the actual password.
+
+To further enhance security, I’ve implemented a **custom pepper**—an additional secret value applied during hashing. This means that even if an attacker obtains the hashed passwords, they would still need the pepper to verify them, adding an extra layer of protection.
 
 ### **Secure API Endpoints**  
 - **Public:** `/user/register`, `/user/login`, `/user/refreshToken`  
-- **Protected:** All other endpoints require JWT authentication.  
+- **Protected:** All other endpoints require JWT authentication.
 
 ---
 
