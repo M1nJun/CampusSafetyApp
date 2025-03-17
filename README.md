@@ -136,22 +136,25 @@ This architecture integrates AWS cloud services to automate load balancing and h
 
 ## App Screenshots & Overview
 
-### **App Screenshots & Overview**
-
-<div align="center">
-  <img src="https://github.com/user-attachments/assets/c00edc05-fd10-4701-a7bd-555ff94bc4d2" width="300">
-  <p><strong>Login Page:</strong> You can toggle to the Signup page.</p>
-</div>
-
-<div align="center">
-  <img src="https://github.com/user-attachments/assets/3a249075-3ed2-4674-9ead-9c1e23e309cd" width="300">
-  <p><strong>Signup Page:</strong> You can toggle to the Login page.</p>
-</div>
-
-<div align="center">
-  <img src="https://github.com/user-attachments/assets/67bb738e-e59e-460a-9b7a-3cf249e3f245" width="300">
-  <p><strong>Verification Page:</strong> After signing up, enter the 6-digit verification code sent to your <code>lawrence.edu</code> email.</p>
-</div>
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/c00edc05-fd10-4701-a7bd-555ff94bc4d2" width="250"><br>
+      <strong>Login Page</strong><br>
+      You can toggle to the Signup page.
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/3a249075-3ed2-4674-9ead-9c1e23e309cd" width="250"><br>
+      <strong>Signup Page</strong><br>
+      You can toggle to the Login page.
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/67bb738e-e59e-460a-9b7a-3cf249e3f245" width="250"><br>
+      <strong>Verification Page</strong><br>
+      Enter the 6-digit code sent to your <code>lawrence.edu</code> email.
+    </td>
+  </tr>
+</table>
 
 
 <p align="center">
