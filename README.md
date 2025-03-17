@@ -359,18 +359,14 @@ For the where are you, let's try to use Current Location.
     <td align="center">
       <img src="https://github.com/user-attachments/assets/c08d4692-1dda-440b-9781-1e0c4b0ffbc7" width="300">
     </td>
-  </tr>
-  <tr>
-    <td align="left">
-      <b>Submitting & Viewing the Request:</b> Once submitted, the request moves to a <b>pending status</b> while waiting for an officer to accept.
-    </td>
-  </tr>
-  <tr>
     <td align="center">
       <img src="https://github.com/user-attachments/assets/4b8b7e68-71b1-441b-b9b6-6c3e5fe20f9f" width="300">
     </td>
   </tr>
   <tr>
+    <td align="left">
+      <b>Submitting & Viewing the Request:</b> Once submitted, the request moves to a <b>pending status</b> while waiting for an officer to accept.
+    </td>
     <td align="left">
       <b>Canceling a Request:</b> Users can <b>cancel their request</b> if needed.<br>
       - A <b>reason must be provided</b> before canceling.
