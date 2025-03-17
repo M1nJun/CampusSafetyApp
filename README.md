@@ -172,8 +172,8 @@ This architecture integrates AWS cloud services to automate load balancing and h
 ### **Navigating the Student App**
 
 We are now in the **Student Home Screen**, where users can make two types of requests:  
-✔ **Ride Request**  
-✔ **Safety Request**  
+- **Ride Request**  
+- **Safety Request**  
 Both requests can be submitted **quickly and easily**.
 
 <table>
