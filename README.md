@@ -175,16 +175,33 @@ Both requests can be submitted **quickly and easily**.
 ### **Demonstration of Creating a Ride Request**
 
 ### **Selecting Pickup & Destination Locations**
-<img src="https://github.com/user-attachments/assets/40f85dbe-6977-418a-b72f-560d66371c27" width="300">
 
-When you tap on the **"Where to"** or **"Where from"** boxes, a dropdown list appears with the following options:  
-- **Current Location**
-- **Search Address**
-- **List of Lawrence Buildings** (default view)
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/40f85dbe-6977-418a-b72f-560d66371c27" width="300">
+    </td>
+  </tr>
+  <tr>
+    <td align="left">
+      <b>When you tap on the <em>"Where to"</em> or <em>"Where from"</em> boxes, a dropdown list appears with the following options:</b><br>
+      - <b>Current Location</b><br>
+      - <b>Search Address</b><br>
+      - <b>List of Lawrence Buildings</b> (default view)
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/df666831-5c75-492b-8166-bd7621ccf58c" width="300">
+    </td>
+  </tr>
+  <tr>
+    <td align="left">
+      <b>Users can filter through Lawrence Buildings by typing keywords.</b>
+    </td>
+  </tr>
+</table>
 
-<img src="https://github.com/user-attachments/assets/df666831-5c75-492b-8166-bd7621ccf58c" width="300">  
-
-Users can filter through Lawrence Buildings by typing keywords.
 
 ### **Selecting Pickup & Destination Locations**
 
@@ -211,8 +228,8 @@ Users can filter through Lawrence Buildings by typing keywords.
 </table>
 
 
-### **Using the "Current Location" Option**
-For the "where to", let's try to use Current Location.
+### **Using the Current Location Option**
+For the where to, let's try to use Current Location.
 
 <table>
   <tr>
@@ -230,8 +247,8 @@ For the "where to", let's try to use Current Location.
 </table>
 
 
-### **Using the "Search Address" Option**
-For the "where are you", let's try to use Current Location.
+### **Using the Search Address Option**
+For the where are you, let's try to use Current Location.
 
 <table>
   <tr>
