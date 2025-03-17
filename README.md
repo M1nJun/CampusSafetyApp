@@ -141,13 +141,13 @@ This architecture integrates AWS cloud services to automate load balancing and h
 <table>
   <tr>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/c00edc05-fd10-4701-a7bd-555ff94bc4d2" height="700">
+      <img src="https://github.com/user-attachments/assets/c00edc05-fd10-4701-a7bd-555ff94bc4d2" height="500">
     </td>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/3a249075-3ed2-4674-9ead-9c1e23e309cd" height="700">
+      <img src="https://github.com/user-attachments/assets/3a249075-3ed2-4674-9ead-9c1e23e309cd" height="500">
     </td>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/67bb738e-e59e-460a-9b7a-3cf249e3f245" height="700">
+      <img src="https://github.com/user-attachments/assets/67bb738e-e59e-460a-9b7a-3cf249e3f245" height="500">
     </td>
   </tr>
   <tr>
