@@ -255,32 +255,25 @@ Users can filter through Lawrence Buildings by typing keywords.
 - The newly submitted request appears under the **"Pending"** section.
 
 
-
-![NoInstantRequest](https://github.com/user-attachments/assets/b14ae7da-d571-4f0b-adfd-6dfca704c299)
-![OfficerReservedPending](https://github.com/user-attachments/assets/282d7530-97b5-48d5-80d3-876975c050f0)
-![OfficerTryAccept](https://github.com/user-attachments/assets/dc6a8e62-806e-4cf3-a03a-b41be6f89128)
-![ChooseOfficer](https://github.com/user-attachments/assets/6a9b81ec-50b7-4490-b3e4-f8c573fe55cb)
-![AcceptSuccess](https://github.com/user-attachments/assets/a41fb5b0-57ab-41ad-bff0-0b6be9ffc346)
-![OfficerReservedAccepted](https://github.com/user-attachments/assets/ce3001f3-be6c-46b8-af87-80c19bb6cda1)
-![StudentPastAccepted](https://github.com/user-attachments/assets/3ba93b63-e6e6-40e0-bd43-5e331803345c)
-![StudentAccepted](https://github.com/user-attachments/assets/53c7ffe5-d99f-47c6-89bc-abff834330a5)
-![BlankMessage](https://github.com/user-attachments/assets/6aecaa1b-8b5e-41e1-bae5-6bc2063b13eb)
-![StudentMessage](https://github.com/user-attachments/assets/7fe15dc6-57e2-4c2f-949e-5b756dcac9f9)
-![StudentMessageList](https://github.com/user-attachments/assets/73d7e069-4288-4831-8521-1a3888ac7f37)
-![OfficerMessageList](https://github.com/user-attachments/assets/519377e0-0745-4d1c-a0aa-a5d16f339a2d)
-![OfficerMessage](https://github.com/user-attachments/assets/9ad39fff-2220-4399-a4bc-5f5853211517)
-![OfficerComplete](https://github.com/user-attachments/assets/6f61c5ec-81da-4870-b92b-dd78e8a902b2)
-![OfficerPastRequest](https://github.com/user-attachments/assets/dffc5a1c-65e8-4f36-a85d-43de6caa580b)
-![OfficerPastRequestView](https://github.com/user-attachments/assets/c3063655-570b-4823-b3c4-ce4e3737ade5)
-![StudentPastCompleted](https://github.com/user-attachments/assets/15b206fc-4060-4a99-b890-e75b7b8db00e)
-![StudentCompleteView](https://github.com/user-attachments/assets/60a97d8e-0b8e-4f73-ad8b-33959f0b8c92)
-
-
-
-
-
-
-
+Now we are looking at the Officer version of the app. On the home screen of the Officer app, the user will see two options: Instant Requests, Reserved Requests.
+<img src="https://github.com/user-attachments/assets/b14ae7da-d571-4f0b-adfd-6dfca704c299" width="300">
+<img src="https://github.com/user-attachments/assets/282d7530-97b5-48d5-80d3-876975c050f0" width="300">
+<img src="https://github.com/user-attachments/assets/dc6a8e62-806e-4cf3-a03a-b41be6f89128" width="300">
+<img src="https://github.com/user-attachments/assets/6a9b81ec-50b7-4490-b3e4-f8c573fe55cb" width="300">
+<img src="https://github.com/user-attachments/assets/a41fb5b0-57ab-41ad-bff0-0b6be9ffc346" width="300">
+<img src="https://github.com/user-attachments/assets/ce3001f3-be6c-46b8-af87-80c19bb6cda1" width="300">
+<img src="https://github.com/user-attachments/assets/3ba93b63-e6e6-40e0-bd43-5e331803345c" width="300">
+<img src="https://github.com/user-attachments/assets/53c7ffe5-d99f-47c6-89bc-abff834330a5" width="300">
+<img src="https://github.com/user-attachments/assets/6aecaa1b-8b5e-41e1-bae5-6bc2063b13eb" width="300">
+<img src="https://github.com/user-attachments/assets/7fe15dc6-57e2-4c2f-949e-5b756dcac9f9" width="300">
+<img src="https://github.com/user-attachments/assets/73d7e069-4288-4831-8521-1a3888ac7f37" width="300">
+<img src="https://github.com/user-attachments/assets/519377e0-0745-4d1c-a0aa-a5d16f339a2d" width="300">
+<img src="https://github.com/user-attachments/assets/9ad39fff-2220-4399-a4bc-5f5853211517" width="300">
+<img src="https://github.com/user-attachments/assets/6f61c5ec-81da-4870-b92b-dd78e8a902b2" width="300">
+<img src="https://github.com/user-attachments/assets/dffc5a1c-65e8-4f36-a85d-43de6caa580b" width="300">
+<img src="https://github.com/user-attachments/assets/c3063655-570b-4823-b3c4-ce4e3737ade5" width="300">
+<img src="https://github.com/user-attachments/assets/15b206fc-4060-4a99-b890-e75b7b8db00e" width="300">
+<img src="https://github.com/user-attachments/assets/60a97d8e-0b8e-4f73-ad8b-33959f0b8c92" width="300">
 
 
 ---
