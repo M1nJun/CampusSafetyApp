@@ -134,6 +134,18 @@ This architecture integrates AWS cloud services to automate load balancing and h
 
 ---
 
+## App Screenshots & Overview
+![Login](https://github.com/user-attachments/assets/c00edc05-fd10-4701-a7bd-555ff94bc4d2)
+![Signup](https://github.com/user-attachments/assets/3a249075-3ed2-4674-9ead-9c1e23e309cd)
+![Verification](https://github.com/user-attachments/assets/67bb738e-e59e-460a-9b7a-3cf249e3f245)
+![RideRequest](https://github.com/user-attachments/assets/e485e7fb-3a89-40b6-b906-c62cdc8f1e9f)
+![SafetyRequest](https://github.com/user-attachments/assets/3ee6d83d-9ed4-4310-b3d9-8a0e3a3b67db)
+![LawrenceBuilding](https://github.com/user-attachments/assets/40f85dbe-6977-418a-b72f-560d66371c27)
+
+
+
+---
+
 ## Conclusion & Project Impact  
 
 This project **streamlined Campus Safety operations**, reducing response times and improving efficiency.  
