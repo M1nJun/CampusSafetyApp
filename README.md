@@ -64,10 +64,8 @@ I created a **full-stack mobile application** with two versions:
 Built with **Spring Boot** and follows a **REST API architecture** for scalability.  
 
 - **Spring Boot Framework** - Handles API requests and logic.  
-- **JPA (Java Persistence API)** - Manages database operations.  
-- **MySQL Database** - Stores user data and requests.  
+- **JPA (Java Persistence API)** - Manages database operations.    
 - **Spring Security & JWT** - Manages authentication and user sessions.  
-- **AWS Hosting** - Backend is deployed on AWS EC2 with Auto Scaling.  
 
 ---
 
@@ -82,6 +80,8 @@ Built with **Spring Boot** and follows a **REST API architecture** for scalabili
   3. Refresh Token expires → User must re-login.  
 
 ### **Automated Email Verification**  
+Only active members of Lawrence University have an active lawrence.edu email account.
+To verify affiliation with the university, users must sign up using their <PersonalAddress>@lawrence.edu email.
 - A **6-digit verification code** is generated at sign-up.  
 - The code is **valid for 15 minutes** and sent via **JavaMailSender**.  
 - Users enter the code to activate their account.  
