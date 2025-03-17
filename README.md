@@ -247,6 +247,8 @@ Users can filter through Lawrence Buildings by typing keywords.
 
 
 Now we are looking at the Officer version of the app. On the home screen of the Officer app, the user will see two options: Instant Requests, Reserved Requests.
+I'm still working on the demo of the app with the screenshots. Will come back to explaining these screenshots.
+
 <img src="https://github.com/user-attachments/assets/b14ae7da-d571-4f0b-adfd-6dfca704c299" width="300">
 <img src="https://github.com/user-attachments/assets/282d7530-97b5-48d5-80d3-876975c050f0" width="300">
 <img src="https://github.com/user-attachments/assets/dc6a8e62-806e-4cf3-a03a-b41be6f89128" width="300">
