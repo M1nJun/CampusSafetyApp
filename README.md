@@ -148,6 +148,42 @@ This architecture integrates AWS cloud services to automate load balancing and h
   <img src="https://github.com/user-attachments/assets/40f85dbe-6977-418a-b72f-560d66371c27" width="300">
 </p>
 
+![LawrenceBuildingKeyword](https://github.com/user-attachments/assets/df666831-5c75-492b-8166-bd7621ccf58c)
+![CurrentLocation](https://github.com/user-attachments/assets/4376edb8-dee2-4f2f-b38c-a4c147fcc555)
+![AddressKeyword](https://github.com/user-attachments/assets/ff079d52-9b7e-4b7c-8097-f5b13676e83f)
+![AddressKeywordMap](https://github.com/user-attachments/assets/6a98bbf9-93b1-4326-a40a-d3a9c7d80631)
+![ChooseReservation](https://github.com/user-attachments/assets/54c100c1-948c-444b-bc6d-48fbe8423b65)
+![ReservationYes](https://github.com/user-attachments/assets/439c203c-eed5-4067-a675-2d6b500e376d)
+![ChooseDate](https://github.com/user-attachments/assets/0e0ce9ba-6191-4021-a39e-a2ef37cbea82)
+![ChooseTime](https://github.com/user-attachments/assets/b945d078-32e6-4b05-ac98-398cc033525c)
+![Comment](https://github.com/user-attachments/assets/3d837b83-f088-4b29-b92c-311e88339ac6)
+![PendingRide](https://github.com/user-attachments/assets/c08d4692-1dda-440b-9781-1e0c4b0ffbc7)
+![CancelRequest](https://github.com/user-attachments/assets/4b8b7e68-71b1-441b-b9b6-6c3e5fe20f9f)
+![StudentPastPending](https://github.com/user-attachments/assets/271e797b-d154-45cb-8316-b3e6ab2894f8)
+![NoInstantRequest](https://github.com/user-attachments/assets/b14ae7da-d571-4f0b-adfd-6dfca704c299)
+![OfficerReservedPending](https://github.com/user-attachments/assets/282d7530-97b5-48d5-80d3-876975c050f0)
+![OfficerTryAccept](https://github.com/user-attachments/assets/dc6a8e62-806e-4cf3-a03a-b41be6f89128)
+![ChooseOfficer](https://github.com/user-attachments/assets/6a9b81ec-50b7-4490-b3e4-f8c573fe55cb)
+![AcceptSuccess](https://github.com/user-attachments/assets/a41fb5b0-57ab-41ad-bff0-0b6be9ffc346)
+![OfficerReservedAccepted](https://github.com/user-attachments/assets/ce3001f3-be6c-46b8-af87-80c19bb6cda1)
+![StudentPastAccepted](https://github.com/user-attachments/assets/3ba93b63-e6e6-40e0-bd43-5e331803345c)
+![StudentAccepted](https://github.com/user-attachments/assets/53c7ffe5-d99f-47c6-89bc-abff834330a5)
+![BlankMessage](https://github.com/user-attachments/assets/6aecaa1b-8b5e-41e1-bae5-6bc2063b13eb)
+![StudentMessage](https://github.com/user-attachments/assets/7fe15dc6-57e2-4c2f-949e-5b756dcac9f9)
+![StudentMessageList](https://github.com/user-attachments/assets/73d7e069-4288-4831-8521-1a3888ac7f37)
+![OfficerMessageList](https://github.com/user-attachments/assets/519377e0-0745-4d1c-a0aa-a5d16f339a2d)
+![OfficerMessage](https://github.com/user-attachments/assets/9ad39fff-2220-4399-a4bc-5f5853211517)
+![OfficerComplete](https://github.com/user-attachments/assets/6f61c5ec-81da-4870-b92b-dd78e8a902b2)
+![OfficerPastRequest](https://github.com/user-attachments/assets/dffc5a1c-65e8-4f36-a85d-43de6caa580b)
+![OfficerPastRequestView](https://github.com/user-attachments/assets/c3063655-570b-4823-b3c4-ce4e3737ade5)
+![StudentPastCompleted](https://github.com/user-attachments/assets/15b206fc-4060-4a99-b890-e75b7b8db00e)
+![StudentCompleteView](https://github.com/user-attachments/assets/60a97d8e-0b8e-4f73-ad8b-33959f0b8c92)
+
+
+
+
+
+
 
 
 
