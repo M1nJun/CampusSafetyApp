@@ -217,13 +217,17 @@ Users can filter through Lawrence Buildings by typing keywords.
 ### **Picking Date & Time for a Reserved Request**
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/0e0ce9ba-6191-4021-a39e-a2ef37cbea82" width="300">
+  <img src="https://github.com/user-attachments/assets/0e0ce9ba-6191-4021-a39e-a2ef37cbea82" width="300" style="margin-right: 20px;">
   <img src="https://github.com/user-attachments/assets/b945d078-32e6-4b05-ac98-398cc033525c" width="300">
 </p>
 
 <p align="center">
-  <b>Users can select the <em>date</em> for the request from the date-picker</b> &nbsp;&nbsp;&nbsp;&nbsp; 
-  <b>Users can then pick the <em>time</em> for the request from the time-picker</b>
+  <span style="display:inline-block; width: 300px; text-align: center;">
+    <b>Users can select the <em>date</em> for the request from the date-picker</b>
+  </span>
+  <span style="display:inline-block; width: 300px; text-align: center; margin-left: 20px;">
+    <b>Users can then pick the <em>time</em> for the request from the time-picker</b>
+  </span>
 </p>
 
 
