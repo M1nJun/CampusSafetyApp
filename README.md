@@ -123,7 +123,7 @@ Users interact with an **Application Load Balancer (ALB)**, which acts as an ent
 
 To ensure scalability, I’ve set up an **Auto Scaling Group (ASG)**, which dynamically adjusts the number of EC2 instances based on demand. Think of it as a factory that automatically launches or terminates instances depending on the incoming request volume. When a new EC2 instance is launched, it follows a launch template, which configures everything needed to run my server on the newly provisioned machine.
 
-Additionally, EventBridge detects when the Auto Scaling Group launches a new EC2 instance and triggers a **Lambda function** to register the instance with the target group of the Application Load Balancer.
+Additionally, **EventBridge** detects when the Auto Scaling Group launches a new EC2 instance and triggers a **Lambda function** to register the instance with the target group of the Application Load Balancer.
 
 This architecture integrates AWS cloud services to automate load balancing and horizontal scaling.
 
