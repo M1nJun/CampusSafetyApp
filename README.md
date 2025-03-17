@@ -141,13 +141,10 @@ This architecture integrates AWS cloud services to automate load balancing and h
 <table>
   <tr>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/c00edc05-fd10-4701-a7bd-555ff94bc4d2" height="500">
+      <img src="https://github.com/user-attachments/assets/c00edc05-fd10-4701-a7bd-555ff94bc4d2" width="300">
     </td>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/3a249075-3ed2-4674-9ead-9c1e23e309cd" height="500">
-    </td>
-    <td align="center">
-      <img src="https://github.com/user-attachments/assets/67bb738e-e59e-460a-9b7a-3cf249e3f245" height="500">
+      <img src="https://github.com/user-attachments/assets/3a249075-3ed2-4674-9ead-9c1e23e309cd" width="300">
     </td>
   </tr>
   <tr>
@@ -159,12 +156,20 @@ This architecture integrates AWS cloud services to automate load balancing and h
       <b>Signup Page:</b> Users can create an account.<br>
       - Requires <code>lawrence.edu</code> email for verification.
     </td>
-    <td align="left">
+  </tr>
+  <tr>
+    <td align="center" colspan="2">
+      <img src="https://github.com/user-attachments/assets/67bb738e-e59e-460a-9b7a-3cf249e3f245" width="300">
+    </td>
+  </tr>
+  <tr>
+    <td align="left" colspan="2">
       <b>Verification Page:</b> After signing up, users must enter a <b>6-digit code</b> sent to their <b>Lawrence University email</b>.<br>
       - The code is valid for <b>15 minutes</b>.
     </td>
   </tr>
 </table>
+
 
 
 ---
