@@ -163,7 +163,6 @@ Both requests can be submitted **quickly and easily**.
 
 ---
 
-### **Submitting a Ride or Safety Request**
 <img src="https://github.com/user-attachments/assets/e485e7fb-3a89-40b6-b906-c62cdc8f1e9f" width="300">
 
 - **Ride Request Page:**
@@ -173,7 +172,6 @@ Both requests can be submitted **quickly and easily**.
 - **Safety Request Page:**
 
 ---
-
 
 ## **Demonstration of Creating a Ride Request**
 
