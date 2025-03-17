@@ -136,9 +136,8 @@ This architecture integrates AWS cloud services to automate load balancing and h
 
 ## App Screenshots & Overview
 
-## **User Authentication & Request Submission**
 
-### **Step 1: Logging In & Signing Up**
+### **Logging In & Signing Up**
 <img src="https://github.com/user-attachments/assets/c00edc05-fd10-4701-a7bd-555ff94bc4d2" width="250">
 
 - **Login Page:** Users can log in using their **Lawrence University credentials**.
@@ -156,7 +155,7 @@ This architecture integrates AWS cloud services to automate load balancing and h
 
 ---
 
-### **Step 2: Navigating the Student Home Screen**
+### **Navigating the Student Home Screen**
 We are now in the **student home screen**, where users can make two types of requests:  
 ✔ **Ride Request**  
 ✔ **Safety Request**  
@@ -164,7 +163,7 @@ Both requests can be submitted **quickly and easily**.
 
 ---
 
-### **Step 3: Submitting a Ride or Safety Request**
+### **Submitting a Ride or Safety Request**
 <img src="https://github.com/user-attachments/assets/e485e7fb-3a89-40b6-b906-c62cdc8f1e9f" width="300">
 
 - **Ride Request Page:** Users can request a ride by selecting a pickup and destination.
