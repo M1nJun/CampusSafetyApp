@@ -181,6 +181,9 @@ Both requests can be submitted **quickly and easily**.
     <td align="center">
       <img src="https://github.com/user-attachments/assets/40f85dbe-6977-418a-b72f-560d66371c27" width="300">
     </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/df666831-5c75-492b-8166-bd7621ccf58c" width="300">
+    </td>
   </tr>
   <tr>
     <td align="left">
@@ -189,13 +192,6 @@ Both requests can be submitted **quickly and easily**.
       - <b>Search Address</b><br>
       - <b>List of Lawrence Buildings</b> (default view)
     </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="https://github.com/user-attachments/assets/df666831-5c75-492b-8166-bd7621ccf58c" width="300">
-    </td>
-  </tr>
-  <tr>
     <td align="left">
       <b>Users can filter through Lawrence Buildings by typing keywords.</b>
     </td>
