@@ -174,10 +174,8 @@ Both requests can be submitted **quickly and easily**.
 
 ---
 
-This structured flow **guides users through authentication and request submission**, ensuring a seamless experience. 🚀
 
-
-## **Creating a Ride Request from Scratch**
+## **Demonstration of Creating a Ride Request**
 
 ### **Accessing the Ride Request Page**
 <img src="https://github.com/user-attachments/assets/40f85dbe-6977-418a-b72f-560d66371c27" width="300">
