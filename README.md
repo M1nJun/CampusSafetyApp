@@ -376,10 +376,19 @@ For the where are you, let's try to use Current Location.
 
 
 ### **Viewing Past Requests**
-<img src="https://github.com/user-attachments/assets/271e797b-d154-45cb-8316-b3e6ab2894f8" width="300">
 
-- In the **student app's account page**, users can view **past ride requests**.
-- The newly submitted request appears under the **"Pending"** section.
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/271e797b-d154-45cb-8316-b3e6ab2894f8" width="300">
+    </td>
+    <td align="left">
+      <b>In the <em>student app's account page</em>, users can view <b>past ride requests</b>.</b><br>
+      - The newly submitted request appears under the <b>"Pending"</b> section.
+    </td>
+  </tr>
+</table>
+
 
 
 ### **Navigating the Officer App**
