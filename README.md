@@ -177,6 +177,7 @@ Both requests can be submitted **quickly and easily**.
 
 ### **Selecting Pickup & Destination Locations**
 <img src="https://github.com/user-attachments/assets/40f85dbe-6977-418a-b72f-560d66371c27" width="300">
+
 When you tap on the **"Where to"** or **"Where from"** boxes, a dropdown list appears with the following options:  
 - **Current Location**
 - **Search Address**
