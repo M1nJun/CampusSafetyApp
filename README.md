@@ -136,45 +136,49 @@ This architecture integrates AWS cloud services to automate load balancing and h
 
 ## App Screenshots & Overview
 
-<table align="center">
-  <tr>
-    <td align="center">
-      <img src="https://github.com/user-attachments/assets/c00edc05-fd10-4701-a7bd-555ff94bc4d2" width="250"><br>
-      <strong>Login Page</strong><br>
-      You can toggle to the Signup page.
-    </td>
-    <td align="center">
-      <img src="https://github.com/user-attachments/assets/3a249075-3ed2-4674-9ead-9c1e23e309cd" width="250"><br>
-      <strong>Signup Page</strong><br>
-      You can toggle to the Login page.
-    </td>
-    <td align="center">
-      <img src="https://github.com/user-attachments/assets/67bb738e-e59e-460a-9b7a-3cf249e3f245" width="250"><br>
-      <strong>Verification Page</strong><br>
-      Enter the 6-digit code sent to your <code>lawrence.edu</code> email.
-    </td>
-  </tr>
-</table>
+## **User Authentication & Request Submission**
 
+### **Step 1: Logging In & Signing Up**
+<img src="https://github.com/user-attachments/assets/c00edc05-fd10-4701-a7bd-555ff94bc4d2" width="250">
 
-<p align="center">
-  We are now in the student home screen. You can make two types of requests: <strong>Ride Request</strong> and <strong>Safety Request</strong>. Both are simple forms that can be submitted with just a few clicks.
-</p>
+- **Login Page:** Users can log in using their **Lawrence University credentials**.
+- Option to toggle to the **Signup Page** if they don’t have an account.
 
-<table align="center">
-  <tr>
-    <td align="center">
-      <img src="https://github.com/user-attachments/assets/e485e7fb-3a89-40b6-b906-c62cdc8f1e9f" width="300"><br>
-      <strong>Ride Request Page</strong><br>
-      Submit a request for a ride with just a few taps.
-    </td>
-    <td align="center">
-      <img src="https://github.com/user-attachments/assets/3ee6d83d-9ed4-4310-b3d9-8a0e3a3b67db" width="300"><br>
-      <strong>Safety Request Page</strong><br>
-      Request assistance for safety concerns.
-    </td>
-  </tr>
-</table>
+<img src="https://github.com/user-attachments/assets/3a249075-3ed2-4674-9ead-9c1e23e309cd" width="250">
+
+- **Signup Page:** Users can create an account.
+- Requires **<code>lawrence.edu</code>** email for verification.
+
+<img src="https://github.com/user-attachments/assets/67bb738e-e59e-460a-9b7a-3cf249e3f245" width="250">
+
+- **Verification Page:** After signing up, users must enter a **6-digit code** sent to their **Lawrence University email**.
+- The code is valid for **15 minutes**.
+
+---
+
+### **Step 2: Navigating the Student Home Screen**
+We are now in the **student home screen**, where users can make two types of requests:  
+✔ **Ride Request**  
+✔ **Safety Request**  
+Both requests can be submitted **quickly and easily**.
+
+---
+
+### **Step 3: Submitting a Ride or Safety Request**
+<img src="https://github.com/user-attachments/assets/e485e7fb-3a89-40b6-b906-c62cdc8f1e9f" width="300">
+
+- **Ride Request Page:** Users can request a ride by selecting a pickup and destination.
+- Location selection includes **Lawrence buildings, current location, or a manually entered address**.
+
+<img src="https://github.com/user-attachments/assets/3ee6d83d-9ed4-4310-b3d9-8a0e3a3b67db" width="300">
+
+- **Safety Request Page:** Users can request safety assistance.
+- Officers will receive the request and respond accordingly.
+
+---
+
+This structured flow **guides users through authentication and request submission**, ensuring a seamless experience. 🚀
+
 
 ## **Creating a Ride Request from Scratch**
 
