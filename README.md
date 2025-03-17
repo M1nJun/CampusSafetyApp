@@ -397,8 +397,8 @@ For the where are you, let's try to use Current Location.
 ### **Navigating the Officer App**
 
 We are now on the **Officer Home Screen**, where users can manage two types of requests:  
-✔ **(Instant) Requests**  
-✔ **Reserved Requests**  
+- **(Instant) Requests**  
+- **Reserved Requests**  
 Both request types are displayed in chronological order.
 
 <table>
@@ -412,10 +412,10 @@ Both request types are displayed in chronological order.
   </tr>
   <tr>
     <td align="left">
-      <b>(Instant) Requests Page:</b> Officers can view and manage <b>instant requests</b> submitted by students.
+      <b>(Instant) Requests Page</b>
     </td>
     <td align="left">
-      <b>Reserved Requests Page:</b> Displays scheduled <b>reserved requests</b> that officers need to handle.
+      <b>Reserved Requests Page</b>
     </td>
   </tr>
 </table>
