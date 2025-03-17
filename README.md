@@ -206,13 +206,21 @@ Users can filter through Lawrence Buildings by typing keywords.
 - The address updates dynamically as the pin moves.
 
 ### **Choosing an Instant or Reserved Request**
-<img src="https://github.com/user-attachments/assets/aa98d0df-539c-4c92-81c5-6569c90a6bbe" width="300">
 
-- Users can choose between an **instant request** or a **reserved request**.
-
-<img src="https://github.com/user-attachments/assets/439c203c-eed5-4067-a675-2d6b500e376d" width="300">
-
-- Tapping **"By this date"** enables the **reservation option**.
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/aa98d0df-539c-4c92-81c5-6569c90a6bbe" width="300">
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/439c203c-eed5-4067-a675-2d6b500e376d" width="300">
+    </td>
+  </tr>
+  <tr>
+    <td align="center"><b>Users can choose between an <em>instant request</em> or a <em>reserved request</em>.</b></td>
+    <td align="center"><b>Tapping <em>"By this date"</em> enables the <em>reservation option</em>.</b></td>
+  </tr>
+</table>
 
 
 ### **Picking Date & Time for a Reserved Request**
