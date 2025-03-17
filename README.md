@@ -172,7 +172,7 @@ Both requests can be submitted **quickly and easily**.
 
 ---
 
-## **Demonstration of Creating a Ride Request**
+### **Demonstration of Creating a Ride Request**
 
 ### **Selecting Pickup & Destination Locations**
 <img src="https://github.com/user-attachments/assets/40f85dbe-6977-418a-b72f-560d66371c27" width="300">
