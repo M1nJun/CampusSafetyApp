@@ -205,17 +205,18 @@ Users can filter through Lawrence Buildings by typing keywords.
     </td>
   </tr>
   <tr>
-    <td align="center">
+    <td align="left">
       <b>Users can search for a <em>specific address</em> by selecting the <em>"Search Address"</em> option.</b><br>
       - The system provides <b>autocomplete suggestions</b> for locations nearest to the user.
     </td>
-    <td align="center">
+    <td align="left">
       <b>Once a location is selected, an <em>interactive map</em> appears.</b><br>
       - The pin can be moved to adjust the location.<br>
       - The address updates dynamically as the pin moves.
     </td>
   </tr>
 </table>
+
 
 ### **Choosing an Instant or Reserved Request**
 
