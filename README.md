@@ -211,17 +211,13 @@ Users can filter through Lawrence Buildings by typing keywords.
 </table>
 
 
-### **Using the "Current Location" Option**
-<img src="https://github.com/user-attachments/assets/4376edb8-dee2-4f2f-b38c-a4c147fcc555" width="300">
-
-- The **"Current Location"** option requires location-sharing permission.
-- If selected, the input box is auto-filled with the **street address** of the user's current location.
-- An **interactive map** with a pin appears, allowing users to adjust their exact location.
-
-### **Searching for an Address**
+### **Using the "Current Location", "Search Address Option** 
 
 <table>
   <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/4376edb8-dee2-4f2f-b38c-a4c147fcc555" width="300">
+    </td>
     <td align="center">
       <img src="https://github.com/user-attachments/assets/ff079d52-9b7e-4b7c-8097-f5b13676e83f" width="300">
     </td>
@@ -231,16 +227,22 @@ Users can filter through Lawrence Buildings by typing keywords.
   </tr>
   <tr>
     <td align="left">
+      <b>The <em>"Current Location"</em> option requires location-sharing permission.</b><br>
+      - If selected, the input box is auto-filled with the <b>street address</b> of the user's current location.<br>
+      - An <b>interactive map</b> with a pin appears, allowing users to adjust their exact location.
+    </td>
+    <td align="left">
       <b>Users can search for a <em>specific address</em> by selecting the <em>"Search Address"</em> option.</b><br>
-      The system provides <b>autocomplete suggestions</b> for locations nearest to the user.
+      - The system provides <b>autocomplete suggestions</b> for locations nearest to the user.
     </td>
     <td align="left">
       <b>Once a location is selected, an <em>interactive map</em> appears.</b><br>
-      The pin can be moved to adjust the location.<br>
-      The address updates dynamically as the pin moves.
+      - The pin can be moved to adjust the location.<br>
+      - The address updates dynamically as the pin moves.
     </td>
   </tr>
 </table>
+
 
 
 ### **Choosing an Instant or Reserved Request**
