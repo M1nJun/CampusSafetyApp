@@ -179,10 +179,10 @@ This structured flow **guides users through authentication and request submissio
 
 ## **Creating a Ride Request from Scratch**
 
-### **Step 1: Accessing the Ride Request Page**
+### **Accessing the Ride Request Page**
 <img src="https://github.com/user-attachments/assets/40f85dbe-6977-418a-b72f-560d66371c27" width="300">
 
-### **Step 2: Selecting Pickup & Destination Locations**
+### **Selecting Pickup & Destination Locations**
 When you tap on the **"Where to"** or **"Where from"** boxes, a dropdown list appears with the following options:  
 - **Current Location**
 - **Search Address**
@@ -192,14 +192,14 @@ When you tap on the **"Where to"** or **"Where from"** boxes, a dropdown list ap
 
 Users can filter through Lawrence Buildings by typing keywords.
 
-### **Step 3: Using the "Current Location" Option**
+### **Using the "Current Location" Option**
 <img src="https://github.com/user-attachments/assets/4376edb8-dee2-4f2f-b38c-a4c147fcc555" width="300">
 
 - The **"Current Location"** option requires location-sharing permission.
 - If selected, the input box is auto-filled with the **street address** of the user's current location.
 - An **interactive map** with a pin appears, allowing users to adjust their exact location.
 
-### **Step 4: Searching for an Address**
+### **Searching for an Address**
 <img src="https://github.com/user-attachments/assets/ff079d52-9b7e-4b7c-8097-f5b13676e83f" width="300">
 
 - Users can search for a **specific address** by selecting the **"Search Address"** option.
@@ -211,7 +211,7 @@ Users can filter through Lawrence Buildings by typing keywords.
 - The pin can be moved to adjust the location.
 - The address updates dynamically as the pin moves.
 
-### **Step 5: Choosing an Instant or Reserved Request**
+### **Choosing an Instant or Reserved Request**
 <img src="https://github.com/user-attachments/assets/aa98d0df-539c-4c92-81c5-6569c90a6bbe" width="300">
 
 - Users can choose between an **instant request** or a **reserved request**.
@@ -220,7 +220,7 @@ Users can filter through Lawrence Buildings by typing keywords.
 
 - Tapping **"By this date"** enables the **reservation option**.
 
-### **Step 6: Picking Date & Time for a Reserved Request**
+### **Picking Date & Time for a Reserved Request**
 <img src="https://github.com/user-attachments/assets/0e0ce9ba-6191-4021-a39e-a2ef37cbea82" width="300">
 
 - Users can select the **date** for the ride.
@@ -229,23 +229,23 @@ Users can filter through Lawrence Buildings by typing keywords.
 
 - Users can then pick the **time** for the request.
 
-### **Step 7: Leaving a Comment (Optional)**
+### **Leaving a Comment (Optional)**
 <img src="https://github.com/user-attachments/assets/3d837b83-f088-4b29-b92c-311e88339ac6" width="300">
 
 - Users can leave a **message for the officer** with any additional details.
 
-### **Step 8: Submitting & Viewing the Request**
+### **Submitting & Viewing the Request**
 <img src="https://github.com/user-attachments/assets/c08d4692-1dda-440b-9781-1e0c4b0ffbc7" width="300">
 
 - Once submitted, the request moves to a **pending status** while waiting for an officer to accept.
 
-### **Step 9: Canceling a Request**
+### **Canceling a Request**
 <img src="https://github.com/user-attachments/assets/4b8b7e68-71b1-441b-b9b6-6c3e5fe20f9f" width="300">
 
 - Users can **cancel their request** if needed.
 - A **reason must be provided** before canceling.
 
-### **Step 10: Viewing Past Requests**
+### **Viewing Past Requests**
 <img src="https://github.com/user-attachments/assets/271e797b-d154-45cb-8316-b3e6ab2894f8" width="300">
 
 - In the **student app's account page**, users can view **past ride requests**.
