@@ -175,10 +175,8 @@ Both requests can be submitted **quickly and easily**.
 
 ## **Demonstration of Creating a Ride Request**
 
-### **Accessing the Ride Request Page**
-<img src="https://github.com/user-attachments/assets/40f85dbe-6977-418a-b72f-560d66371c27" width="300">
-
 ### **Selecting Pickup & Destination Locations**
+<img src="https://github.com/user-attachments/assets/40f85dbe-6977-418a-b72f-560d66371c27" width="300">
 When you tap on the **"Where to"** or **"Where from"** boxes, a dropdown list appears with the following options:  
 - **Current Location**
 - **Search Address**
