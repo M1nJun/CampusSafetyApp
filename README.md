@@ -165,11 +165,11 @@ Both requests can be submitted **quickly and easily**.
 
 <img src="https://github.com/user-attachments/assets/e485e7fb-3a89-40b6-b906-c62cdc8f1e9f" width="300">
 
-- **Ride Request Page:**
+**Ride Request Page**
 
 <img src="https://github.com/user-attachments/assets/3ee6d83d-9ed4-4310-b3d9-8a0e3a3b67db" width="300">
 
-- **Safety Request Page:**
+**Safety Request Page**
 
 ---
 
