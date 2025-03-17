@@ -138,20 +138,34 @@ This architecture integrates AWS cloud services to automate load balancing and h
 
 
 ### **Logging In & Signing Up**
-<img src="https://github.com/user-attachments/assets/c00edc05-fd10-4701-a7bd-555ff94bc4d2" width="250">
 
-- **Login Page:** Users can log in using their **Lawrence University credentials**.
-- Option to toggle to the **Signup Page** if they don’t have an account.
-
-<img src="https://github.com/user-attachments/assets/3a249075-3ed2-4674-9ead-9c1e23e309cd" width="250">
-
-- **Signup Page:** Users can create an account.
-- Requires **<code>lawrence.edu</code>** email for verification.
-
-<img src="https://github.com/user-attachments/assets/67bb738e-e59e-460a-9b7a-3cf249e3f245" width="250">
-
-- **Verification Page:** After signing up, users must enter a **6-digit code** sent to their **Lawrence University email**.
-- The code is valid for **15 minutes**.
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/c00edc05-fd10-4701-a7bd-555ff94bc4d2" width="250">
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/3a249075-3ed2-4674-9ead-9c1e23e309cd" width="250">
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/67bb738e-e59e-460a-9b7a-3cf249e3f245" width="250">
+    </td>
+  </tr>
+  <tr>
+    <td align="left">
+      <b>Login Page:</b> Users can log in using their <b>Lawrence University credentials</b>.<br>
+      - Option to toggle to the <b>Signup Page</b> if they don’t have an account.
+    </td>
+    <td align="left">
+      <b>Signup Page:</b> Users can create an account.<br>
+      - Requires <code>lawrence.edu</code> email for verification.
+    </td>
+    <td align="left">
+      <b>Verification Page:</b> After signing up, users must enter a <b>6-digit code</b> sent to their <b>Lawrence University email</b>.<br>
+      - The code is valid for <b>15 minutes</b>.
+    </td>
+  </tr>
+</table>
 
 ---
 
