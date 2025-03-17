@@ -87,7 +87,7 @@ To verify affiliation with the university, users must sign up using their <Perso
 - Users enter the code to activate their account.
 
 ### **Password Security**  
-The user's password is securely hashed using the **Bcrypt** cryptographic algorithm. **Password hashing** is a **one-way process** that converts a plain-text password into a unique, fixed-length string, making it impossible to reverse-engineer the original password. This ensures that even if someone gains access to the database, they would only see an unintelligible string of characters rather than the actual password.
+The user's password is securely hashed using the **Bcrypt** cryptographic algorithm. **Password hashing** is a **one-way process** that converts a plain-text password into a unique, fixed-length string, making it impossible to reverse-engineer the original password.
 
 To further enhance security, I’ve implemented a **custom pepper**—an additional secret value applied during hashing. This means that even if an attacker obtains the hashed passwords, they would still need the pepper to verify them, adding an extra layer of protection.
 
