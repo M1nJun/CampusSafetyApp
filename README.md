@@ -186,6 +186,31 @@ When you tap on the **"Where to"** or **"Where from"** boxes, a dropdown list ap
 
 Users can filter through Lawrence Buildings by typing keywords.
 
+### **Selecting Pickup & Destination Locations**
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/40f85dbe-6977-418a-b72f-560d66371c27" width="300">
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/df666831-5c75-492b-8166-bd7621ccf58c" width="300">
+    </td>
+  </tr>
+  <tr>
+    <td align="left">
+      <b>When you tap on the <em>"Where to"</em> or <em>"Where from"</em> boxes, a dropdown list appears with the following options:</b><br>
+      - <b>Current Location</b><br>
+      - <b>Search Address</b><br>
+      - <b>List of Lawrence Buildings</b> (default view)
+    </td>
+    <td align="left">
+      <b>Users can filter through Lawrence Buildings by typing keywords.</b>
+    </td>
+  </tr>
+</table>
+
+
 ### **Using the "Current Location" Option**
 <img src="https://github.com/user-attachments/assets/4376edb8-dee2-4f2f-b38c-a4c147fcc555" width="300">
 
