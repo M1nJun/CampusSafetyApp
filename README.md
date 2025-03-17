@@ -176,20 +176,82 @@ This architecture integrates AWS cloud services to automate load balancing and h
   </tr>
 </table>
 
+## **Creating a Ride Request from Scratch**
+
+### **Step 1: Accessing the Ride Request Page**
 <img src="https://github.com/user-attachments/assets/40f85dbe-6977-418a-b72f-560d66371c27" width="300">
 
-![LawrenceBuildingKeyword](https://github.com/user-attachments/assets/df666831-5c75-492b-8166-bd7621ccf58c)
-![CurrentLocation](https://github.com/user-attachments/assets/4376edb8-dee2-4f2f-b38c-a4c147fcc555)
-![AddressKeyword](https://github.com/user-attachments/assets/ff079d52-9b7e-4b7c-8097-f5b13676e83f)
-![AddressKeywordMap](https://github.com/user-attachments/assets/6a98bbf9-93b1-4326-a40a-d3a9c7d80631)
-![ChooseReservation](https://github.com/user-attachments/assets/54c100c1-948c-444b-bc6d-48fbe8423b65)
-![ReservationYes](https://github.com/user-attachments/assets/439c203c-eed5-4067-a675-2d6b500e376d)
-![ChooseDate](https://github.com/user-attachments/assets/0e0ce9ba-6191-4021-a39e-a2ef37cbea82)
-![ChooseTime](https://github.com/user-attachments/assets/b945d078-32e6-4b05-ac98-398cc033525c)
-![Comment](https://github.com/user-attachments/assets/3d837b83-f088-4b29-b92c-311e88339ac6)
-![PendingRide](https://github.com/user-attachments/assets/c08d4692-1dda-440b-9781-1e0c4b0ffbc7)
-![CancelRequest](https://github.com/user-attachments/assets/4b8b7e68-71b1-441b-b9b6-6c3e5fe20f9f)
-![StudentPastPending](https://github.com/user-attachments/assets/271e797b-d154-45cb-8316-b3e6ab2894f8)
+### **Step 2: Selecting Pickup & Destination Locations**
+When you tap on the **"Where to"** or **"Where from"** boxes, a dropdown list appears with the following options:  
+- **Current Location**
+- **Search Address**
+- **List of Lawrence Buildings** (default view)
+
+<img src="https://github.com/user-attachments/assets/df666831-5c75-492b-8166-bd7621ccf58c" width="300">  
+
+Users can filter through Lawrence Buildings by typing keywords.
+
+### **Step 3: Using the "Current Location" Option**
+<img src="https://github.com/user-attachments/assets/4376edb8-dee2-4f2f-b38c-a4c147fcc555" width="300">
+
+- The **"Current Location"** option requires location-sharing permission.
+- If selected, the input box is auto-filled with the **street address** of the user's current location.
+- An **interactive map** with a pin appears, allowing users to adjust their exact location.
+
+### **Step 4: Searching for an Address**
+<img src="https://github.com/user-attachments/assets/ff079d52-9b7e-4b7c-8097-f5b13676e83f" width="300">
+
+- Users can search for a **specific address** by selecting the **"Search Address"** option.
+- The system provides **autocomplete suggestions** for locations nearest to the user.
+
+<img src="https://github.com/user-attachments/assets/6a98bbf9-93b1-4326-a40a-d3a9c7d80631" width="300">
+
+- Once a location is selected, an **interactive map** appears.
+- The pin can be moved to adjust the location.
+- The address updates dynamically as the pin moves.
+
+### **Step 5: Choosing an Instant or Reserved Request**
+<img src="https://github.com/user-attachments/assets/aa98d0df-539c-4c92-81c5-6569c90a6bbe" width="300">
+
+- Users can choose between an **instant request** or a **reserved request**.
+
+<img src="https://github.com/user-attachments/assets/439c203c-eed5-4067-a675-2d6b500e376d" width="300">
+
+- Tapping **"By this date"** enables the **reservation option**.
+
+### **Step 6: Picking Date & Time for a Reserved Request**
+<img src="https://github.com/user-attachments/assets/0e0ce9ba-6191-4021-a39e-a2ef37cbea82" width="300">
+
+- Users can select the **date** for the ride.
+
+<img src="https://github.com/user-attachments/assets/b945d078-32e6-4b05-ac98-398cc033525c" width="300">
+
+- Users can then pick the **time** for the request.
+
+### **Step 7: Leaving a Comment (Optional)**
+<img src="https://github.com/user-attachments/assets/3d837b83-f088-4b29-b92c-311e88339ac6" width="300">
+
+- Users can leave a **message for the officer** with any additional details.
+
+### **Step 8: Submitting & Viewing the Request**
+<img src="https://github.com/user-attachments/assets/c08d4692-1dda-440b-9781-1e0c4b0ffbc7" width="300">
+
+- Once submitted, the request moves to a **pending status** while waiting for an officer to accept.
+
+### **Step 9: Canceling a Request**
+<img src="https://github.com/user-attachments/assets/4b8b7e68-71b1-441b-b9b6-6c3e5fe20f9f" width="300">
+
+- Users can **cancel their request** if needed.
+- A **reason must be provided** before canceling.
+
+### **Step 10: Viewing Past Requests**
+<img src="https://github.com/user-attachments/assets/271e797b-d154-45cb-8316-b3e6ab2894f8" width="300">
+
+- In the **student app's account page**, users can view **past ride requests**.
+- The newly submitted request appears under the **"Pending"** section.
+
+
+
 ![NoInstantRequest](https://github.com/user-attachments/assets/b14ae7da-d571-4f0b-adfd-6dfca704c299)
 ![OfficerReservedPending](https://github.com/user-attachments/assets/282d7530-97b5-48d5-80d3-876975c050f0)
 ![OfficerTryAccept](https://github.com/user-attachments/assets/dc6a8e62-806e-4cf3-a03a-b41be6f89128)
