@@ -215,13 +215,17 @@ Users can filter through Lawrence Buildings by typing keywords.
 - Tapping **"By this date"** enables the **reservation option**.
 
 ### **Picking Date & Time for a Reserved Request**
-<img src="https://github.com/user-attachments/assets/0e0ce9ba-6191-4021-a39e-a2ef37cbea82" width="300">
 
-- Users can select the **date** for the request from the date-picker
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/0e0ce9ba-6191-4021-a39e-a2ef37cbea82" width="300">
+  <img src="https://github.com/user-attachments/assets/b945d078-32e6-4b05-ac98-398cc033525c" width="300">
+</p>
 
-<img src="https://github.com/user-attachments/assets/b945d078-32e6-4b05-ac98-398cc033525c" width="300">
+<p align="center">
+  <b>Users can select the <em>date</em> for the request from the date-picker</b> &nbsp;&nbsp;&nbsp;&nbsp; 
+  <b>Users can then pick the <em>time</em> for the request from the time-picker</b>
+</p>
 
-- Users can then pick the **time** for the request from the date-picker
 
 ### **Leaving a Comment (Optional)**
 <img src="https://github.com/user-attachments/assets/3d837b83-f088-4b29-b92c-311e88339ac6" width="300">
