@@ -158,10 +158,25 @@ This architecture integrates AWS cloud services to automate load balancing and h
 
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/e485e7fb-3a89-40b6-b906-c62cdc8f1e9f" width="300">
-  <img src="https://github.com/user-attachments/assets/3ee6d83d-9ed4-4310-b3d9-8a0e3a3b67db" width="300">
-  <img src="https://github.com/user-attachments/assets/40f85dbe-6977-418a-b72f-560d66371c27" width="300">
+  We are now in the student home screen. You can make two types of requests: <strong>Ride Request</strong> and <strong>Safety Request</strong>. Both are simple forms that can be submitted with just a few clicks.
 </p>
+
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/e485e7fb-3a89-40b6-b906-c62cdc8f1e9f" width="300"><br>
+      <strong>Ride Request Page</strong><br>
+      Submit a request for a ride with just a few taps.
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/3ee6d83d-9ed4-4310-b3d9-8a0e3a3b67db" width="300"><br>
+      <strong>Safety Request Page</strong><br>
+      Request assistance for safety concerns.
+    </td>
+  </tr>
+</table>
+
+<img src="https://github.com/user-attachments/assets/40f85dbe-6977-418a-b72f-560d66371c27" width="300">
 
 ![LawrenceBuildingKeyword](https://github.com/user-attachments/assets/df666831-5c75-492b-8166-bd7621ccf58c)
 ![CurrentLocation](https://github.com/user-attachments/assets/4376edb8-dee2-4f2f-b38c-a4c147fcc555)
