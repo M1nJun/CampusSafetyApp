@@ -24,6 +24,7 @@ import MapView, {Marker} from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as TokenService from '../services/tokenService';
 import API_BASE_URL from "../config";
+import {API_KEY} from "@env"
 
 const SafetyRequesterComponent = () => {
   const navigation = useNavigation();
@@ -43,7 +44,6 @@ const SafetyRequesterComponent = () => {
   const [showLocAutoCompleteList, setShowLocAutoCompleteList] = useState(false);
   const [locAutoCompleteList, setLocAutoCompleteList] = useState([]);
 
-  const API_KEY = "AIzaSyBP26jrlVQ062A5TJsu1rD3TQ49n7cto54";
   // This function has 2 cases
   // case 1: user chose to searchAddress on their own. In that case, we fetch autocompleted suggestions of the keyword on a list and show it to the user.
   // case 2: user chose to select a location from the static lawrence building list. Then as the user types, the user will be given a list that consists of locations that contain that keyword.

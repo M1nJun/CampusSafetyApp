@@ -23,6 +23,7 @@ import MapView, {Marker} from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as TokenService from '../services/tokenService';
 import API_BASE_URL from "../config";
+import {API_KEY} from "@env"
 
 const RideRequesterComponent = () => {
   const navigation = useNavigation();
@@ -194,7 +195,7 @@ const RideRequesterComponent = () => {
 
 
 
-  const API_KEY = "AIzaSyBP26jrlVQ062A5TJsu1rD3TQ49n7cto54";
+  // const API_KEY = "AIzaSyBP26jrlVQ062A5TJsu1rD3TQ49n7cto54";
   // Added fetchPlaceDetails Function: This function fetches detailed address information for a given place ID.
 
   // Modified fetchAutocomplete Function: Now it maps over predictions to get both placeId and description.
