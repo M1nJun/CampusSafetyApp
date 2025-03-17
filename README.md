@@ -395,18 +395,33 @@ For the where are you, let's try to use Current Location.
 
 
 ### **Navigating the Officer App**
-We are now on the **Officer Home Screen**, where users can manage two types of requests:
+
+We are now on the **Officer Home Screen**, where users can manage two types of requests:  
 ✔ **(Instant) Requests**  
 ✔ **Reserved Requests**  
 Both request types are displayed in chronological order.
 
-- **(Instant) Requests Page**
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/b14ae7da-d571-4f0b-adfd-6dfca704c299" width="300">
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/282d7530-97b5-48d5-80d3-876975c050f0" width="300">
+    </td>
+  </tr>
+  <tr>
+    <td align="left">
+      <b>(Instant) Requests Page:</b> Officers can view and manage <b>instant requests</b> submitted by students.
+    </td>
+    <td align="left">
+      <b>Reserved Requests Page:</b> Displays scheduled <b>reserved requests</b> that officers need to handle.
+    </td>
+  </tr>
+</table>
 
-<img src="https://github.com/user-attachments/assets/b14ae7da-d571-4f0b-adfd-6dfca704c299" width="300">
 
-- **Reserved Requests Page**
 
-<img src="https://github.com/user-attachments/assets/282d7530-97b5-48d5-80d3-876975c050f0" width="300">
 <img src="https://github.com/user-attachments/assets/dc6a8e62-806e-4cf3-a03a-b41be6f89128" width="300">
 <img src="https://github.com/user-attachments/assets/6a9b81ec-50b7-4490-b3e4-f8c573fe55cb" width="300">
 <img src="https://github.com/user-attachments/assets/a41fb5b0-57ab-41ad-bff0-0b6be9ffc346" width="300">
