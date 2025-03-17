@@ -155,8 +155,8 @@ This architecture integrates AWS cloud services to automate load balancing and h
 
 ---
 
-### **Navigating the Student Home Screen**
-We are now in the **student home screen**, where users can make two types of requests:  
+### **Navigating the Student App**
+We are now in the **Student Home Screen**, where users can make two types of requests:  
 ✔ **Ride Request**  
 ✔ **Safety Request**  
 Both requests can be submitted **quickly and easily**.
@@ -246,10 +246,17 @@ Users can filter through Lawrence Buildings by typing keywords.
 - The newly submitted request appears under the **"Pending"** section.
 
 
-Now we are looking at the Officer version of the app. On the home screen of the Officer app, the user will see two options: Instant Requests, Reserved Requests.
-I'm still working on the demo of the app with the screenshots. Will come back to explaining these screenshots.
+### **Navigating the Officer App**
+We are now on the **Officer Home Screen**, where users can manage two types of requests:
+✔ **(Instant) Requests**  
+✔ **Reserved Requests**  
+Both request types are displayed in chronological order.
+
+- **(Instant) Requests Page**
 
 <img src="https://github.com/user-attachments/assets/b14ae7da-d571-4f0b-adfd-6dfca704c299" width="300">
+
+- **Reserved Requests Page**
 
 <img src="https://github.com/user-attachments/assets/282d7530-97b5-48d5-80d3-876975c050f0" width="300">
 <img src="https://github.com/user-attachments/assets/dc6a8e62-806e-4cf3-a03a-b41be6f89128" width="300">
@@ -269,6 +276,7 @@ I'm still working on the demo of the app with the screenshots. Will come back to
 <img src="https://github.com/user-attachments/assets/15b206fc-4060-4a99-b890-e75b7b8db00e" width="300">
 <img src="https://github.com/user-attachments/assets/60a97d8e-0b8e-4f73-ad8b-33959f0b8c92" width="300">
 
+I'm still working on the demo of the app with the screenshots. Will come back to explaining these screenshots.
 
 ---
 
