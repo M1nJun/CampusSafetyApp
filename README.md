@@ -156,18 +156,30 @@ This architecture integrates AWS cloud services to automate load balancing and h
 ---
 
 ### **Navigating the Student App**
+
 We are now in the **Student Home Screen**, where users can make two types of requests:  
 ✔ **Ride Request**  
 ✔ **Safety Request**  
 Both requests can be submitted **quickly and easily**.
 
-- **Ride Request Page**
-
-<img src="https://github.com/user-attachments/assets/e485e7fb-3a89-40b6-b906-c62cdc8f1e9f" width="300">
-
-- **Safety Request Page**
-
-<img src="https://github.com/user-attachments/assets/3ee6d83d-9ed4-4310-b3d9-8a0e3a3b67db" width="300">
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/e485e7fb-3a89-40b6-b906-c62cdc8f1e9f" width="300">
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/3ee6d83d-9ed4-4310-b3d9-8a0e3a3b67db" width="300">
+    </td>
+  </tr>
+  <tr>
+    <td align="left">
+      <b>Ride Request Page</b>
+    </td>
+    <td align="left">
+      <b>Safety Request Page</b>
+    </td>
+  </tr>
+</table>
 
 
 ---
