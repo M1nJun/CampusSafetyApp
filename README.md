@@ -166,11 +166,11 @@ Both requests can be submitted **quickly and easily**.
 ### **Submitting a Ride or Safety Request**
 <img src="https://github.com/user-attachments/assets/e485e7fb-3a89-40b6-b906-c62cdc8f1e9f" width="300">
 
-- **Ride Request Page:** Users can request a ride by selecting a pickup and destination.
+- **Ride Request Page:**
 
 <img src="https://github.com/user-attachments/assets/3ee6d83d-9ed4-4310-b3d9-8a0e3a3b67db" width="300">
 
-- **Safety Request Page:** Users can request safety assistance.
+- **Safety Request Page:**
 
 ---
 
