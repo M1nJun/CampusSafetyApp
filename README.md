@@ -117,6 +117,16 @@ The app is built with **React Native** for cross-platform support.
 ## AWS Infrastructure
 ![Campus Safety App - AWS Architecture](https://github.com/user-attachments/assets/966dfb6e-0d12-4462-90b1-6782b4ec599c)
 
+My server is deployed on EC2 instances, which are essentially virtual machines rented from Amazon. The more instances I have, the greater my server's capacity to handle incoming user requests.
+
+Users interact with an Application Load Balancer (ALB), which acts as an entry point, directing traffic to a designated target group that contains my EC2 instances. These EC2 instances communicate with an RDS instance, a managed database service in AWS that hosts my MySQL database.
+
+To ensure scalability, I’ve set up an Auto Scaling Group (ASG), which dynamically adjusts the number of EC2 instances based on demand. Think of it as a factory that automatically launches or terminates instances depending on the incoming request volume. When a new EC2 instance is launched, it follows a launch template, which configures everything needed to run my server on the newly provisioned machine.
+
+Additionally, EventBridge detects when the Auto Scaling Group launches a new EC2 instance and triggers a Lambda function to register the instance with the target group of the Application Load Balancer.
+
+This architecture integrates AWS cloud services to automate load balancing and horizontal scaling.
+
 ---
 
 ## Conclusion & Project Impact  
