@@ -69,7 +69,7 @@ Built with **Spring Boot** and follows a **REST API architecture** for scalabili
 
 ---
 
-## Security Implementation  
+## Security Implementation
 
 ### **JWT Authentication**  
 - Uses **JSON Web Tokens (JWT)** for user authentication.  
