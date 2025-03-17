@@ -230,8 +230,8 @@ Users can filter through Lawrence Buildings by typing keywords.
     </td>
   </tr>
   <tr>
-    <td align="center"><b>Users can choose between an <em>instant request</em> or a <em>reserved request</em>.</b></td>
-    <td align="center"><b>Tapping <em>"By this date"</em> enables the <em>reservation option</em>.</b></td>
+    <td align="left"><b>Users can choose between an <em>instant request</em> or a <em>reserved request</em>.</b></td>
+    <td align="left"><b>Tapping <em>"By this date"</em> enables the <em>reservation option</em>.</b></td>
   </tr>
 </table>
 
@@ -248,8 +248,8 @@ Users can filter through Lawrence Buildings by typing keywords.
     </td>
   </tr>
   <tr>
-    <td align="center"><b>Users can select the <em>date</em> for the request from the date-picker</b></td>
-    <td align="center"><b>Users can then pick the <em>time</em> for the request from the time-picker</b></td>
+    <td align="left"><b>Users can select the <em>date</em> for the request from the date-picker</b></td>
+    <td align="left"><b>Users can then pick the <em>time</em> for the request from the time-picker</b></td>
   </tr>
 </table>
 
